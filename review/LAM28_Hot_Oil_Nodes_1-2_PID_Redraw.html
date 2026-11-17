@@ -1,0 +1,683 @@
+<title>LAM-28 Hot Oil Flushing P&amp;ID</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: drawing-sheet header, full-width scrollable drawing, then reference sections in a readable column */
+:root {
+  --bg:#f3f5f8; --paper:#ffffff; --ink:#14202e; --mute:#5b6b7e; --rule:#d5dce5; --accent:#b86a00;
+  --crude:#1b2b3c; --fg:#c58a00; --ho:#c2410c; --vap:#7c3aed; --vent:#7a8796; --sig:#2563eb; --ia:#0f766e; --dr:#6b4f2a;
+  --chipbg:#eef1f5; --n1:#8b5cf6; --n2:#f2b705; --water:#0284c7; --dsl:#8a5a2b; --gas:#64748b; --hold:#dc2626;
+  --disp:'Rajdhani', 'Arial Narrow', sans-serif; --body:'Inter', system-ui, sans-serif; --mono:'IBM Plex Mono', ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#07101f; --paper:#0e1b2e; --ink:#dfe7f1; --mute:#8a9bb2; --rule:#1d3452; --accent:#f59e0b;
+  --crude:#e2e8f0; --fg:#facc15; --ho:#fb7a3c; --vap:#a78bfa; --vent:#94a3b8; --sig:#60a5fa; --ia:#2dd4bf; --dr:#c8a273; --chipbg:#162236; --n1:#a78bfa; --n2:#fbbf24; --water:#38bdf8; --dsl:#d6a46b; --gas:#94a3b8; --hold:#f87171; color-scheme:dark } }
+:root[data-theme="dark"] {
+  --bg:#07101f; --paper:#0e1b2e; --ink:#dfe7f1; --mute:#8a9bb2; --rule:#1d3452; --accent:#f59e0b;
+  --crude:#e2e8f0; --fg:#facc15; --ho:#fb7a3c; --vap:#a78bfa; --vent:#94a3b8; --sig:#60a5fa; --ia:#2dd4bf; --dr:#c8a273; --chipbg:#162236; --n1:#a78bfa; --n2:#fbbf24; --water:#38bdf8; --dsl:#d6a46b; --gas:#94a3b8; --hold:#f87171; color-scheme:dark }
+body { background:var(--bg); color:var(--ink); font-family:var(--body); font-size:14px; line-height:1.55; }
+.wrap { padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); padding-block:20px 48px; max-width:1500px; margin:0 auto; display:grid; gap:28px; }
+header.sheet { display:grid; grid-template-columns:1fr auto; gap:12px 24px; align-items:end; border-bottom:2px solid var(--ink); padding-bottom:12px; }
+header.sheet h1 { font-family:var(--disp); font-size:clamp(26px,4vw,38px); line-height:1.05; margin:0; letter-spacing:.01em; text-wrap:balance; }
+header.sheet p { margin:4px 0 0; color:var(--mute); max-width:70ch; }
+.tb { display:grid; grid-template-columns:auto auto; gap:2px 14px; font-family:var(--mono); font-size:12px; }
+.tb span:nth-child(odd) { color:var(--mute); text-transform:uppercase; letter-spacing:.06em; font-size:10.5px; padding-top:2px; }
+@media (max-width:720px) { header.sheet { grid-template-columns:1fr; } }
+h2 { font-family:var(--disp); font-size:24px; margin:0 0 10px; letter-spacing:.02em; text-wrap:balance; }
+h3 { font-family:var(--disp); font-size:18px; margin:18px 0 6px; letter-spacing:.02em; }
+section { min-width:0; }
+.lead { max-width:75ch; color:var(--mute); margin:0 0 12px; }
+.toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:8px; }
+.toolbar button { font:600 12px var(--mono); background:var(--paper); color:var(--ink); border:1px solid var(--rule); padding:6px 10px; border-radius:4px; cursor:pointer; }
+.toolbar button[aria-pressed="true"] { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.toolbar button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.toolbar .hint { color:var(--mute); font-size:12px; }
+.canvas { overflow:auto; border:1px solid var(--rule); background:var(--paper); max-height:82vh; border-radius:4px; }
+#pid { display:block; width:2460px; max-width:none; height:auto; }
+.canvas.fit #pid { width:100%; }
+.legend { display:flex; flex-wrap:wrap; gap:6px 18px; font-size:12px; margin-top:10px; color:var(--mute); }
+.legend span { display:inline-flex; align-items:center; gap:6px; }
+.legend i { display:inline-block; width:28px; height:0; border-top:3px solid; }
+/* svg classes */
+.paper { fill:var(--paper); } .frame { fill:none; stroke:var(--rule); stroke-width:1.5; }
+.tx { fill:var(--ink); font-family:var(--mono); } .mute { fill:var(--mute); font-family:var(--mono); }
+.tk { fill:var(--ink); font-family:var(--disp); } .itx { fill:var(--ink); font-family:var(--mono); font-weight:600; }
+.optx { fill:var(--ink); font-family:var(--mono); }
+polyline { fill:none; stroke-linejoin:round; }
+.halo { stroke:var(--paper); stroke-width:10; }
+.l-crude { stroke:var(--crude); stroke-width:3.2; } .l-fg { stroke:var(--fg); stroke-width:2.4; }
+.l-ho { stroke:var(--ho); stroke-width:2.4; } .l-vap { stroke:var(--vap); stroke-width:2.6; }
+.l-vent { stroke:var(--vent); stroke-width:1.8; } .l-ia { stroke:var(--ia); stroke-width:1.6; }
+.l-dr { stroke:var(--dr); stroke-width:1.8; } .l-inst { stroke:var(--ink); stroke-width:1.1; }
+.sig { fill:none; stroke:var(--sig); stroke-width:1.2; stroke-dasharray:6 4; }
+.ah { stroke:none; } polygon.ah.l-crude { fill:var(--crude); } polygon.ah.l-fg { fill:var(--fg); } polygon.ah.l-ho { fill:var(--ho); }
+polygon.ah.l-vap { fill:var(--vap); } polygon.ah.l-vent { fill:var(--vent); } polygon.ah.l-ia { fill:var(--ia); } polygon.ah.l-dr { fill:var(--dr); }
+.vb { fill:var(--paper); stroke:var(--ink); stroke-width:1.3; } .vb.nc { fill:var(--ink); }
+.dot, .tee { fill:var(--ink); } .stem { stroke:var(--ink); stroke-width:1.3; }
+.ib { fill:var(--paper); stroke:var(--ink); stroke-width:1.2; } .ibl { stroke:var(--ink); stroke-width:1; }
+.tank { fill:var(--paper); stroke:var(--ink); stroke-width:2.6; } .lvl { stroke:var(--crude); stroke-width:1; stroke-dasharray:8 5; }
+.coil { fill:none; stroke:var(--ho); stroke-width:1.5; }
+.pvrv { fill:var(--paper); stroke:var(--vap); stroke-width:1.6; } .pvrvm { fill:none; stroke:var(--vap); stroke-width:1.4; }
+.op { fill:var(--paper); stroke-width:1.6; } .crude-op { stroke:var(--crude); } .fg-op { stroke:var(--fg); } .ho-op { stroke:var(--ho); }
+.vap-op { stroke:var(--vap); } .ia-op { stroke:var(--ia); } .dr-op { stroke:var(--dr); }
+.agug { stroke:var(--mute); stroke-width:1; stroke-dasharray:10 6; }
+g.hot { cursor:help; } g.hot:hover .vb, g.hot:hover .ib, g.hot:hover .op, g.hot:hover .pvrv { stroke:var(--accent); stroke-width:2.2; }
+#tip { position:fixed; z-index:20; max-width:340px; background:var(--ink); color:var(--paper); font:12px/1.45 var(--body); padding:8px 10px; border-radius:4px; pointer-events:none; }
+/* prose & tables */
+.cols { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:18px 28px; }
+.card { background:var(--paper); border:1px solid var(--rule); border-radius:4px; padding:14px 16px; min-width:0; }
+.card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+.card h3 i { width:22px; height:0; border-top:3px solid; display:inline-block; }
+.card p, .card ul { margin:6px 0; } .card ul { padding-left:18px; }
+.tw { overflow-x:auto; border:1px solid var(--rule); border-radius:4px; background:var(--paper); }
+table { border-collapse:collapse; width:100%; font-size:12.5px; }
+th, td { text-align:left; padding:6px 10px; border-bottom:1px solid var(--rule); vertical-align:top; }
+th { font-family:var(--disp); font-size:14px; letter-spacing:.04em; text-transform:uppercase; background:var(--chipbg); position:sticky; top:0; }
+table.num td { font-variant-numeric:tabular-nums; }
+tbody tr:last-child td { border-bottom:0; }
+.mono { font-family:var(--mono); font-size:12px; white-space:nowrap; }
+.chip { font:600 11px var(--mono); padding:1px 7px; border-radius:10px; background:var(--chipbg); border-left:3px solid; white-space:nowrap; }
+.chip.fg { border-color:var(--fg); } .chip.vap { border-color:var(--vap); } .chip.vent { border-color:var(--vent); } .chip.ho { border-color:var(--ho); }
+.chip.crude { border-color:var(--crude); } .chip.dr { border-color:var(--dr); } .chip.ia { border-color:var(--ia); }
+ol.notes { margin:0; padding-left:22px; max-width:90ch; } ol.notes li { margin:3px 0; }
+.caveat { border-left:3px solid var(--accent); padding:8px 14px; background:var(--paper); max-width:95ch; }
+.caveat ul { margin:4px 0; padding-left:18px; }
+nav.toc { display:flex; flex-wrap:wrap; gap:6px 14px; font:500 12.5px var(--mono); }
+nav.toc a { color:var(--ink); text-decoration:none; border-bottom:1px solid var(--rule); }
+nav.toc a:hover { border-color:var(--accent); }
+@media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+
+.nd { fill:none; stroke-width:16; stroke-linejoin:round; stroke-linecap:round; opacity:.28; } .nd1 { stroke:var(--n1); } .nd2 { stroke:var(--n2); }
+.nd2box { fill:none; stroke:var(--n2); stroke-width:10; opacity:.28; rx:4; }
+.ndl1 { fill:var(--n1); font-family:var(--disp); } .ndl2 { fill:var(--n2); font-family:var(--disp); }
+.l-water { stroke:var(--water); stroke-width:2.4; } polygon.ah.l-water { fill:var(--water); }
+.l-dsl { stroke:var(--dsl); stroke-width:2.4; stroke-dasharray:10 5; } polygon.ah.l-dsl { fill:var(--dsl); }
+.l-gas { stroke:var(--gas); stroke-width:2; } .water-op { stroke:var(--water); } .dsl-op { stroke:var(--dsl); }
+.l-vent { stroke:var(--vent); stroke-width:2.2; }
+.tp { fill:var(--paper); stroke:var(--hold); stroke-width:1.4; } .tptx { fill:var(--hold); font-family:var(--mono); font-weight:600; }
+.vsl { fill:var(--paper); stroke:var(--ink); stroke-width:2.2; } .eq { fill:var(--paper); stroke:var(--ink); stroke-width:1.8; }
+.eq.hot { stroke:var(--ho); } .pkg { fill:none; stroke:var(--mute); stroke-width:1; stroke-dasharray:8 5; }
+.hold { fill:var(--hold); font-family:var(--mono); }
+.chip.water { border-color:var(--water); } .chip.dsl { border-color:var(--dsl); } .chip.n1 { border-color:var(--n1); } .chip.n2 { border-color:var(--n2); }
+.flow { display:flex; flex-wrap:wrap; gap:6px; align-items:center; font:500 12px var(--mono); margin:6px 0 2px; }
+.flow span { background:var(--chipbg); padding:2px 8px; border-radius:3px; }
+.flow b { color:var(--mute); font-weight:400; }
+
+ul.notes { margin:0; padding-left:20px; max-width:90ch; } ul.notes li { margin:3px 0; }
+</style>
+<div class="wrap">
+<header class="sheet">
+  <div>
+    <h1>LAM-28 Stabilised Crude Hot Oil Flushing — Nodes 1 &amp; 2</h1>
+    <p>Replacement of diesel with stabilised crude oil for hot oil flushing in LAM-28. Redrawn from the five marked-up P&amp;IDs (sheets 031, 030, 041, 062, 025). The drawing shows the scope-of-work lines with flow directions, line numbers, tie-ins and equipment, plus how the system works.</p>
+  </div>
+  <div class="tb">
+    <span>Package</span><span>IFR ENG-XXX-2026-PKG-L028-00</span>
+    <span>Facility</span><span>LAM-28, Dragon Oil (Turkmenistan)</span>
+    <span>Sheets</span><span>031 · 030 · 041 · 062 · 025</span>
+    <span>Status</span><span>Issued for review (01A–10A)</span>
+    <span>Holds</span><span>HOLD 1 — cold vent height</span>
+  </div>
+</header>
+<nav class="toc" aria-label="Sections">
+  <a href="#drawing">Drawing</a><a href="#function">How it works</a><a href="#equipment">Equipment</a><a href="#lines">Line list</a><a href="#tieins">Tie-ins</a><a href="#instruments">Instruments</a><a href="#notes">Notes</a><a href="#sheets">Source sheets</a><a href="#caveats">Reading notes</a>
+</nav>
+
+<section id="drawing">
+  <h2>Redrawn P&amp;ID — scope of work</h2>
+  <p class="lead">The five sheets are joined into one continuous flow path. The purple and amber bands follow the Node 1 and Node 2 mark-up on the originals. Red hexagons are tie-in points. Hover or tap any item for its tag and function. Existing plant away from the new lines is left out.</p>
+  <div class="toolbar" role="group" aria-label="Zoom">
+    <button type="button" id="z-fit" aria-pressed="false">Fit width</button>
+    <button type="button" id="z-100" aria-pressed="true">100%</button>
+    <button type="button" id="z-150" aria-pressed="false">150%</button>
+    <span class="hint">Scroll inside the frame to pan.</span>
+  </div>
+  <div class="canvas" id="canvas"><svg id="pid" viewBox="0 0 2460 1360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Redrawn P&amp;ID, LAM-28 stabilised crude hot oil flushing, Nodes 1 and 2">
+<rect x="0" y="0" width="2460" height="1360" class="paper"/><rect x="8" y="8" width="2444" height="1344" class="frame"/>
+<polyline points="300,200 960,200 960,290" class="nd nd1"/>
+<polyline points="300,380 960,380 960,290" class="nd nd1"/>
+<polyline points="960,290 1480,290 1480,620" class="nd nd1"/>
+<polyline points="300,140 640,140" class="nd nd1"/>
+<polyline points="1180,250 1180,360" class="nd nd1"/>
+<polyline points="1450,740 1380,740 1380,1000 1290,1000" class="nd nd2"/>
+<polyline points="1230,1000 960,1000 820,1000 640,1000 640,1100" class="nd nd2"/>
+<polyline points="1100,1000 1100,520 1480,520" class="nd nd2"/>
+<polyline points="640,1150 700,1150 700,1250 2170,1250 2170,560 1620,560 1620,620" class="nd nd2"/>
+<polyline points="1760,620 1760,520 2250,520 2250,110" class="nd nd2"/>
+<polyline points="2250,300 2330,300" class="nd nd2"/>
+<rect x="420" y="1095" width="230" height="110" class="nd2box"/>
+<text x="40" y="60" font-size="15" text-anchor="start" class="ndl1" font-weight="700">NODE 1 · Crude transfer to Bullet Tank-C</text>
+<text x="40" y="76" font-size="9" text-anchor="start" class="mute">Sheets 030 (V-100) · 031 (V-301 / ST-017) · 041 (V-312 inlet)</text>
+<g class="hot"><title>L028-21-V-100 TDE test separator (existing, sheet 030). Operated close to wellhead choke downstream pressure (Note 5). Used for hot oil flushing when free-water separation is needed (Note 7). Well 192B selected for trial (Note 6).</title>
+<rect x="40" y="110" width="260" height="120" rx="60.0" ry="60.0" class="vsl"/>
+</g>
+<text x="170.0" y="166.0" font-size="13" text-anchor="middle" class="tk" font-weight="700">L028-21-V-100</text>
+<text x="170.0" y="182.0" font-size="8.5" text-anchor="middle" class="mute">TDE TEST SEPARATOR</text>
+<text x="170.0" y="194.0" font-size="8.5" text-anchor="middle" class="mute">Trim 2&quot;-PR-D013-119-X · existing</text>
+<g class="hot"><title>L028-21-V-301 Repco HP separator (existing, sheet 031). Dedicated to hot oil unit operation while heating stabilised crude for flushing (Note 2). Level control LIC-302 / LV-303 on oil outlet.</title>
+<rect x="40" y="320" width="260" height="120" rx="60.0" ry="60.0" class="vsl"/>
+</g>
+<text x="170.0" y="376.0" font-size="13" text-anchor="middle" class="tk" font-weight="700">L028-21-V-301</text>
+<text x="170.0" y="392.0" font-size="8.5" text-anchor="middle" class="mute">REPCO HP SEPARATOR</text>
+<text x="170.0" y="404.0" font-size="8.5" text-anchor="middle" class="mute">Trim 2&quot;-PR-C013-117-X · existing</text>
+<polyline points="300,140 640,140" class="l-water"/>
+<polygon points="337,140 323,135.1 323,144.9" class="ah l-water"/>
+<g class="hot"><title>TP-02A/02B: new tie-ins on existing V-100 water outlet line (downstream of LV-102B)</title>
+<polygon points="353,118 361.5,107 378.5,107 387,118 378.5,129 361.5,129" class="tp"/>
+<text x="370" y="117" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="370" y="126" font-size="7" text-anchor="middle" class="tptx">02A/B</text>
+</g>
+<g class="hot"><title>2&quot; 600# isolation valve on new free-water line</title>
+<path d="M392,134 L408,146 L408,134 L392,146 Z" class="vb"/>
+</g>
+<g class="hot"><title>2&quot; check valve on free-water line</title>
+<path d="M432,133 L432,147 M448,133 L448,147 M432,134 L448,146" class="stem"/>
+<polygon points="448,140 438,135 438,145" class="dot"/>
+</g>
+<polyline points="480,140 480,110" class="l-inst"/>
+<g class="hot"><title>DBB (double block &amp; bleed) instrument isolation valve, 1/2&quot; for PI-544</title>
+<rect x="474" y="116" width="12" height="12" class="vb"/><path d="M474,116 L486,128 M486,116 L474,128" class="stem"/>
+</g>
+<g class="hot"><title>PI-544 pressure gauge on free-water line (DBB isolated)</title>
+<circle cx="480" cy="98" r="12" class="ib"/>
+<text x="480" y="96" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="480" y="106.0" font-size="7.5" text-anchor="middle" class="itx">544</text>
+</g>
+<text x="500" y="160" font-size="7.5" text-anchor="start" class="mute">3&quot;-PR-B013-8087-H ↓ (Note 3)</text>
+<g class="hot"><title>TP-03: tie-in to existing 4&quot; line at BV-397 (4&quot; 600#) towards LLP header</title>
+<polygon points="543,118 551.5,107 568.5,107 577,118 568.5,129 551.5,129" class="tp"/>
+<text x="560" y="117" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="560" y="126" font-size="7" text-anchor="middle" class="tptx">03</text>
+</g>
+<g class="hot"><title>BV-397 4&quot; 600# isolation</title>
+<path d="M582,134 L598,146 L598,134 L582,146 Z" class="vb"/>
+</g>
+<g class="hot"><title>Free water drained to the LLP header during hot oil flushing (sheet 030 Note 3). LLP header continues to Bullet Tank-C.</title>
+<polygon points="640,123.0 830,123.0 840,140 830,157.0 640,157.0" class="op water-op"/>
+<text x="735.0" y="137.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">LLP HEADER → BULLET TANK-C</text>
+<text x="735.0" y="150.0" font-size="8.5" text-anchor="middle" class="optx">4&quot;-PR-D013-5076-X · sht 041</text>
+</g>
+<text x="315" y="132" font-size="7.5" text-anchor="start" class="mute">WATER</text>
+<polyline points="300,200 960,200 960,290" class="l-crude"/>
+<polygon points="347,200 333,195.1 333,204.9" class="ah l-crude"/>
+<g class="hot"><title>TP-01A/01B: new tie-ins on existing V-100 oil outlet (downstream of LV-101B)</title>
+<polygon points="353,178 361.5,167 378.5,167 387,178 378.5,189 361.5,189" class="tp"/>
+<text x="370" y="177" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="370" y="186" font-size="7" text-anchor="middle" class="tptx">01A/B</text>
+</g>
+<g class="hot"><title>3&quot; 600# isolation valve on V-100 oil take-off</title>
+<path d="M392,194 L408,206 L408,194 L392,206 Z" class="vb"/>
+</g>
+<text x="425" y="222" font-size="7.5" text-anchor="start" class="mute">D013│B013</text>
+<polyline points="480,200 480,230" class="l-inst"/>
+<g class="hot"><title>DBB (double block &amp; bleed) instrument isolation valve, 1/2&quot; for PI-543</title>
+<rect x="474" y="212" width="12" height="12" class="vb"/><path d="M474,212 L486,224 M486,212 L474,224" class="stem"/>
+</g>
+<g class="hot"><title>PI-543 pressure gauge, V-100 oil take-off (DBB)</title>
+<circle cx="480" cy="242" r="12" class="ib"/>
+<text x="480" y="240" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="480" y="250.0" font-size="7.5" text-anchor="middle" class="itx">543</text>
+</g>
+<text x="560" y="193" font-size="9" text-anchor="start" class="tx">3&quot;-PR-B013-8086-H</text>
+<polygon points="960,247 955.1,233 964.9,233" class="ah l-crude"/>
+<text x="315" y="192" font-size="7.5" text-anchor="start" class="mute">OIL</text>
+<polyline points="300,380 960,380 960,290" class="l-crude"/>
+<polygon points="347,380 333,375.1 333,384.9" class="ah l-crude"/>
+<g class="hot"><title>TP-04: new tie-in on V-301 oil outlet 3&quot;-PR-C013-152-X downstream of LV-303</title>
+<polygon points="353,358 361.5,347 378.5,347 387,358 378.5,369 361.5,369" class="tp"/>
+<text x="370" y="357" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="370" y="366" font-size="7" text-anchor="middle" class="tptx">04</text>
+</g>
+<g class="hot"><title>3&quot; 300# isolation valve on V-301 oil take-off</title>
+<path d="M392,374 L408,386 L408,374 L392,386 Z" class="vb"/>
+</g>
+<text x="425" y="402" font-size="7.5" text-anchor="start" class="mute">C013│B013</text>
+<polyline points="480,380 480,350" class="l-inst"/>
+<g class="hot"><title>DBB (double block &amp; bleed) instrument isolation valve, 1/2&quot; for PI-545</title>
+<rect x="474" y="356" width="12" height="12" class="vb"/><path d="M474,356 L486,368 M486,356 L474,368" class="stem"/>
+</g>
+<g class="hot"><title>PI-545 pressure gauge, V-301 oil take-off (DBB)</title>
+<circle cx="480" cy="338" r="12" class="ib"/>
+<text x="480" y="336" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="480" y="346.0" font-size="7.5" text-anchor="middle" class="itx">545</text>
+</g>
+<text x="560" y="373" font-size="9" text-anchor="start" class="tx">3&quot;-PR-B013-8083-H</text>
+<polygon points="960,333 955.1,347 964.9,347" class="ah l-crude"/>
+<circle cx="960" cy="290" r="3.5" class="tee"/>
+<polyline points="960,290 1480,290 1480,620" class="l-crude"/>
+<text x="985" y="283" font-size="9" text-anchor="start" class="tx">3&quot;-PR-B013-8083-H</text>
+<g class="hot"><title>3&quot; 150# strainer inlet isolation</title>
+<path d="M1072,284 L1088,296 L1088,284 L1072,296 Z" class="vb"/>
+</g>
+<g class="hot"><title>L028-21-ST-017 A/B basket strainer (new, taken from stock, sheet 031 Note 3). Filters well fluid before Bullet Tank-C. 1/2&quot; vent and drain on body.</title>
+<rect x="1155" y="255" width="50" height="100" rx="4" class="vsl"/><path d="M1160,268 L1200,342 M1200,268 L1160,342" class="stem"/>
+</g>
+<text x="1180" y="375" font-size="9" text-anchor="middle" class="tx" font-weight="600">L028-21-ST-017 A/B</text>
+<text x="1180" y="387" font-size="7.5" text-anchor="middle" class="mute">BASKET STRAINER</text>
+<polyline points="1240,290 1240,260" class="l-inst"/>
+<g class="hot"><title>DBB (double block &amp; bleed) instrument isolation valve, 1/2&quot; for PI-54X</title>
+<rect x="1234" y="266" width="12" height="12" class="vb"/><path d="M1234,266 L1246,278 M1246,266 L1234,278" class="stem"/>
+</g>
+<g class="hot"><title>PI-54X strainer outlet pressure gauge (tag number not yet assigned on drawing) — use with PI-545/543 for strainer ΔP</title>
+<circle cx="1240" cy="248" r="12" class="ib"/>
+<text x="1240" y="246" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="1240" y="256.0" font-size="7.5" text-anchor="middle" class="itx">54X</text>
+</g>
+<g class="hot"><title>3&quot; 150# strainer outlet isolation</title>
+<path d="M1282,284 L1298,296 L1298,284 L1282,296 Z" class="vb"/>
+</g>
+<text x="1310" y="283" font-size="9" text-anchor="start" class="tx">3&quot;-PR-B013-8085-H</text>
+<polyline points="1030,290 1030,430 1340,430 1340,290" class="l-crude"/>
+<circle cx="1030" cy="290" r="3" class="tee"/><circle cx="1340" cy="290" r="3" class="tee"/>
+<g class="hot"><title>3&quot; 150# strainer bypass valve, locked closed (LC). 100% bypass on 3&quot;-PR-B013-8087-H</title>
+<path d="M1172,424 L1188,436 L1188,424 L1172,436 Z" class="vb"/>
+</g>
+<text x="1180" y="450" font-size="8" text-anchor="middle" class="mute">LC · 100% BYPASS · 3&quot;-PR-B013-8087-H</text>
+<polygon points="1257,430 1243,425.1 1243,434.9" class="ah l-crude"/>
+<polygon points="1407,290 1393,285.1 1393,294.9" class="ah l-crude"/>
+<g class="hot"><title>3&quot; 150# isolation on oil inlet to Bullet Tank-C</title>
+<path d="M1474,342 L1486,358 L1474,358 L1486,342 Z" class="vb"/>
+</g>
+<polyline points="1480,400 1515,400" class="l-inst"/>
+<g class="hot"><title>DBB isolation for PI-549</title>
+<rect x="1497" y="394" width="12" height="12" class="vb"/>
+</g>
+<g class="hot"><title>PI-549 pressure gauge on oil inlet to Bullet Tank-C (DBB)</title>
+<circle cx="1535" cy="400" r="12" class="ib"/>
+<text x="1535" y="398" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="1535" y="408.0" font-size="7.5" text-anchor="middle" class="itx">549</text>
+</g>
+<g class="hot"><title>TP-06A: new 3&quot; oil line ties into existing 6&quot; 150# inlet line (BV-352) to V-312 N1</title>
+<polygon points="1433,450 1441.5,439 1458.5,439 1467,450 1458.5,461 1441.5,461" class="tp"/>
+<text x="1450" y="449" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="1450" y="458" font-size="7" text-anchor="middle" class="tptx">06A</text>
+</g>
+<circle cx="1480" cy="520" r="3.5" class="tee"/>
+<g class="hot"><title>BV-352 6&quot; 150# existing inlet isolation to V-312 N1</title>
+<path d="M1474,567 L1486,583 L1474,583 L1486,567 Z" class="vb"/>
+</g>
+<text x="1490" y="580" font-size="7.5" text-anchor="start" class="mute">BV-352 6&quot;</text>
+<g class="hot"><title>TP-06B: tie-in at BV-352 / V-312 N1</title>
+<polygon points="1498,555 1506.5,544 1523.5,544 1532,555 1523.5,566 1506.5,566" class="tp"/>
+<text x="1515" y="554" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="1515" y="563" font-size="7" text-anchor="middle" class="tptx">06B</text>
+</g>
+<polygon points="1480,607 1475.1,593 1484.9,593" class="ah l-crude"/>
+<text x="40" y="520" font-size="15" text-anchor="start" class="ndl2" font-weight="700">NODE 2 · Bullet Tank-C → HOU feed pump → hot oil heater → recirculation &amp; cold vent</text>
+<text x="40" y="536" font-size="9" text-anchor="start" class="mute">Sheets 041 (V-312 / P-003) · 062 (hot oil unit) · 025 (V-001 vent)</text>
+<g class="hot"><title>L028-21-V-312 Bullet Tank-C (existing, sheet 041). Receives filtered crude, lets it stabilise (weathers off gas to the cold vent) and supplies the HOU feed pump. Heated oil recirculates back for stabilisation.</title>
+<rect x="1450" y="620" width="500" height="170" rx="85.0" ry="85.0" class="vsl big"/>
+</g>
+<text x="1700.0" y="701.0" font-size="13" text-anchor="middle" class="tk" font-weight="700">L028-21-V-312</text>
+<text x="1700.0" y="717.0" font-size="8.5" text-anchor="middle" class="mute">BULLET TANK-C · existing</text>
+<text x="1700.0" y="729.0" font-size="8.5" text-anchor="middle" class="mute">Dedicated to hot oil operation (Note 4)</text>
+<text x="1700.0" y="741.0" font-size="8.5" text-anchor="middle" class="mute">HH 2200 · H 2000 · L 400 · LL 300 mm</text>
+<text x="1484" y="636" font-size="8" text-anchor="start" class="mute">N1</text>
+<text x="1624" y="636" font-size="8" text-anchor="start" class="mute">N6</text>
+<text x="1764" y="636" font-size="8" text-anchor="start" class="mute">N10</text>
+<text x="1864" y="636" font-size="8" text-anchor="start" class="mute">N11</text>
+<polyline points="1915,650 1988,650" class="l-inst"/>
+<g class="hot"><title>LSHH-1004 high-high level switch → PSD-232 (HH 2200 mm)</title>
+<circle cx="2000" cy="650" r="12" class="ib"/>
+<text x="2000" y="648" font-size="7.5" text-anchor="middle" class="itx">LSHH</text>
+<text x="2000" y="658.0" font-size="7.5" text-anchor="middle" class="itx">1004</text>
+</g>
+<polyline points="2012,650 2040,650" class="sig"/>
+<g class="hot"><title>PSD-232 process shutdown on LSHH-1004 (HH)</title>
+<rect x="2041" y="639" width="22" height="22" class="ib"/>
+<polygon points="2052,639 2063,650 2052,661 2041,650" class="ib"/>
+<text x="2052" y="648" font-size="6.5" text-anchor="middle" class="itx">PSD</text>
+<text x="2052" y="657.0" font-size="6.5" text-anchor="middle" class="itx">232</text>
+</g>
+<text x="2068" y="653" font-size="8" text-anchor="start" class="tx">HH</text>
+<polyline points="1945,690 1988,690" class="l-inst"/>
+<g class="hot"><title>LT-1004 level transmitter</title>
+<circle cx="2000" cy="690" r="12" class="ib"/>
+<text x="2000" y="688" font-size="7.5" text-anchor="middle" class="itx">LT</text>
+<text x="2000" y="698.0" font-size="7.5" text-anchor="middle" class="itx">1004</text>
+</g>
+<polyline points="1945,730 1988,730" class="l-inst"/>
+<g class="hot"><title>LG-1004 level gauge</title>
+<circle cx="2000" cy="730" r="12" class="ib"/>
+<text x="2000" y="728" font-size="7.5" text-anchor="middle" class="itx">LG</text>
+<text x="2000" y="738.0" font-size="7.5" text-anchor="middle" class="itx">1004</text>
+</g>
+<polyline points="1915,770 1988,770" class="l-inst"/>
+<g class="hot"><title>LSLL-1004 low-low level switch → PSD-231 (LL 300 mm) — protects P-003 against dry running</title>
+<circle cx="2000" cy="770" r="12" class="ib"/>
+<text x="2000" y="768" font-size="7.5" text-anchor="middle" class="itx">LSLL</text>
+<text x="2000" y="778.0" font-size="7.5" text-anchor="middle" class="itx">1004</text>
+</g>
+<polyline points="2012,770 2040,770" class="sig"/>
+<g class="hot"><title>PSD-231 process shutdown on LSLL-1004 (LL)</title>
+<rect x="2041" y="759" width="22" height="22" class="ib"/>
+<polygon points="2052,759 2063,770 2052,781 2041,770" class="ib"/>
+<text x="2052" y="768" font-size="6.5" text-anchor="middle" class="itx">PSD</text>
+<text x="2052" y="777.0" font-size="6.5" text-anchor="middle" class="itx">231</text>
+</g>
+<text x="2068" y="773" font-size="8" text-anchor="start" class="tx">LL</text>
+<polyline points="1900,790 1988,812" class="l-inst"/>
+<g class="hot"><title>TT-1003 / TIA-1003 tank temperature with low alarm</title>
+<circle cx="2000" cy="812" r="11" class="ib"/>
+<text x="2000" y="810" font-size="6.5" text-anchor="middle" class="itx">TT</text>
+<text x="2000" y="819.0" font-size="6.5" text-anchor="middle" class="itx">1003</text>
+</g>
+<text x="2016" y="815" font-size="7.5" text-anchor="start" class="tx">TIA-1003 L</text>
+<text x="1440" y="735" font-size="8" text-anchor="end" class="mute">N4</text>
+<polyline points="1450,740 1380,740 1380,1000 1290,1000" class="l-crude"/>
+<g class="hot"><title>TP-07: new 2&quot; suction take-off at V-312 N4 (nitrogen connection, 1000 mm above bottom)</title>
+<polygon points="1403,762 1411.5,751 1428.5,751 1437,762 1428.5,773 1411.5,773" class="tp"/>
+<text x="1420" y="761" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="1420" y="770" font-size="7" text-anchor="middle" class="tptx">07</text>
+</g>
+<g class="hot"><title>2&quot; 150# suction isolation at N4</title>
+<path d="M1397,734 L1413,746 L1413,734 L1397,746 Z" class="vb"/>
+</g>
+<text x="1393" y="800" font-size="8.5" text-anchor="start" class="tx" transform="rotate(-90 1393 800)">2&quot;-PR-B013-8088-H</text>
+<polygon points="1380,787 1375.1,773 1384.9,773" class="ah l-crude"/>
+<polyline points="1380,830 1330,830 1330,880" class="l-dr"/>
+<circle cx="1380" cy="830" r="3" class="tee"/>
+<g class="hot"><title>4&quot;x2&quot; reducer to local drain</title>
+<polygon points="1323,844 1337,844 1334,856 1326,856" class="vb"/>
+</g>
+<g class="hot"><title>2&quot; 150# local drain valve</title>
+<path d="M1324,862 L1336,878 L1324,878 L1336,862 Z" class="vb"/>
+</g>
+<text x="1330" y="895" font-size="7" text-anchor="middle" class="mute">LOCAL DRAIN</text>
+<g class="hot"><title>2&quot; 150# pump suction isolation</title>
+<path d="M1374,892 L1386,908 L1374,908 L1386,892 Z" class="vb"/>
+</g>
+<g class="hot"><title>2&quot; suction strainer</title>
+<path d="M1372,930 L1388,930 L1380,950 Z" class="vb"/>
+</g>
+<polyline points="1380,970 1420,970" class="l-inst"/>
+<g class="hot"><title>PG-546 P-003 suction pressure gauge (DBB)</title>
+<circle cx="1435" cy="970" r="12" class="ib"/>
+<text x="1435" y="968" font-size="7.5" text-anchor="middle" class="itx">PG</text>
+<text x="1435" y="978.0" font-size="7.5" text-anchor="middle" class="itx">546</text>
+</g>
+<polygon points="1333,1000 1347,995.1 1347,1004.9" class="ah l-crude"/>
+<g class="hot"><title>2&quot;x1.5&quot; reducer at pump suction</title>
+<polygon points="1299,993 1311,996 1311,1004 1299,1007" class="vb"/>
+</g>
+<g class="hot"><title>L028-21-P-003 hot oil unit feed pump (new, from stock — Note 6). Electric centrifugal, 25/20/13 m³/h, 34 m differential head, 6 barg discharge, driver XX kW. Local control panel START/STOP.</title>
+<circle cx="1260" cy="1000" r="26" class="eq"/><path d="M1260,974 L1236,986 M1286,1000 L1260,974" class="stem"/><path d="M1240,1022 L1280,1022 L1290,1036 L1230,1036 Z" class="vb"/>
+</g>
+<text x="1260" y="1056" font-size="10" text-anchor="middle" class="tx" font-weight="700">L028-21-P-003</text>
+<text x="1260" y="1068" font-size="8" text-anchor="middle" class="mute">HOU FEED PUMP</text>
+<text x="1260" y="1080" font-size="7.5" text-anchor="middle" class="mute">25 m³/h · 34 m · 6 barg</text>
+<g class="hot"><title>Local control panel with START/STOP push-buttons (Notes 3 &amp; 4)</title>
+<rect x="1232" y="925" width="56" height="20" rx="2" class="ib"/>
+</g>
+<text x="1260" y="939" font-size="7.5" text-anchor="middle" class="itx">LCP S/S</text>
+<line x1="1260" y1="945" x2="1260" y2="974" class="sig"/>
+<polyline points="1234,1000 640,1000" class="l-crude"/>
+<g class="hot"><title>2&quot;x1&quot; reducer at pump discharge</title>
+<polygon points="1209,993 1221,996 1221,1004 1209,1007" class="vb"/>
+</g>
+<polyline points="1190,1000 1190,975" class="l-inst"/>
+<g class="hot"><title>PG-547 P-003 discharge pressure gauge (DBB)</title>
+<circle cx="1190" cy="962" r="12" class="ib"/>
+<text x="1190" y="960" font-size="7.5" text-anchor="middle" class="itx">PG</text>
+<text x="1190" y="970.0" font-size="7.5" text-anchor="middle" class="itx">547</text>
+</g>
+<circle cx="1100" cy="1000" r="3.5" class="tee"/>
+<text x="1150" y="1018" font-size="8.5" text-anchor="start" class="tx">2&quot;-PR-B013-8093-H</text>
+<g class="hot"><title>2&quot; 150# check valve on pump discharge</title>
+<path d="M1052,993 L1052,1007 M1068,993 L1068,1007 M1068,994 L1052,1006" class="stem"/>
+<polygon points="1052,1000 1062,995 1062,1005" class="dot"/>
+</g>
+<g class="hot"><title>2&quot; 150# discharge isolation</title>
+<path d="M1017,994 L1033,1006 L1033,994 L1017,1006 Z" class="vb"/>
+</g>
+<polyline points="1000,1000 1000,1020" class="l-dr"/>
+<g class="hot"><title>3/4&quot; drain</title>
+<path d="M994,1020 L1006,1036 L994,1036 L1006,1020 Z" class="vb"/>
+</g>
+<polygon points="973,1000 987,995.1 987,1004.9" class="ah l-crude"/>
+<polyline points="1100,1000 1100,520 1480,520" class="l-crude"/>
+<g class="hot"><title>2&quot; 150# isolation on minimum-flow line</title>
+<path d="M1094,932 L1106,948 L1094,948 L1106,932 Z" class="vb"/>
+</g>
+<g class="hot"><title>2&quot; 150# globe valve setting minimum recirculation flow for pump protection (sheet 041 Note 3)</title>
+<path d="M1094,882 L1106,898 L1094,898 L1106,882 Z" class="vb"/>
+<circle cx="1100" cy="890" r="3" class="dot"/>
+</g>
+<polyline points="1100,840 1130,840" class="l-inst"/>
+<g class="hot"><title>PI-548 pressure gauge on minimum-flow line (DBB)</title>
+<circle cx="1145" cy="840" r="12" class="ib"/>
+<text x="1145" y="838" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="1145" y="848.0" font-size="7.5" text-anchor="middle" class="itx">548</text>
+</g>
+<polygon points="1100,693 1095.1,707 1104.9,707" class="ah l-crude"/>
+<polygon points="1307,520 1293,515.1 1293,524.9" class="ah l-crude"/>
+<text x="1092" y="760" font-size="8.5" text-anchor="middle" class="tx" transform="rotate(-90 1092 760)">2&quot;-PR-B013-8094-H · MIN FLOW (Note 3)</text>
+<g class="hot"><title>L028-68-A-001 hot oil unit package (existing, sheet 062)</title>
+<rect x="60" y="1080" width="880" height="200" class="pkg"/>
+</g>
+<text x="70" y="1272" font-size="9" text-anchor="start" class="mute" font-weight="600">HOT OIL UNIT L028-68-A-001 (existing package)</text>
+<text x="940" y="990" font-size="8.5" text-anchor="end" class="tx">2&quot;-PR-B013-8048-H</text>
+<g class="hot"><title>TP-10A/10B: new 2&quot; crude feed ties into the existing 3&quot; diesel supply line to the hot oil unit</title>
+<polygon points="803,1022 811.5,1011 828.5,1011 837,1022 828.5,1033 811.5,1033" class="tp"/>
+<text x="820" y="1021" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="820" y="1030" font-size="7" text-anchor="middle" class="tptx">10A/B</text>
+</g>
+<g class="hot"><title>2&quot; 150# isolation at TP-10A/B</title>
+<path d="M782,994 L798,1006 L798,994 L782,1006 Z" class="vb"/>
+</g>
+<g class="hot"><title>Existing diesel supply to the hot oil unit. Stabilised crude replaces diesel as the flushing medium; diesel isolation 3&quot; valve stays closed during crude operation.</title>
+<polygon points="30,983.0 220,983.0 230,1000 220,1017.0 30,1017.0" class="op dsl-op"/>
+<text x="125.0" y="997.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">FROM DIESEL SUPPLY</text>
+<text x="125.0" y="1010.0" font-size="8.5" text-anchor="middle" class="optx">3&quot;-DF-B013-XXX-X · sht 038</text>
+</g>
+<polyline points="230,1000 640,1000" class="l-dsl"/>
+<g class="hot"><title>3&quot; diesel supply isolation (closed when running on crude)</title>
+<path d="M262,994 L278,1006 L278,994 L262,1006 Z" class="vb nc"/>
+</g>
+<text x="270" y="1020" font-size="7.5" text-anchor="middle" class="mute">3&quot; NC on crude</text>
+<circle cx="640" cy="1000" r="3.5" class="tee"/>
+<polyline points="640,1000 640,1100" class="l-crude"/>
+<text x="648" y="1050" font-size="7.5" text-anchor="start" class="mute">HOSE · 4&quot;x3&quot; · BV-001</text>
+<g class="hot"><title>BV-001 4&quot; heater inlet valve</title>
+<path d="M634,1067 L646,1083 L634,1083 L646,1067 Z" class="vb"/>
+</g>
+<polygon points="640,1047 635.1,1033 644.9,1033" class="ah l-crude"/>
+<g class="hot"><title>L028-68-P-001 hot oil unit booster pump (existing)</title>
+<rect x="200" y="1110" width="180" height="90" rx="3" class="eq"/>
+</g>
+<text x="290.0" y="1149.0" font-size="11" text-anchor="middle" class="tk" font-weight="700">L028-68-P-001</text>
+<text x="290.0" y="1164.0" font-size="8" text-anchor="middle" class="mute">HOU BOOSTER PUMP</text>
+<text x="290.0" y="1175.0" font-size="8" text-anchor="middle" class="mute">existing</text>
+<polyline points="380,1155 420,1155" class="l-crude"/>
+<polygon points="417,1155 403,1150.1 403,1159.9" class="ah l-crude"/>
+<g class="hot"><title>L028-68-H-001 hot oil heater (existing). Crude is heated to a maximum of 75–80 °C to avoid excessive gas flashing (sheet 062 Note 5).</title>
+<rect x="420" y="1100" width="230" height="100" rx="3" class="eq hot"/>
+</g>
+<text x="535.0" y="1144.0" font-size="11" text-anchor="middle" class="tk" font-weight="700">L028-68-H-001</text>
+<text x="535.0" y="1159.0" font-size="8" text-anchor="middle" class="mute">HOT OIL HEATER</text>
+<text x="535.0" y="1170.0" font-size="8" text-anchor="middle" class="mute">oil heated to max 75–80 °C (Note 5)</text>
+<polyline points="650,1150 700,1150 780,1150" class="l-ho"/>
+<g class="hot"><title>TP-11A/11B: new 2&quot; heated-oil recirculation take-off at hot oil heater outlet</title>
+<polygon points="683,1128 691.5,1117 708.5,1117 717,1128 708.5,1139 691.5,1139" class="tp"/>
+<text x="700" y="1127" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="700" y="1136" font-size="7" text-anchor="middle" class="tptx">11A/B</text>
+</g>
+<g class="hot"><title>2&quot; existing valve heater → HP PD booster pump</title>
+<path d="M737,1144 L753,1156 L753,1144 L737,1156 Z" class="vb"/>
+</g>
+<g class="hot"><title>L028-68-P-002 high-pressure PD booster pump (existing). Pumps hot oil via chiksan pipe and 2&quot;-HD-D013-5128-X to wells 120, 134LS/SS, 136LS/SS, 137LS/SS for flushing.</title>
+<rect x="780" y="1100" width="150" height="100" rx="3" class="eq"/>
+</g>
+<text x="855.0" y="1144.0" font-size="11" text-anchor="middle" class="tk" font-weight="700">L028-68-P-002</text>
+<text x="855.0" y="1159.0" font-size="8" text-anchor="middle" class="mute">HP PD BOOSTER PUMP</text>
+<text x="855.0" y="1170.0" font-size="8" text-anchor="middle" class="mute">existing</text>
+<polyline points="855,1200 855,1300" class="l-ho"/>
+<polygon points="855,1297 850.1,1283 859.9,1283" class="ah l-ho"/>
+<text x="865" y="1300" font-size="8" text-anchor="start" class="mute">→ 2&quot;-HD-D013-5128-X to wells 120/134/136/137 (flushing)</text>
+<polyline points="700,1150 700,1250 2170,1250 2170,560 1620,560 1620,620" class="l-ho"/>
+<g class="hot"><title>2&quot; 150# isolation on heated-oil recirculation at TP-11A/B</title>
+<path d="M694,1197 L706,1213 L694,1213 L706,1197 Z" class="vb"/>
+</g>
+<polygon points="907,1250 893,1245.1 893,1254.9" class="ah l-ho"/>
+<polygon points="2170,893 2165.1,907 2174.9,907" class="ah l-ho"/>
+<polygon points="1893,560 1907,555.1 1907,564.9" class="ah l-ho"/>
+<polygon points="1620,612 1615.1,598 1624.9,598" class="ah l-ho"/>
+<text x="960" y="1243" font-size="9" text-anchor="start" class="tx">2&quot;-PR-B013-8097-H · heated oil recirculation to Bullet Tank-C (Note 4)</text>
+<polyline points="1500,1250 1500,1222" class="l-inst"/>
+<g class="hot"><title>PI-551 pressure gauge on heated-oil return (DBB)</title>
+<circle cx="1500" cy="1208" r="12" class="ib"/>
+<text x="1500" y="1206" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="1500" y="1216.0" font-size="7.5" text-anchor="middle" class="itx">551</text>
+</g>
+<polyline points="1560,1250 1560,1222" class="l-inst"/>
+<g class="hot"><title>TI-527 temperature on heated-oil return — confirms ≤ 75–80 °C</title>
+<circle cx="1560" cy="1208" r="12" class="ib"/>
+<text x="1560" y="1206" font-size="7.5" text-anchor="middle" class="itx">TI</text>
+<text x="1560" y="1216.0" font-size="7.5" text-anchor="middle" class="itx">527</text>
+</g>
+<g class="hot"><title>TP-05: heated-oil line joins existing 2&quot; 600# line (near LCV-1005) into V-312 N6</title>
+<polygon points="1633,588 1641.5,577 1658.5,577 1667,588 1658.5,599 1641.5,599" class="tp"/>
+<text x="1650" y="587" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="1650" y="596" font-size="7" text-anchor="middle" class="tptx">05</text>
+</g>
+<g class="hot"><title>2&quot; 600# isolation at TP-05</title>
+<path d="M1614,577 L1626,593 L1614,593 L1626,577 Z" class="vb"/>
+</g>
+<polyline points="1760,620 1760,520 2250,520 2250,110" class="l-vent"/>
+<g class="hot"><title>2&quot; 150# vent isolation at V-312 N10</title>
+<path d="M1754,572 L1766,588 L1754,588 L1766,572 Z" class="vb"/>
+</g>
+<g class="hot"><title>TP-08: new 2&quot; vent take-off on V-312 N10</title>
+<polygon points="1773,600 1781.5,589 1798.5,589 1807,600 1798.5,611 1781.5,611" class="tp"/>
+<text x="1790" y="599" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="1790" y="608" font-size="7" text-anchor="middle" class="tptx">08</text>
+</g>
+<polyline points="1760,545 1720,545" class="l-inst"/>
+<g class="hot"><title>PI-550 pressure gauge on V-312 vent line (DBB)</title>
+<circle cx="1705" cy="545" r="12" class="ib"/>
+<text x="1705" y="543" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="1705" y="553.0" font-size="7.5" text-anchor="middle" class="itx">550</text>
+</g>
+<polygon points="2007,520 1993,515.1 1993,524.9" class="ah l-vent"/>
+<polygon points="2250,193 2245.1,207 2254.9,207" class="ah l-vent"/>
+<text x="2000" y="513" font-size="8.5" text-anchor="middle" class="tx">2&quot;-VF-B013-8095-X (Note 5)</text>
+<g class="hot"><title>New cold vent stack, ~3 m, vents to atmosphere at a safe location. HOLD 1: stack height to be fixed by dispersion calculation.</title>
+<rect x="2240" y="80" width="20" height="30" class="vb"/>
+</g>
+<text x="2268" y="90" font-size="9" text-anchor="start" class="tx" font-weight="600">COLD VENT → ATM</text>
+<text x="2268" y="102" font-size="7.5" text-anchor="start" class="mute">safe location · ~3 m</text>
+<text x="2268" y="114" font-size="7.5" text-anchor="start" class="hold">HOLD 1: height by dispersion calc.</text>
+<polyline points="1860,620 1860,580" class="l-gas"/>
+<g class="hot"><title>Existing gas line from V-312 to LAM-16 flare / vent-drain tank — CLOSED during hot oil operation so the tank vents to atmosphere (Note 5)</title>
+<path d="M1854,590 L1866,606 L1854,606 L1866,590 Z" class="vb nc"/>
+</g>
+<g class="hot"><title>TP-09: existing isolation on gas line to LAM-16 flare, closed for hot oil operation</title>
+<polygon points="1873,592 1881.5,581 1898.5,581 1907,592 1898.5,603 1881.5,603" class="tp"/>
+<text x="1890" y="591" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="1890" y="600" font-size="7" text-anchor="middle" class="tptx">09</text>
+</g>
+<text x="1872" y="575" font-size="7.5" text-anchor="start" class="mute">TO LAM-16 FLARE — CLOSED (Note 5)</text>
+<g class="hot"><title>L028-57-V-001 vent/drain drum (existing, sheet 025). Existing 2&quot;-VA-B013-203-X vent rerouted to the new cold vent.</title>
+<rect x="2300" y="330" width="140" height="70" rx="35.0" ry="35.0" class="vsl"/>
+</g>
+<text x="2370.0" y="361.0" font-size="13" text-anchor="middle" class="tk" font-weight="700">L028-57-V-001</text>
+<text x="2370.0" y="377.0" font-size="8.5" text-anchor="middle" class="mute">VENT/DRAIN DRUM 4 m³</text>
+<polyline points="2330,330 2330,300 2250,300" class="l-vent"/>
+<g class="hot"><title>TP-12A/12B: new 2&quot; 150# vent line from V-001 N2 (12&quot;) to new cold vent</title>
+<polygon points="2283,278 2291.5,267 2308.5,267 2317,278 2308.5,289 2291.5,289" class="tp"/>
+<text x="2300" y="277" font-size="6.5" text-anchor="middle" class="tptx">TP</text>
+<text x="2300" y="286" font-size="7" text-anchor="middle" class="tptx">12A/B</text>
+</g>
+<g class="hot"><title>2&quot; 150# isolation on V-001 vent</title>
+<path d="M2282,294 L2298,306 L2298,294 L2282,306 Z" class="vb"/>
+</g>
+<text x="2335" y="322" font-size="7.5" text-anchor="start" class="mute">N2</text>
+<circle cx="2250" cy="300" r="3" class="tee"/>
+<text x="2260" y="250" font-size="8" text-anchor="start" class="tx">2&quot;-VF-B013-8096-X</text>
+<polygon points="2258,300 2272,295.1 2272,304.9" class="ah l-vent"/>
+</svg></div>
+  <div class="legend">
+    <span><i style="border-color:var(--n1);border-top-width:8px;opacity:.5"></i>Node 1</span>
+    <span><i style="border-color:var(--n2);border-top-width:8px;opacity:.6"></i>Node 2</span>
+    <span><i style="border-color:var(--crude)"></i>Crude oil</span>
+    <span><i style="border-color:var(--ho)"></i>Heated crude / hot oil</span>
+    <span><i style="border-color:var(--water)"></i>Free water</span>
+    <span><i style="border-color:var(--vent)"></i>Vent</span>
+    <span><i style="border-color:var(--dsl);border-top-style:dashed"></i>Diesel (existing)</span>
+    <span><i style="border-color:var(--sig);border-top-style:dashed"></i>Signal</span>
+    <span>■ filled valve = normally closed · LC = locked closed</span>
+  </div>
+</section>
+
+<section id="function">
+  <h2>How it works</h2>
+  <p class="lead">Until now the hot oil unit flushed wells with diesel. In this change, well crude that has already been separated is filtered and stabilised in Bullet Tank-C. A new feed pump then sends it through the existing hot oil heater to the wells. Part of the heated crude is returned to the tank, and the tank vents to a new cold vent instead of to flare.</p>
+  <div class="cols">
+    <div class="card"><h3><i style="border-color:var(--n1)"></i>Node 1 — crude to Bullet Tank-C</h3>
+      <div class="flow"><span>V-100 / V-301 oil</span><b>→</b><span>TP-01A/B · TP-04</span><b>→</b><span>3&quot; lines 8086-H / 8083-H</span><b>→</b><span>ST-017 A/B</span><b>→</b><span>8085-H</span><b>→</b><span>TP-06A/B · BV-352</span><b>→</b><span>V-312 N1</span></div>
+      <p>Crude comes from either the test separator V-100 (TP-01A/B, 3" 600#) or the Repco separator V-301 (TP-04, 3" 300# downstream of LV-303). The two lines join and pass through the new basket strainer ST-017 A/B, which has a locked-closed 100% bypass, then enter Bullet Tank-C at N1 through the existing 6" BV-352. The separators push the flow on their own pressure, so there is no pump in this node. At each spec break (D013/C013 → B013) the line drops to the B013 150# class. Before start-up, the fluid is checked for solids, gas and water (030 Note 4).</p>
+      <p>When V-100 is used, its free water drains separately through TP-02A/B and a check valve to TP-03 and the LLP header (030 Note 3).</p></div>
+    <div class="card"><h3><i style="border-color:var(--n2)"></i>Node 2 — feed pump and heater loop</h3>
+      <div class="flow"><span>V-312 N4</span><b>→</b><span>TP-07</span><b>→</b><span>P-003</span><b>→</b><span>8093-H / 8048-H</span><b>→</b><span>TP-10A/B</span><b>→</b><span>H-001</span><b>→</b><span>TP-11A/B</span><b>→</b><span>8097-H</span><b>→</b><span>TP-05 → V-312 N6</span></div>
+      <p>P-003 draws crude from N4 (1000 mm above the tank bottom) and pumps it into the existing 3" diesel supply line at TP-10A/B. The diesel isolation stays closed during this service. From there the crude passes through the hose and BV-001 to heater H-001, which heats it to 75–80 °C at most. The HP PD booster P-002 sends hot crude to the wells. A 2" line from the heater outlet (TP-11A/B) returns heated oil to V-312 N6 so the tank contents warm up and stabilise (062 Note 4). A 2" minimum-flow line (8094-H) protects P-003 when its discharge is throttled.</p></div>
+    <div class="card"><h3><i style="border-color:var(--vent)"></i>Venting and stabilisation</h3>
+      <p>For stabilisation, the gas line from V-312 to LAM-16 flare is closed (TP-09, Note 5) and the tank vents through N10 (TP-08), <span class="mono">2"-VF-B013-8095-X</span>, to a new cold vent about 3 m high at a safe location. The V-001 vent/drain drum vent joins the same stack (TP-12A/B, <span class="mono">2"-VF-B013-8096-X</span>). The stack height is on HOLD 1 until the dispersion calculation is done.</p></div>
+    <div class="card"><h3><i style="border-color:var(--sig)"></i>Protection on this scope</h3>
+      <ul>
+        <li>LSHH-1004 → PSD-232 at 2200 mm protects V-312 against overfill from the separators and from heated-oil recirculation.</li>
+        <li>LSLL-1004 → PSD-231 at 300 mm protects P-003 against loss of suction.</li>
+        <li>P-003 has a check valve on the discharge and a minimum-flow line. It is started and stopped locally from the LCP.</li>
+        <li>TI-527 on the heated-oil return confirms the 75–80 °C limit. A heater trip or control on this limit is not shown on these sheets.</li>
+        <li>Pressure on every new branch is shown by a DBB-isolated local gauge (PI-543 … PI-551). There are no new transmitters.</li>
+      </ul></div>
+  </div>
+</section>
+
+<section id="equipment"><h2>Equipment</h2><div class="tw"><table class=""><thead><tr><th>Tag</th><th>Description</th><th>Status</th><th>Node</th><th>Key data</th></tr></thead><tbody><tr><td><span class="mono">L028-21-V-100</span></td><td>TDE test separator</td><td>Existing</td><td><span class="chip n1">1</span></td><td>Trim 2"-PR-D013-119-X. Run near wellhead choke downstream pressure (030 Note 5); used when free water must be separated (030 Note 7)</td></tr><tr><td><span class="mono">L028-21-V-301</span></td><td>Repco HP separator</td><td>Existing</td><td><span class="chip n1">1</span></td><td>Trim 2"-PR-C013-117-X. Dedicated to hot oil unit operation (031 Note 2). Oil level on LIC-302 / LV-303</td></tr><tr><td><span class="mono">L028-21-ST-017 A/B</span></td><td>Basket strainer</td><td>New (from stock)</td><td><span class="chip n1">1</span></td><td>3" 150#, inlet/outlet isolation, 100% bypass (LC), PI-54X downstream (031 Note 3)</td></tr><tr><td><span class="mono">L028-21-V-312</span></td><td>Bullet Tank-C</td><td>Existing</td><td><span class="chip n2">1/2</span></td><td>Levels HH 2200 / H 2000 / L 400 / LL 300 mm. LSHH/LSLL-1004 → PSD-232/231, LT/LG-1004, TT/TIA-1003. Dedicated to hot oil operation (041 Note 4)</td></tr><tr><td><span class="mono">L028-21-P-003</span></td><td>Hot oil unit feed pump</td><td>New (from stock)</td><td><span class="chip n2">2</span></td><td>Electric centrifugal · 25/20/13 m³/h · 34 m differential head · 6 barg discharge · driver XX kW · LCP start/stop (041 Note 6)</td></tr><tr><td><span class="mono">L028-68-A-001</span></td><td>Hot oil unit package</td><td>Existing</td><td><span class="chip n2">2</span></td><td>Contains booster pump P-001, heater H-001 and HP PD booster pump P-002</td></tr><tr><td><span class="mono">L028-68-P-001</span></td><td>HOU booster pump</td><td>Existing</td><td><span class="chip n2">2</span></td><td>Feeds heater H-001</td></tr><tr><td><span class="mono">L028-68-H-001</span></td><td>Hot oil heater</td><td>Existing</td><td><span class="chip n2">2</span></td><td>Crude heated to max 75–80 °C to avoid excess gas flashing (062 Note 5)</td></tr><tr><td><span class="mono">L028-68-P-002</span></td><td>HP PD booster pump</td><td>Existing</td><td><span class="chip n2">2</span></td><td>Pumps hot oil via chiksan / 2"-HD-D013-5128-X to wells 120, 134LS/SS, 136LS/SS, 137LS/SS</td></tr><tr><td><span class="mono">L028-57-V-001</span></td><td>Vent / drain drum</td><td>Existing</td><td><span class="chip n2">2</span></td><td>4 m³, trim 2"-DC-B013-115-X. Pumps L028-21-P-116A/B (AODD, 450 LPM, 5 barg). Vent rerouted to new cold vent</td></tr><tr><td><span class="mono">Cold vent stack</span></td><td>Vent to atmosphere at safe location</td><td>New</td><td><span class="chip n2">2</span></td><td>Approx. 3 m. HOLD 1: height from dispersion calculation</td></tr></tbody></table></div></section>
+<section id="lines"><h2>Line list (new scope)</h2><p class="lead">Format: size – service – piping class – number – insulation code. PR process, VF vent/flare, DF diesel fuel, HD hot oil discharge. B013 is the 150# carbon steel class; C013 (300#) and D013 (600#) are upstream classes at the separators.</p><div class="tw"><table class=""><thead><tr><th>Line number</th><th>Size</th><th>Service</th><th>From → To</th><th>Node</th></tr></thead><tbody><tr><td><span class="mono">3&quot;-PR-B013-8086-H</span></td><td>3"</td><td><span class="chip crude">Crude</span></td><td>V-100 oil outlet (TP-01A/B, 3" 600#, D013/B013 break, PI-543) → basket strainer inlet</td><td><span class="chip n1">1</span></td></tr><tr><td><span class="mono">3&quot;-PR-B013-8083-H</span></td><td>3"</td><td><span class="chip crude">Crude</span></td><td>V-301 oil outlet (TP-04, 3" 300#, C013/B013 break, PI-545) → ST-017 A/B</td><td><span class="chip n1">1</span></td></tr><tr><td><span class="mono">3&quot;-PR-B013-8087-H</span></td><td>3"</td><td><span class="chip crude">Crude</span></td><td>Strainer 100% bypass, 3" 150# LC valve</td><td><span class="chip n1">1</span></td></tr><tr><td><span class="mono">3&quot;-PR-B013-8085-H</span></td><td>3"</td><td><span class="chip crude">Crude</span></td><td>ST-017 outlet (PI-54X, PI-549) → TP-06A/B → BV-352 → V-312 N1</td><td><span class="chip n1">1</span></td></tr><tr><td><span class="mono">2&quot; free-water line (no new number shown)</span></td><td>2"</td><td><span class="chip water">Water</span></td><td>V-100 water outlet (TP-02A/B, 2" 600#, check, PI-544) → TP-03 / BV-397 → LLP header 4"-PR-D013-5076-X</td><td><span class="chip n1">1</span></td></tr><tr><td><span class="mono">2&quot;-PR-B013-8088-H</span></td><td>2"</td><td><span class="chip crude">Crude</span></td><td>V-312 N4 (TP-07) → local drain branch → P-003 suction (PG-546)</td><td><span class="chip n2">2</span></td></tr><tr><td><span class="mono">2&quot;-PR-B013-8093-H</span></td><td>2"</td><td><span class="chip crude">Crude</span></td><td>P-003 discharge (PG-547, check, isolation) → hot oil unit</td><td><span class="chip n2">2</span></td></tr><tr><td><span class="mono">2&quot;-PR-B013-8094-H</span></td><td>2"</td><td><span class="chip crude">Crude</span></td><td>P-003 minimum-flow line (globe + isolation, PI-548) → V-312 inlet line (041 Note 3)</td><td><span class="chip n2">2</span></td></tr><tr><td><span class="mono">2&quot;-PR-B013-8048-H</span></td><td>2"</td><td><span class="chip crude">Crude</span></td><td>From P-003 → TP-10A/B on 3" diesel supply line → hose → BV-001 → heater H-001</td><td><span class="chip n2">2</span></td></tr><tr><td><span class="mono">2&quot;-PR-B013-8097-H</span></td><td>2"</td><td><span class="chip ho">Heated crude</span></td><td>Heater outlet (TP-11A/B) → PI-551, TI-527 → TP-05 → V-312 N6 (062 Note 4)</td><td><span class="chip n2">2</span></td></tr><tr><td><span class="mono">2&quot;-VF-B013-8095-X</span></td><td>2"</td><td><span class="chip vent">Vent</span></td><td>V-312 N10 (TP-08, PI-550) → new cold vent (041 Note 5)</td><td><span class="chip n2">2</span></td></tr><tr><td><span class="mono">2&quot;-VF-B013-8096-X</span></td><td>2"</td><td><span class="chip vent">Vent</span></td><td>V-001 N2 (TP-12A/B) → new cold vent</td><td><span class="chip n2">2</span></td></tr><tr><td><span class="mono">3&quot;-DF-B013-XXX-X</span></td><td>3"</td><td><span class="chip dsl">Diesel</span></td><td>Existing diesel supply to hot oil unit (isolated when running on crude)</td><td>Context</td></tr><tr><td><span class="mono">2&quot;-HD-D013-5128-X</span></td><td>2"</td><td><span class="chip ho">Hot oil</span></td><td>Existing hot oil from P-002 to the well flushing headers</td><td>Context</td></tr></tbody></table></div></section>
+<section id="tieins"><h2>Tie-in schedule</h2><div class="tw"><table class=""><thead><tr><th>Tie-in</th><th>Sheet</th><th>Location</th><th>Purpose</th></tr></thead><tbody><tr><td><span class="mono">TP-01A/B</span></td><td>030</td><td>V-100 oil outlet line</td><td>Take-off for crude to basket strainer</td></tr><tr><td><span class="mono">TP-02A/B</span></td><td>030</td><td>V-100 water outlet line</td><td>Free-water drain to LLP header (030 Note 3)</td></tr><tr><td><span class="mono">TP-03</span></td><td>030</td><td>4" line at BV-397</td><td>Free water into LLP header → Bullet Tank-C</td></tr><tr><td><span class="mono">TP-04</span></td><td>031</td><td>V-301 oil outlet 3"-PR-C013-152-X, downstream of LV-303</td><td>Take-off for Repco oil to basket strainer</td></tr><tr><td><span class="mono">TP-05</span></td><td>041</td><td>Existing 2" 600# line to V-312 N6 (near LCV-1005)</td><td>Heated-oil recirculation return</td></tr><tr><td><span class="mono">TP-06A/B</span></td><td>041</td><td>Existing 6" 150# BV-352 to V-312 N1</td><td>Filtered crude inlet to Bullet Tank-C</td></tr><tr><td><span class="mono">TP-07</span></td><td>041</td><td>V-312 N4 (2", 1000 mm above bottom)</td><td>P-003 suction</td></tr><tr><td><span class="mono">TP-08</span></td><td>041</td><td>V-312 N10</td><td>Tank vent to new cold vent</td></tr><tr><td><span class="mono">TP-09</span></td><td>041</td><td>Existing gas line from V-312 to LAM-16 flare</td><td>Closed during hot oil operation (041 Note 5)</td></tr><tr><td><span class="mono">TP-10A/B</span></td><td>062</td><td>Existing 3" diesel supply line to HOU</td><td>Crude feed into hot oil unit</td></tr><tr><td><span class="mono">TP-11A/B</span></td><td>062</td><td>Hot oil heater H-001 outlet</td><td>Heated-oil recirculation take-off</td></tr><tr><td><span class="mono">TP-12A/B</span></td><td>025</td><td>V-001 vent nozzle N2</td><td>V-001 vent to new cold vent</td></tr></tbody></table></div></section>
+<section id="instruments"><h2>Instruments on the scope</h2><div class="tw"><table class=""><thead><tr><th>Tag</th><th>Type</th><th>Location</th><th>Function / setting</th></tr></thead><tbody><tr><td><span class="mono">PI-543</span></td><td>Pressure gauge (DBB)</td><td>V-100 oil take-off</td><td>Local pressure</td></tr><tr><td><span class="mono">PI-544</span></td><td>Pressure gauge (DBB)</td><td>Free-water line</td><td>Local pressure</td></tr><tr><td><span class="mono">PI-545</span></td><td>Pressure gauge (DBB)</td><td>V-301 oil take-off</td><td>Strainer upstream pressure</td></tr><tr><td><span class="mono">PI-54X</span></td><td>Pressure gauge</td><td>ST-017 outlet</td><td>Strainer ΔP with PI-545/543. Tag not yet assigned</td></tr><tr><td><span class="mono">PI-549</span></td><td>Pressure gauge (DBB)</td><td>Inlet line to V-312</td><td>Local pressure</td></tr><tr><td><span class="mono">LSHH-1004 / PSD-232</span></td><td>Level switch → shutdown</td><td>V-312</td><td>HH 2200 mm, stops inflow / overfill protection</td></tr><tr><td><span class="mono">LSLL-1004 / PSD-231</span></td><td>Level switch → shutdown</td><td>V-312</td><td>LL 300 mm, protects P-003 from dry running</td></tr><tr><td><span class="mono">LT-1004, LG-1004</span></td><td>Level transmitter / gauge</td><td>V-312</td><td>H 2000 / L 400 mm alarms</td></tr><tr><td><span class="mono">TT-1003 / TIA-1003</span></td><td>Temperature</td><td>V-312</td><td>Low temperature alarm</td></tr><tr><td><span class="mono">PG-546 / PG-547</span></td><td>Pressure gauges</td><td>P-003 suction / discharge</td><td>Local pump monitoring</td></tr><tr><td><span class="mono">PI-548</span></td><td>Pressure gauge (DBB)</td><td>Min-flow line</td><td>Confirms min-flow path</td></tr><tr><td><span class="mono">LCP START/STOP</span></td><td>Local control panel</td><td>P-003</td><td>Manual pump start/stop</td></tr><tr><td><span class="mono">PI-551</span></td><td>Pressure gauge (DBB)</td><td>Heated-oil return</td><td>Local pressure</td></tr><tr><td><span class="mono">TI-527</span></td><td>Temperature indicator</td><td>Heated-oil return</td><td>Check oil ≤ 75–80 °C</td></tr><tr><td><span class="mono">PI-550</span></td><td>Pressure gauge (DBB)</td><td>V-312 vent line</td><td>Tank vapour pressure</td></tr></tbody></table></div></section>
+<section id="notes"><h2>Drawing notes</h2><h3>030 · TDE Test Separator V-100</h3><ul class='notes'><li>Well selection for stabilized crude deployment to replace the diesel flushing shall be free of sand, min gas and oil.</li><li>Free water drain line to LLP header during hot oil flushing operation.</li><li>Fluid shall be analysed in LAM-28 to ensure that the fluid is free from solid, min. gas &amp; water before starting hot oil operation.</li><li>Test separator shall be operated close to the wellhead choke valve downstream pressure.</li><li>Well 192B is selected for this trial operation.</li><li>Test separator shall be operated for hot oil flushing, if free water separation is required.</li></ul><h3>031 · Repco Separator V-301</h3><ul class='notes'><li>Repco separator shall be dedicated for hot oil unit operation, during heating of stabilized crude oil from flushing operation.</li><li>Basket strainer is available in stock.</li></ul><h3>041 · Bullet Tank-C V-312</h3><ul class='notes'><li>Min recirculation line for pump protection.</li><li>Bullet tank shall be dedicated for hot oil operation during flushing operation with crude oil.</li><li>Vent to atm shall be operated by closing the line to LAM-16 flare for oil stabilization.</li><li>Pump is available in stock.</li><li>NC (normally close) is applicable when bullet tank is used for hot oil operation.</li><li>HOLD 1: new cold vent stack height based on dispersion calculation.</li></ul><h3>062 · Hot Oil Units</h3><ul class='notes'><li>Well fluid shall flow from test separator or Repco separator to the bullet tank after filtration in basket strainer. Stabilized oil shall be pumped to the hot oil unit through booster pumps.</li><li>Heater oil for recirculation to bullet tank.</li><li>Oil shall be heated to maximum temperature of 75 °C–80 °C to avoid excess flushing of gas.</li></ul><h3>025 · Vent &amp; Drain Drum V-001</h3><ul class='notes'><li>HOLD 1: dispersion calculation (new cold vent).</li></ul></section>
+<section id="sheets"><h2>Source sheets</h2><div class="tw"><table class=""><thead><tr><th>Sheet</th><th>Drawing</th><th>Title</th><th>Current rev.</th><th>Node(s)</th></tr></thead><tbody><tr><td>1</td><td><span class="mono">L028-PR-PID-01-M0001-031-00</span></td><td>P&ID for Repco separator V-301</td><td>01A · 22.10.2026 · IFR ENG-XXX-2026</td><td><span class="chip n1">1</span></td></tr><tr><td>2</td><td><span class="mono">L028-PR-PID-01-M0001-030-00</span></td><td>P&ID for TDE test separator V-100</td><td>04A · 15.07.2026 · IFR ENG-XXX-2026</td><td><span class="chip n1">1</span></td></tr><tr><td>3</td><td><span class="mono">L028-PR-PID-01-M0001-041-00</span></td><td>P&ID for Bullet Tank L028-21-V-312</td><td>10A · 15.07.2026 · IFR ENG-XXX-2026</td><td><span class="chip n1">1</span> <span class="chip n2">2</span></td></tr><tr><td>4</td><td><span class="mono">L028-PR-PID-01-M0001-062-00</span></td><td>P&ID for hot oil units</td><td>03A · 15.07.2026 · IFR ENG-XXX-2026</td><td><span class="chip n2">2</span></td></tr><tr><td>5</td><td><span class="mono">L028-PR-PID-01-M0001-025-00</span></td><td>Vent & drain drum V-001</td><td>04A · 22.10.2026 · IFR ENG-XXX-2026</td><td><span class="chip n2">2</span></td></tr></tbody></table></div></section>
+<section id="caveats"><h2>Reading notes</h2>
+  <div class="caveat"><ul>
+    <li>This is a schematic of the new scope for review and HAZOP use, not a controlled drawing. Existing plant that does not touch the new lines (well manifolds, LP headers, V-001 inlet headers and so on) is left out.</li>
+    <li>The mark-up places the V-312 vent line (TP-08) in Node 2. The repo's Rev B HAZOP worksheet put the V-312 vessel, its instruments and the atmospheric vent in Node 1. Agree which convention applies before the next session.</li>
+    <li>The pump is tagged <span class="mono">L028-21-P-003</span> on the pump symbol but <span class="mono">L028-68-P-003</span> in the data box and on sheet 062.</li>
+    <li>On sheet 041, line 8097-H is labelled "from HOU booster pump L028-68-P-001". On sheet 062 the same line leaves the heater H-001 outlet at TP-11A/B. The redraw follows sheet 062.</li>
+    <li>Line number <span class="mono">3"-PR-B013-8087-H</span> appears both on the strainer bypass (sheet 031) and next to the free-water tie-in on sheet 030. The free-water line has no number of its own.</li>
+    <li>Several items are still undefined: PI-54X, PI-XXX, BV-XXX valve numbers, the P-003 driver power ("XX kW") and the 3"-DF-B013-XXX-X diesel line.</li>
+  </ul></div>
+</section>
+</div>
+<div id="tip" hidden></div>
+<script>
+(function(){
+  var c=document.getElementById('canvas'), svg=document.getElementById('pid');
+  var btns={fit:document.getElementById('z-fit'),'100':document.getElementById('z-100'),'150':document.getElementById('z-150')};
+  function set(k){
+    c.classList.toggle('fit',k==='fit');
+    if(k!=='fit') svg.style.width=(2460*(k==='150'?1.5:1))+'px'; else svg.style.width='';
+    Object.keys(btns).forEach(function(n){btns[n].setAttribute('aria-pressed', n===k?'true':'false');});
+    try{localStorage.setItem('pidzoom',k);}catch(e){}
+  }
+  Object.keys(btns).forEach(function(n){btns[n].addEventListener('click',function(){set(n);});});
+  var saved=null; try{saved=localStorage.getItem('pidzoom');}catch(e){}
+  set(saved && btns[saved] ? saved : (window.innerWidth<900?'fit':'100'));
+  var tip=document.getElementById('tip');
+  function show(e){
+    var g=e.target.closest && e.target.closest('g.hot'); if(!g){tip.hidden=true;return;}
+    var tt=g.querySelector('title'); if(!tt) return;
+    tip.textContent=tt.textContent; tip.hidden=false;
+    var x=(e.clientX||0)+14, y=(e.clientY||0)+14;
+    var w=tip.offsetWidth, h=tip.offsetHeight;
+    if(x+w>window.innerWidth-8) x=Math.max(8,window.innerWidth-w-8);
+    if(y+h>window.innerHeight-8) y=Math.max(8,(e.clientY||0)-h-10);
+    tip.style.left=x+'px'; tip.style.top=y+'px';
+  }
+  svg.addEventListener('mousemove',show);
+  svg.addEventListener('click',show);
+  svg.addEventListener('mouseleave',function(){tip.hidden=true;});
+  c.addEventListener('scroll',function(){tip.hidden=true;});
+})();
+</script>
