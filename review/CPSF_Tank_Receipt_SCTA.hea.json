@@ -1,0 +1,3400 @@
+{
+ "id": "scyyg55rtf1",
+ "schema": 1,
+ "created": "2026-11-17T18:06:11.478619Z",
+ "updated": "2026-11-17T18:06:11.478680Z",
+ "meta": {
+  "title": "Crude receipt and tank changeover, CPSF-T-107/108/109 - SCTA",
+  "goal": "Receive crude oil into storage tank CPSF-T-107/108/109 and change over to the next tank",
+  "site": "Dragon Oil (Turkmenistan), crude oil tank farm terminal",
+  "facility": "Storage tanks CPSF-T-107, T-108, T-109 (8,425 m3 each)",
+  "studyType": "SCTA",
+  "revision": "A (draft for walk-through)",
+  "date": "2026-11-17",
+  "owner": "Lead HF analyst (TBC)",
+  "team": "HF analyst (facilitator), process safety engineer, tank farm operations representative, instrument engineer (TBC)",
+  "interviewees": "TO BE CONFIRMED: control room operator and tank farm field operator walk-through not yet done. Desk study from the P&ID only.",
+  "preconditions": "Plant state:\nReceiving tank in service, not under maintenance\nVRU CPSF-23-X-011 A/B available\nFuel gas blanketing available\nHot oil heating available\n\nEquipment:\nDCS with LIA/PIA/TIA for each tank\nHS-10x-1/-2 for inlet and outlet SDVs\nRadio link to degassing boot / metering operator\n\nPersonnel:\nControl Room Operator (CRO)\nField Operator (FO)\nShift Supervisor (SS)\nDegassing boot / metering operator (UO)",
+  "notes": "Source: redrawn P&ID CPSF-PR-PID-1-0001-25-00 Rev X1 (Storage tanks CPSF-T-107/108/109), notes 1-17 and alarm/trip table. No operating procedure was supplied, so the \"work as imagined\" map is the design intent read from the P&ID, and the \"work as done\" map is an unverified DRAFT copy. All PIF ratings are PROVISIONAL from desk review and must be confirmed with the crew at a walk-through before the study is relied on.\n\nSafety-critical task screening for this P&ID (this study covers task 1):\n1. Crude receipt into a tank and changeover (THIS STUDY) - overfill / vapour cloud, Possible MAH. LSHH-10x alarms only; no automatic inlet closure shown.\n2. Tank dewatering via N3 / N4 to sewage and dewatering pumps CPSF-P-127 - drain left open, crude to sewage. High. Recommended next study.\n3. Inter-tank transfer with P-013A/B/C (Note 9, max 495 m3/h; Note 10 VRU limit) - overfill of receiving tank, VRU overload. High.\n4. Hot oil heating coil start-up and isolation (ESDV-414x, XV-413x, GV-41xx) - coil leak, overheating; SIL 2 TSHH exists. Medium.\n5. PVRV changeover / maintenance (LO/LC BFVs, spare PVRV) - tank isolated from relief. High (low frequency).\n6. Fuel gas blanketing PCV bypass operation (GLV-4133/4135/4137) - overpressure / air ingress. Medium.",
+  "ratingMode": "simple",
+  "isExample": false
+ },
+ "agents": [
+  {
+   "id": "av92yggmtf1",
+   "name": "Control Room Operator",
+   "abbr": "CRO",
+   "color": "#e07a6f"
+  },
+  {
+   "id": "arfqqau4tf1",
+   "name": "Field Operator (tank farm)",
+   "abbr": "FO",
+   "color": "#e9b44c"
+  },
+  {
+   "id": "a3ohnur9tf1",
+   "name": "Shift Supervisor",
+   "abbr": "SS",
+   "color": "#6cc3d5"
+  },
+  {
+   "id": "ae7kavhdtf1",
+   "name": "Degassing boot / metering operator",
+   "abbr": "UO",
+   "color": "#8f7fd6"
+  }
+ ],
+ "locations": [
+  {
+   "id": "lvf73jkhtf1",
+   "name": "Control room (DCS)",
+   "color": "#6cc3d5"
+  },
+  {
+   "id": "l0rjkz83tf1",
+   "name": "Tank farm: T-107/108/109 roof and shell",
+   "color": "#7cc68a"
+  },
+  {
+   "id": "l3ov8pegtf1",
+   "name": "Tank inlet / outlet manifold (inside bund)",
+   "color": "#c9a06b"
+  },
+  {
+   "id": "l3yoxguntf1",
+   "name": "Push-button station outside bund wall",
+   "color": "#d98cc8"
+  },
+  {
+   "id": "lwwsseuztf1",
+   "name": "Degassing boot / metering skids X-008/009/010",
+   "color": "#8f7fd6"
+  }
+ ],
+ "maps": {
+  "wai": {
+   "rootId": "nfnprao5tf1",
+   "nodes": {
+    "nfnprao5tf1": {
+     "id": "nfnprao5tf1",
+     "label": "Receive crude oil into storage tank CPSF-T-107/108/109 and change over to the next tank",
+     "children": [
+      "nrapb3butf1",
+      "nzstntfltf1",
+      "nla69ptqtf1",
+      "n1amagg2tf1",
+      "neher6uitf1"
+     ],
+     "parent": null,
+     "ref": "",
+     "agents": [],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null,
+     "type": "goal"
+    },
+    "nrapb3butf1": {
+     "id": "nrapb3butf1",
+     "label": "Prepare the receiving tank",
+     "children": [
+      "nsmgcsn8tf1",
+      "n7l33tsutf1",
+      "n70cpr7wtf1",
+      "na0yeqlxtf1",
+      "n34c8vv8tf1",
+      "nv09fxvytf1"
+     ],
+     "parent": "nfnprao5tf1",
+     "ref": "",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "any",
+      "text": "Do 1.1-1.6 in any order. All must be complete before 2."
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nsmgcsn8tf1": {
+     "id": "nsmgcsn8tf1",
+     "label": "Read the receiving tank level on LIA-10x-1 and LIA-10x-2 and confirm ullage for the planned receipt",
+     "children": [],
+     "parent": "nrapb3butf1",
+     "ref": "1.1",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "n7l33tsutf1": {
+     "id": "n7l33tsutf1",
+     "label": "Confirm VRU CPSF-23-X-011 A/B is running and no inter-tank transfer is in progress (Note 10)",
+     "children": [],
+     "parent": "nrapb3butf1",
+     "ref": "1.2",
+     "agents": [
+      "av92yggmtf1",
+      "a3ohnur9tf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "n70cpr7wtf1": {
+     "id": "n70cpr7wtf1",
+     "label": "Confirm vapour path to VRU (BFV-4135/4138/4139) and PVRV isolation BFVs A/B/C are locked open, spare S locked closed",
+     "children": [],
+     "parent": "nrapb3butf1",
+     "ref": "1.3",
+     "agents": [
+      "arfqqau4tf1"
+     ],
+     "where": "l0rjkz83tf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "na0yeqlxtf1": {
+     "id": "na0yeqlxtf1",
+     "label": "Confirm fuel gas blanketing PV-41xx is in service on PIC-41xx and bypass GLV is closed",
+     "children": [],
+     "parent": "nrapb3butf1",
+     "ref": "1.4",
+     "agents": [
+      "av92yggmtf1",
+      "arfqqau4tf1"
+     ],
+     "where": "l3ov8pegtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "n34c8vv8tf1": {
+     "id": "n34c8vv8tf1",
+     "label": "Confirm tank outlet SDV-10x-2, N3 dewatering valve and N4 drain to sewage are closed",
+     "children": [],
+     "parent": "nrapb3butf1",
+     "ref": "1.5",
+     "agents": [
+      "arfqqau4tf1"
+     ],
+     "where": "l3ov8pegtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nv09fxvytf1": {
+     "id": "nv09fxvytf1",
+     "label": "Confirm oil temperature on TIT-41xx is within 35-40 degC and hot oil ESDV is available",
+     "children": [],
+     "parent": "nrapb3butf1",
+     "ref": "1.6",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nzstntfltf1": {
+     "id": "nzstntfltf1",
+     "label": "Line up the receiving tank",
+     "children": [
+      "nx2ym7rvtf1",
+      "nweo9aiwtf1",
+      "ny5aygmttf1",
+      "nigsfc79tf1"
+     ],
+     "parent": "nfnprao5tf1",
+     "ref": "",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": "Do in sequence."
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nx2ym7rvtf1": {
+     "id": "nx2ym7rvtf1",
+     "label": "Select the receiving tank and agree it with the shift supervisor",
+     "children": [],
+     "parent": "nzstntfltf1",
+     "ref": "2.1",
+     "agents": [
+      "av92yggmtf1",
+      "a3ohnur9tf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nweo9aiwtf1": {
+     "id": "nweo9aiwtf1",
+     "label": "Open inlet SDV-10x-1 of the selected tank from HS-10x-1",
+     "children": [],
+     "parent": "nzstntfltf1",
+     "ref": "2.2",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "ny5aygmttf1": {
+     "id": "ny5aygmttf1",
+     "label": "Confirm SDV-10x-1 shows open and the inlet SDVs of the other two tanks show closed",
+     "children": [],
+     "parent": "nzstntfltf1",
+     "ref": "2.3",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nigsfc79tf1": {
+     "id": "nigsfc79tf1",
+     "label": "Tell the degassing boot / metering operator which tank is lined up and the maximum receipt rate",
+     "children": [],
+     "parent": "nzstntfltf1",
+     "ref": "2.4",
+     "agents": [
+      "av92yggmtf1",
+      "ae7kavhdtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nla69ptqtf1": {
+     "id": "nla69ptqtf1",
+     "label": "Start and monitor the receipt",
+     "children": [
+      "niqzwb0ltf1",
+      "nsj49qevtf1",
+      "n3dk1n8wtf1",
+      "nlvy3431tf1",
+      "nftd8o2otf1"
+     ],
+     "parent": "nfnprao5tf1",
+     "ref": "",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "par",
+      "text": "Do 3.1, then 3.2 continuously. Do 3.3-3.5 when the alarm occurs."
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "niqzwb0ltf1": {
+     "id": "niqzwb0ltf1",
+     "label": "Confirm the level of the selected tank is rising on LIT-10x-1 and LIT-10x-2 within 15 minutes of start",
+     "children": [],
+     "parent": "nla69ptqtf1",
+     "ref": "3.1",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nsj49qevtf1": {
+     "id": "nsj49qevtf1",
+     "label": "Monitor level, receipt rate (max 500 m3/h) and tank pressure PIT-41xx and VRU line pressure PIT-415x through the receipt",
+     "children": [],
+     "parent": "nla69ptqtf1",
+     "ref": "3.2",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "n3dk1n8wtf1": {
+     "id": "n3dk1n8wtf1",
+     "label": "On LIA-10x high alarm, prepare the changeover to the next tank",
+     "children": [],
+     "parent": "nla69ptqtf1",
+     "ref": "3.3",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nlvy3431tf1": {
+     "id": "nlvy3431tf1",
+     "label": "On LSHH-10x / LA HH, stop the receipt immediately: close SDV-10x-1 (or divert) and tell the upstream operator",
+     "children": [],
+     "parent": "nla69ptqtf1",
+     "ref": "3.4",
+     "agents": [
+      "av92yggmtf1",
+      "ae7kavhdtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nftd8o2otf1": {
+     "id": "nftd8o2otf1",
+     "label": "On high tank pressure (PIT-41xx H 0.005 barg) or VRU trip, reduce or stop the receipt",
+     "children": [],
+     "parent": "nla69ptqtf1",
+     "ref": "3.5",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "n1amagg2tf1": {
+     "id": "n1amagg2tf1",
+     "label": "Change over to the next tank",
+     "children": [
+      "nvdt8kpwtf1",
+      "nn72i656tf1",
+      "novkjs5stf1",
+      "nfczw4nctf1"
+     ],
+     "parent": "nfnprao5tf1",
+     "ref": "",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "cond",
+      "text": "Do when the receiving tank reaches its planned fill level or LIA-10x high. Do 4.1-4.4 in sequence: open the next tank BEFORE closing the full tank."
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nvdt8kpwtf1": {
+     "id": "nvdt8kpwtf1",
+     "label": "Confirm the next tank has ullage and is prepared (steps 1.1-1.5 done for that tank)",
+     "children": [],
+     "parent": "n1amagg2tf1",
+     "ref": "4.1",
+     "agents": [
+      "av92yggmtf1",
+      "arfqqau4tf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nn72i656tf1": {
+     "id": "nn72i656tf1",
+     "label": "Open inlet SDV of the next tank",
+     "children": [],
+     "parent": "n1amagg2tf1",
+     "ref": "4.2",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "novkjs5stf1": {
+     "id": "novkjs5stf1",
+     "label": "Close inlet SDV-10x-1 of the full tank",
+     "children": [],
+     "parent": "n1amagg2tf1",
+     "ref": "4.3",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nfczw4nctf1": {
+     "id": "nfczw4nctf1",
+     "label": "Confirm the full tank level is steady and the next tank level is rising",
+     "children": [],
+     "parent": "n1amagg2tf1",
+     "ref": "4.4",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "neher6uitf1": {
+     "id": "neher6uitf1",
+     "label": "Record and hand over",
+     "children": [
+      "nbt9w41qtf1",
+      "nwaf2925tf1"
+     ],
+     "parent": "nfnprao5tf1",
+     "ref": "",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nbt9w41qtf1": {
+     "id": "nbt9w41qtf1",
+     "label": "Record tank, start time, levels and changeover in the shift log",
+     "children": [],
+     "parent": "neher6uitf1",
+     "ref": "5.1",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    },
+    "nwaf2925tf1": {
+     "id": "nwaf2925tf1",
+     "label": "Hand over the receipt status (tank, level, time to high level, alarms) at shift change",
+     "children": [],
+     "parent": "neher6uitf1",
+     "ref": "5.2",
+     "agents": [
+      "av92yggmtf1",
+      "a3ohnur9tf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null
+    }
+   },
+   "source": "Design intent from P&ID CPSF-PR-PID-1-0001-25-00 Rev X1 (notes 1-17, alarm/trip table). No operating procedure supplied.",
+   "capturedOn": "2026-11-17"
+  },
+  "wad": {
+   "rootId": "np6za6gntf1",
+   "nodes": {
+    "np6za6gntf1": {
+     "id": "np6za6gntf1",
+     "label": "Receive crude oil into storage tank CPSF-T-107/108/109 and change over to the next tank",
+     "children": [
+      "nlv9omx0tf1",
+      "nx3w3e8ytf1",
+      "nmcnfjaxtf1",
+      "n6wqr5kxtf1",
+      "nmpnzdrutf1"
+     ],
+     "parent": null,
+     "ref": "",
+     "agents": [],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": null,
+     "type": "goal"
+    },
+    "nlv9omx0tf1": {
+     "id": "nlv9omx0tf1",
+     "label": "Prepare the receiving tank",
+     "children": [
+      "nv02q4s3tf1",
+      "n7ragsxqtf1",
+      "npxyb7gdtf1",
+      "n7jkcmo5tf1",
+      "ntv4r4rvtf1",
+      "ncu453cutf1"
+     ],
+     "parent": "np6za6gntf1",
+     "ref": "",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "any",
+      "text": "Do 1.1-1.6 in any order. All must be complete before 2."
+     },
+     "critical": false,
+     "photos": [],
+     "link": "nrapb3butf1"
+    },
+    "nv02q4s3tf1": {
+     "id": "nv02q4s3tf1",
+     "label": "Read the receiving tank level on LIA-10x-1 and LIA-10x-2 and confirm ullage for the planned receipt",
+     "children": [],
+     "parent": "nlv9omx0tf1",
+     "ref": "1.1",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "RET",
+     "warnings": "LIT-10x-1 (roof N17) and LIT-10x-2 (shell N9) must agree",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "Wrong or stale ullage leads directly to overfill of a full tank: crude spill to bund and vapour cloud (Possible MAH).",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": true,
+     "photos": [],
+     "link": "nsmgcsn8tf1"
+    },
+    "n7ragsxqtf1": {
+     "id": "n7ragsxqtf1",
+     "label": "Confirm VRU CPSF-23-X-011 A/B is running and no inter-tank transfer is in progress (Note 10)",
+     "children": [],
+     "parent": "nlv9omx0tf1",
+     "ref": "1.2",
+     "agents": [
+      "av92yggmtf1",
+      "a3ohnur9tf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "CH",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "VRU is sized for filling at 500 m3/h only. Filling during inter-tank transfer overloads the VRU: tank pressure rises, PVRVs lift and vent crude vapour to atmosphere.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": true,
+     "photos": [],
+     "link": "n7l33tsutf1"
+    },
+    "npxyb7gdtf1": {
+     "id": "npxyb7gdtf1",
+     "label": "Confirm vapour path to VRU (BFV-4135/4138/4139) and PVRV isolation BFVs A/B/C are locked open, spare S locked closed",
+     "children": [],
+     "parent": "nlv9omx0tf1",
+     "ref": "1.3",
+     "agents": [
+      "arfqqau4tf1"
+     ],
+     "where": "l0rjkz83tf1",
+     "start": "",
+     "finish": "",
+     "activity": "CH",
+     "warnings": "Roof access: work at height and H2S/hydrocarbon vapour",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "A closed vapour or PVRV isolation valve leaves the tank unprotected: roof overpressure on filling or vacuum collapse on emptying.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "n70cpr7wtf1"
+    },
+    "n7jkcmo5tf1": {
+     "id": "n7jkcmo5tf1",
+     "label": "Confirm fuel gas blanketing PV-41xx is in service on PIC-41xx and bypass GLV is closed",
+     "children": [],
+     "parent": "nlv9omx0tf1",
+     "ref": "1.4",
+     "agents": [
+      "av92yggmtf1",
+      "arfqqau4tf1"
+     ],
+     "where": "l3ov8pegtf1",
+     "start": "",
+     "finish": "",
+     "activity": "CH",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 2,
+     "riskReason": "Bypass left open over-pressurises the vapour space with fuel gas; PV out of service lets air in (flammable atmosphere).",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "na0yeqlxtf1"
+    },
+    "ntv4r4rvtf1": {
+     "id": "ntv4r4rvtf1",
+     "label": "Confirm tank outlet SDV-10x-2, N3 dewatering valve and N4 drain to sewage are closed",
+     "children": [],
+     "parent": "nlv9omx0tf1",
+     "ref": "1.5",
+     "agents": [
+      "arfqqau4tf1"
+     ],
+     "where": "l3ov8pegtf1",
+     "start": "",
+     "finish": "",
+     "activity": "CH",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "An open outlet or drain sends crude to the export header or to the sewage system during receipt: loss of containment outside the bund.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "n34c8vv8tf1"
+    },
+    "ncu453cutf1": {
+     "id": "ncu453cutf1",
+     "label": "Confirm oil temperature on TIT-41xx is within 35-40 degC and hot oil ESDV is available",
+     "children": [],
+     "parent": "nlv9omx0tf1",
+     "ref": "1.6",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "MON",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 1,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "nv09fxvytf1"
+    },
+    "nx3w3e8ytf1": {
+     "id": "nx3w3e8ytf1",
+     "label": "Line up the receiving tank",
+     "children": [
+      "na1ufoxhtf1",
+      "nttx5qrhtf1",
+      "n9l4ygqntf1",
+      "nqpdbysftf1"
+     ],
+     "parent": "np6za6gntf1",
+     "ref": "",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": "Do in sequence."
+     },
+     "critical": false,
+     "photos": [],
+     "link": "nzstntfltf1"
+    },
+    "na1ufoxhtf1": {
+     "id": "na1ufoxhtf1",
+     "label": "Select the receiving tank and agree it with the shift supervisor",
+     "children": [],
+     "parent": "nx3w3e8ytf1",
+     "ref": "2.1",
+     "agents": [
+      "av92yggmtf1",
+      "a3ohnur9tf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "SEL",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "Three identical tanks: selecting the wrong tank sends crude into a tank that may already be full (overfill, Possible MAH).",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": true,
+     "photos": [],
+     "link": "nx2ym7rvtf1"
+    },
+    "nttx5qrhtf1": {
+     "id": "nttx5qrhtf1",
+     "label": "Open inlet SDV-10x-1 of the selected tank from HS-10x-1",
+     "children": [],
+     "parent": "nx3w3e8ytf1",
+     "ref": "2.2",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "ACT",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "Right action on the wrong tank SDV opens the wrong tank to receipt.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "nweo9aiwtf1"
+    },
+    "n9l4ygqntf1": {
+     "id": "n9l4ygqntf1",
+     "label": "Confirm SDV-10x-1 shows open and the inlet SDVs of the other two tanks show closed",
+     "children": [],
+     "parent": "nx3w3e8ytf1",
+     "ref": "2.3",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "CH",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 2,
+     "riskReason": "Two tanks open together splits the flow; the expected level rise is not seen in either.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "ny5aygmttf1"
+    },
+    "nqpdbysftf1": {
+     "id": "nqpdbysftf1",
+     "label": "Tell the degassing boot / metering operator which tank is lined up and the maximum receipt rate",
+     "children": [],
+     "parent": "nx3w3e8ytf1",
+     "ref": "2.4",
+     "agents": [
+      "av92yggmtf1",
+      "ae7kavhdtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "COM",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 2,
+     "riskReason": "Wrong tank or rate passed upstream; receipt starts before line-up is complete.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "nigsfc79tf1"
+    },
+    "nmcnfjaxtf1": {
+     "id": "nmcnfjaxtf1",
+     "label": "Start and monitor the receipt",
+     "children": [
+      "noxhnb9atf1",
+      "n2ok4x42tf1",
+      "nermub1xtf1",
+      "nxdhmny6tf1",
+      "nhlc1rljtf1"
+     ],
+     "parent": "np6za6gntf1",
+     "ref": "",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "par",
+      "text": "Do 3.1, then 3.2 continuously. Do 3.3-3.5 when the alarm occurs."
+     },
+     "critical": false,
+     "photos": [],
+     "link": "nla69ptqtf1"
+    },
+    "noxhnb9atf1": {
+     "id": "noxhnb9atf1",
+     "label": "Confirm the level of the selected tank is rising on LIT-10x-1 and LIT-10x-2 within 15 minutes of start",
+     "children": [],
+     "parent": "nmcnfjaxtf1",
+     "ref": "3.1",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "CH",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "First and best chance to detect wrong tank, passing SDV or crude going elsewhere (sewage, other tank).",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": true,
+     "photos": [],
+     "link": "niqzwb0ltf1"
+    },
+    "n2ok4x42tf1": {
+     "id": "n2ok4x42tf1",
+     "label": "Monitor level, receipt rate (max 500 m3/h) and tank pressure PIT-41xx and VRU line pressure PIT-415x through the receipt",
+     "children": [],
+     "parent": "nmcnfjaxtf1",
+     "ref": "3.2",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "MON",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "Overfill or overpressure goes undetected if monitoring lapses; receipts run for many hours across shifts.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": true,
+     "photos": [],
+     "link": "nsj49qevtf1"
+    },
+    "nermub1xtf1": {
+     "id": "nermub1xtf1",
+     "label": "On LIA-10x high alarm, prepare the changeover to the next tank",
+     "children": [],
+     "parent": "nmcnfjaxtf1",
+     "ref": "3.3",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "ACT",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 2,
+     "riskReason": "Late preparation leaves too little time before high-high level.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "n3dk1n8wtf1"
+    },
+    "nxdhmny6tf1": {
+     "id": "nxdhmny6tf1",
+     "label": "On LSHH-10x / LA HH, stop the receipt immediately: close SDV-10x-1 (or divert) and tell the upstream operator",
+     "children": [],
+     "parent": "nmcnfjaxtf1",
+     "ref": "3.4",
+     "agents": [
+      "av92yggmtf1",
+      "ae7kavhdtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "ACT",
+     "warnings": "Local close push-buttons are outside the bund wall (Note 3)",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "Last operator barrier before overfill. LSHH-10x alarms only (LA HH); no automatic trip is shown on the P&ID.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": true,
+     "photos": [],
+     "link": "nlvy3431tf1"
+    },
+    "nhlc1rljtf1": {
+     "id": "nhlc1rljtf1",
+     "label": "On high tank pressure (PIT-41xx H 0.005 barg) or VRU trip, reduce or stop the receipt",
+     "children": [],
+     "parent": "nmcnfjaxtf1",
+     "ref": "3.5",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "ACT",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 2,
+     "riskReason": "Continued filling against a lost VRU vents crude vapour through the PVRVs.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "nftd8o2otf1"
+    },
+    "n6wqr5kxtf1": {
+     "id": "n6wqr5kxtf1",
+     "label": "Change over to the next tank",
+     "children": [
+      "n2ar1bx3tf1",
+      "nz6sw33utf1",
+      "n1n6yz6otf1",
+      "nx36gci6tf1"
+     ],
+     "parent": "np6za6gntf1",
+     "ref": "",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "cond",
+      "text": "Do when the receiving tank reaches its planned fill level or LIA-10x high. Do 4.1-4.4 in sequence: open the next tank BEFORE closing the full tank."
+     },
+     "critical": false,
+     "photos": [],
+     "link": "n1amagg2tf1"
+    },
+    "n2ar1bx3tf1": {
+     "id": "n2ar1bx3tf1",
+     "label": "Confirm the next tank has ullage and is prepared (steps 1.1-1.5 done for that tank)",
+     "children": [],
+     "parent": "n6wqr5kxtf1",
+     "ref": "4.1",
+     "agents": [
+      "av92yggmtf1",
+      "arfqqau4tf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "CH",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "Changing over into an unprepared or full tank repeats the overfill scenario.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "nvdt8kpwtf1"
+    },
+    "nz6sw33utf1": {
+     "id": "nz6sw33utf1",
+     "label": "Open inlet SDV of the next tank",
+     "children": [],
+     "parent": "n6wqr5kxtf1",
+     "ref": "4.2",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "ACT",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 2,
+     "riskReason": "Opening the wrong SDV, or opening after the full tank is closed, blocks the receipt line.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "nn72i656tf1"
+    },
+    "n1n6yz6otf1": {
+     "id": "n1n6yz6otf1",
+     "label": "Close inlet SDV-10x-1 of the full tank",
+     "children": [],
+     "parent": "n6wqr5kxtf1",
+     "ref": "4.3",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "ACT",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "Closing first dead-heads the receipt line (upstream overpressure); closing the wrong tank SDV keeps filling the full tank.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": true,
+     "photos": [],
+     "link": "novkjs5stf1"
+    },
+    "nx36gci6tf1": {
+     "id": "nx36gci6tf1",
+     "label": "Confirm the full tank level is steady and the next tank level is rising",
+     "children": [],
+     "parent": "n6wqr5kxtf1",
+     "ref": "4.4",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "CH",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "Only check that the changeover actually happened.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": true,
+     "photos": [],
+     "link": "nfczw4nctf1"
+    },
+    "nmpnzdrutf1": {
+     "id": "nmpnzdrutf1",
+     "label": "Record and hand over",
+     "children": [
+      "nftx7r0ntf1",
+      "nmndgrs8tf1"
+     ],
+     "parent": "np6za6gntf1",
+     "ref": "",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "",
+     "start": "",
+     "finish": "",
+     "activity": "",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 0,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "neher6uitf1"
+    },
+    "nftx7r0ntf1": {
+     "id": "nftx7r0ntf1",
+     "label": "Record tank, start time, levels and changeover in the shift log",
+     "children": [],
+     "parent": "nmpnzdrutf1",
+     "ref": "5.1",
+     "agents": [
+      "av92yggmtf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "COM",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 1,
+     "riskReason": "",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "nbt9w41qtf1"
+    },
+    "nmndgrs8tf1": {
+     "id": "nmndgrs8tf1",
+     "label": "Hand over the receipt status (tank, level, time to high level, alarms) at shift change",
+     "children": [],
+     "parent": "nmpnzdrutf1",
+     "ref": "5.2",
+     "agents": [
+      "av92yggmtf1",
+      "a3ohnur9tf1"
+     ],
+     "where": "lvf73jkhtf1",
+     "start": "",
+     "finish": "",
+     "activity": "COM",
+     "warnings": "",
+     "comments": "",
+     "tags": "",
+     "risk": 3,
+     "riskReason": "Receipts run across shift change; an incomplete handover is a known precursor of overfill.",
+     "plan": {
+      "type": "seq",
+      "text": ""
+     },
+     "critical": false,
+     "photos": [],
+     "link": "nwaf2925tf1"
+    }
+   },
+   "source": "DRAFT copy of the design-intent map. To be corrected by walk-through / talk-through with CPSF tank farm operators.",
+   "capturedOn": "2026-11-17"
+  }
+ },
+ "gaps": {},
+ "analyses": [
+  {
+   "id": "eu31tyl7tf1",
+   "nodeId": "nv02q4s3tf1",
+   "mode": "RET2",
+   "errorDesc": "CRO reads the level of a different tank, or a stale/frozen level, and over-estimates the ullage",
+   "errorType": "Slip",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "LIT-10x-1 and LIT-10x-2 (two level transmitters)\nLSHH-10x with LA HH\nBund",
+   "recovery": "LIT-1 / LIT-2 disagreement alarm (if configured); level rise check at 3.1",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pf0acr8jtf1",
+     "pifId": "similarity",
+     "name": "Similarity and proximity",
+     "statement": "The equipment is similar in function and in close proximity to other equipment",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "Three identical tanks; tags 107/108/109 sit side by side on the DCS overview and LIA faceplates.",
+     "weight": 1
+    },
+    {
+     "id": "p9dgwr5ftf1",
+     "pifId": "feedback",
+     "name": "Feedback from the system",
+     "statement": "The system gives no clear feedback that the step was done correctly",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "Level is shown in mm/%; no ullage in m3 or time-to-high-level displayed (not shown on P&ID).",
+     "weight": 1
+    },
+    {
+     "id": "p5k6w2yltf1",
+     "pifId": "instruction",
+     "name": "Quality of instruction / information",
+     "statement": "Instructions are unclear, incomplete or out of date",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "No maximum safe fill level, LIT-1/LIT-2 tolerance or ullage calculation is defined on the P&ID; no procedure supplied.",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "ig22bgoztf1",
+     "text": "Show ullage (m3) and time-to-high-level for each tank on the DCS overview, calculated from the agreed receipt rate",
+     "level": "HMI",
+     "pifIds": [
+      "p9dgwr5ftf1"
+     ],
+     "owner": "Instrument / DCS engineer",
+     "due": "2027-01-31",
+     "status": "Proposed",
+     "verification": "Display verified at FAT/SAT and in use at next receipt",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "i47ajtgctf1",
+     "text": "Add a LIT-10x-1 vs LIT-10x-2 deviation alarm on each tank",
+     "level": "ENG",
+     "pifIds": [
+      "p9dgwr5ftf1"
+     ],
+     "owner": "Instrument engineer",
+     "due": "2027-01-31",
+     "status": "Proposed",
+     "verification": "Alarm tested by forcing a deviation",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "i9lksnpgtf1",
+     "text": "Write the tank receipt procedure with the maximum safe fill level per tank and the ullage calculation",
+     "level": "PROC",
+     "pifIds": [
+      "p5k6w2yltf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Procedure approved and briefed",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "iobhhf0xtf1",
+     "text": "Separate the three tank faceplates on the DCS overview and colour-band each tank tag",
+     "level": "HMI",
+     "pifIds": [
+      "pf0acr8jtf1"
+     ],
+     "owner": "Instrument / DCS engineer",
+     "due": "2027-01-31",
+     "status": "Proposed",
+     "verification": "Operator review of the revised graphic",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "e32thvnztf1",
+   "nodeId": "nv02q4s3tf1",
+   "mode": "RET3",
+   "errorDesc": "CRO reads only one transmitter; a failed or drifted LIT goes unnoticed",
+   "errorType": "Lapse",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "Second level transmitter\nLSHH-10x",
+   "recovery": "Level rise check at 3.1",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pn55hpy0tf1",
+     "pifId": "redundancy",
+     "name": "Perceived redundancy",
+     "statement": "The operator believes another check or system will catch any error",
+     "baseline": 75,
+     "modified": null,
+     "reason": "Two transmitters plus LSHH encourage reliance on \"the other one\".",
+     "weight": 1,
+     "noControlReason": "Addressed by the deviation alarm and checklist hold point raised on 1.1 RET2 and this step."
+    },
+    {
+     "id": "p50tozc8tf1",
+     "pifId": "omission",
+     "name": "Barriers to prevent omission",
+     "statement": "The barriers to prevent the check being missed or done at the wrong time are not effective",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "Nothing forces both readings to be compared before receipt.",
+     "weight": 1
+    },
+    {
+     "id": "p2sldy70tf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "iszbe89btf1",
+     "text": "Add a hold point to the receipt checklist: record both LIT readings and their difference; stop if outside tolerance",
+     "level": "PROC",
+     "pifIds": [
+      "p50tozc8tf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Checklist audit after 5 receipts",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "etvlu69utf1",
+   "nodeId": "n7ragsxqtf1",
+   "mode": "CH1",
+   "errorDesc": "Check that no inter-tank transfer is running (and the VRU is in service) is skipped",
+   "errorType": "Lapse",
+   "consequence": "VRU overloaded: tank pressure rises above PVRV set (7.23 in WG), PVRVs lift and vent crude vapour at roof level; flammable atmosphere in tank farm.",
+   "consTypes": [
+    "Process safety",
+    "Environmental"
+   ],
+   "controls": "PIT-41xx high alarm 0.005 barg\nPVRVs with flame arresters\nVRU line PIT-415x",
+   "recovery": "PIT high alarm prompts rate reduction (3.5)",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pfx4u78vtf1",
+     "pifId": "roles",
+     "name": "Roles and responsibilities",
+     "statement": "It is unclear who performs or confirms the step",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "Inter-tank transfer (P-013A/B/C) and filling from the degassing boot may be started by different people; Note 10 does not say who checks.",
+     "weight": 1
+    },
+    {
+     "id": "paiiv1hrtf1",
+     "pifId": "omission",
+     "name": "Barriers to prevent omission",
+     "statement": "The barriers to prevent the check being missed or done at the wrong time are not effective",
+     "baseline": 100,
+     "modified": 25,
+     "reason": "No interlock or permissive between the transfer pumps and the receipt line-up is shown on the P&ID.",
+     "weight": 1
+    },
+    {
+     "id": "pk1rr7yatf1",
+     "pifId": "training",
+     "name": "Training and competence",
+     "statement": "The operator does not understand the requirement for the check",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "The VRU capacity limit is only stated as a drawing note; operators may not know why both operations cannot run together.",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "i34dz1u3tf1",
+     "text": "Provide a DCS permissive: inter-tank transfer pumps P-013A/B/C cannot start while a tank inlet SDV is open to receipt from the degassing boot, and vice versa",
+     "level": "ENG",
+     "pifIds": [
+      "paiiv1hrtf1"
+     ],
+     "owner": "Process / control engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "Permissive tested at SAT",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "iq2uz6dmtf1",
+     "text": "Name the CRO as the single person who authorises any receipt or transfer into CPSF-T-107/108/109",
+     "level": "PROC",
+     "pifIds": [
+      "pfx4u78vtf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Procedure approved",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "iml6dp9mtf1",
+     "text": "Brief Note 10 (VRU capacity) and the PVRV release consequence in operator training",
+     "level": "TRN",
+     "pifIds": [
+      "pk1rr7yatf1"
+     ],
+     "owner": "Training coordinator",
+     "due": "2027-01-31",
+     "status": "Proposed",
+     "verification": "Competence assessment record",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "e45l0jdjtf1",
+   "nodeId": "npxyb7gdtf1",
+   "mode": "CH3",
+   "errorDesc": "FO checks the wrong valve, or confirms a lock is fitted without confirming the valve is open",
+   "errorType": "Slip",
+   "consequence": "Tank vapour path or PVRV isolated: roof overpressure during filling (seam failure, release) or vacuum on emptying.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "Locked-open (LO) BFVs\nPIT-41xx and PIZ/PZT-41xx\nVRU line PIT-415x",
+   "recovery": "PIT-41xx high alarm",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pbmy549stf1",
+     "pifId": "equipment",
+     "name": "Equipment location / accessibility",
+     "statement": "The equipment is hard to reach, see or operate",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Valves are on the tank roof (10.94 m) with locked positions; a check needs roof access.",
+     "weight": 1
+    },
+    {
+     "id": "pjjbduoctf1",
+     "pifId": "labelling",
+     "name": "Labelling",
+     "statement": "Labelling of the equipment is absent or poor",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "Four PVRV BFVs per tank, three LO and one LC; similar valves side by side.",
+     "weight": 1
+    },
+    {
+     "id": "p09yoagptf1",
+     "pifId": "feedback",
+     "name": "Feedback from the system",
+     "statement": "The system gives no clear feedback that the step was done correctly",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "No position indication of BFV-4135/4138/4139 or the PVRV BFVs reaches the DCS.",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "iahwnyddtf1",
+     "text": "Maintain a car-seal / lock register for BFV-4135/4138/4139 and all PVRV isolation BFVs, checked weekly and before each receipt",
+     "level": "PROC",
+     "pifIds": [
+      "pjjbduoctf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Register audit",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "idjhpuqhtf1",
+     "text": "Fit tagged, colour-coded position indicators (open/closed) visible from the roof access point",
+     "level": "HMI",
+     "pifIds": [
+      "pbmy549stf1",
+      "p09yoagptf1"
+     ],
+     "owner": "Maintenance engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "Field verification",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "exwbamn6tf1",
+   "nodeId": "n7jkcmo5tf1",
+   "mode": "CH1",
+   "errorDesc": "Check that the PV-41xx bypass GLV is closed is skipped after maintenance",
+   "errorType": "Lapse",
+   "consequence": "Uncontrolled fuel gas into the tank vapour space; tank pressure rises to PVRV set, fuel gas vented.",
+   "consTypes": [
+    "Process safety"
+   ],
+   "controls": "PIC-41xx\nPIT high alarm\nPVRVs",
+   "recovery": "PIT high alarm",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "plhd22zutf1",
+     "pifId": "omission",
+     "name": "Barriers to prevent omission",
+     "statement": "The barriers to prevent the check being missed or done at the wrong time are not effective",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "Bypass GLV is a normally closed manual valve with no lock shown on the P&ID.",
+     "weight": 1
+    },
+    {
+     "id": "p2fg0uhrtf1",
+     "pifId": "feedback",
+     "name": "Feedback from the system",
+     "statement": "The system gives no clear feedback that the step was done correctly",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    },
+    {
+     "id": "p01gstm9tf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "iagpmfd3tf1",
+     "text": "Lock or car-seal the PV-41xx bypass GLV-4133/4135/4137 closed and add it to the lock register",
+     "level": "PROC",
+     "pifIds": [
+      "plhd22zutf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Register audit",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "et4ldk28tf1",
+   "nodeId": "ntv4r4rvtf1",
+   "mode": "CH1",
+   "errorDesc": "Check that the N4 drain to sewage (and N3 dewatering) is closed is omitted after a water draw-off",
+   "errorType": "Lapse",
+   "consequence": "Crude flows to the sewage system during receipt: loss of containment outside the bund, fire risk in drains, environmental release.",
+   "consTypes": [
+    "Possible MAH",
+    "Environmental"
+   ],
+   "controls": "Bund\nOperator presence during dewatering",
+   "recovery": "Level rise lower than expected at 3.1",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pk9yphu8tf1",
+     "pifId": "equipment",
+     "name": "Equipment location / accessibility",
+     "statement": "The equipment is hard to reach, see or operate",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "N3 dewatering and N4 sewage drain valves are low on the shell inside the bund; position not visible from the manifold.",
+     "weight": 1
+    },
+    {
+     "id": "pvvtvrg8tf1",
+     "pifId": "omission",
+     "name": "Barriers to prevent omission",
+     "statement": "The barriers to prevent the check being missed or done at the wrong time are not effective",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "No lock or indication is shown on the N3 / N4 drain valves.",
+     "weight": 1
+    },
+    {
+     "id": "pwffojnhtf1",
+     "pifId": "complexity",
+     "name": "Task complexity",
+     "statement": "The task is highly complex",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "i1zywv1stf1",
+     "text": "Lock the N4 sewage drain valve closed and include it in the lock register; dewatering under permit only",
+     "level": "PROC",
+     "pifIds": [
+      "pvvtvrg8tf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Register audit",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "irs4tyu4tf1",
+     "text": "Provide an oil-in-water / hydrocarbon detector on the tank drain to sewage with alarm",
+     "level": "ENG",
+     "pifIds": [
+      "pk9yphu8tf1"
+     ],
+     "owner": "Process engineer",
+     "due": "2027-06-30",
+     "status": "Proposed",
+     "verification": "Detector commissioned",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "e53thxo6tf1",
+   "nodeId": "na1ufoxhtf1",
+   "mode": "SEL2",
+   "errorDesc": "The wrong receiving tank is selected (e.g. T-108 instead of T-107)",
+   "errorType": "Mistake",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "LSHH-10x with LA HH\nBund",
+   "recovery": "Level rise check at 3.1 on the selected tank",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pcpb734dtf1",
+     "pifId": "similarity",
+     "name": "Similarity and proximity",
+     "statement": "The equipment is similar in function and in close proximity to other equipment",
+     "baseline": 100,
+     "modified": 50,
+     "reason": "Three identical tanks, identical tags apart from the last digit, faceplates side by side.",
+     "weight": 1
+    },
+    {
+     "id": "pkd9a067tf1",
+     "pifId": "communication",
+     "name": "Communication",
+     "statement": "Communication between the people involved is unreliable",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "Tank choice is agreed verbally between CRO and SS; no read-back is required.",
+     "weight": 1
+    },
+    {
+     "id": "poj76479tf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Changeovers fall at the time set by the receipt rate, often at night or shift end.",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "iy5m4oratf1",
+     "text": "Use a tank receipt permit/checklist that names the tank, its ullage and the SS sign-off before line-up",
+     "level": "PROC",
+     "pifIds": [
+      "pkd9a067tf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Checklist audit",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "i2jpicqftf1",
+     "text": "Require read-back of the tank tag between CRO and SS (standard phrase)",
+     "level": "PROC",
+     "pifIds": [
+      "pkd9a067tf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Observed at receipt",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "i6mnxwf5tf1",
+     "text": "DCS receipt mimic that highlights the selected tank and its ullage before the SDV can be opened",
+     "level": "HMI",
+     "pifIds": [
+      "pcpb734dtf1"
+     ],
+     "owner": "Instrument / DCS engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "SAT",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "ifi9uochtf1",
+     "text": "Plan receipts so changeovers avoid shift handover times where possible",
+     "level": "ELIM",
+     "pifIds": [
+      "poj76479tf1"
+     ],
+     "owner": "Production planner",
+     "due": "2027-01-31",
+     "status": "Proposed",
+     "verification": "Receipt schedule review",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "exvioktatf1",
+   "nodeId": "nttx5qrhtf1",
+   "mode": "ACT7",
+   "errorDesc": "CRO opens the inlet SDV of a different tank (wrong HS-10x-1)",
+   "errorType": "Slip",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "SDV position indication\nLSHH-10x",
+   "recovery": "Check at 2.3 and level rise at 3.1",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pk6gv42utf1",
+     "pifId": "similarity",
+     "name": "Similarity and proximity",
+     "statement": "The equipment is similar in function and in close proximity to other equipment",
+     "baseline": 100,
+     "modified": 50,
+     "reason": "HS-107-1, HS-108-1, HS-109-1 are identical hand switches on similar faceplates.",
+     "weight": 1
+    },
+    {
+     "id": "phi71klntf1",
+     "pifId": "feedback",
+     "name": "Feedback from the system",
+     "statement": "The system gives no clear feedback that the step was done correctly",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    },
+    {
+     "id": "plojw7rztf1",
+     "pifId": "distraction",
+     "name": "Distractions",
+     "statement": "The operator is frequently interrupted during the step",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Control room radio and phone traffic during line-up.",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "i5e0w3detf1",
+     "text": "Add a confirm dialogue on HS-10x-1 that shows the tank tag and its current level/ullage before the command is sent",
+     "level": "HMI",
+     "pifIds": [
+      "pk6gv42utf1"
+     ],
+     "owner": "Instrument / DCS engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "SAT",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "iql6iw08tf1",
+     "text": "Define a no-interruption period for line-up and changeover in the control room",
+     "level": "ENV",
+     "pifIds": [
+      "plojw7rztf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Observed at receipt",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "etoum93itf1",
+   "nodeId": "n9l4ygqntf1",
+   "mode": "CH2",
+   "errorDesc": "CRO confirms the selected SDV opened but does not check that the other two tank inlet SDVs are closed",
+   "errorType": "Lapse",
+   "consequence": "Receipt splits between two tanks; level rise in each is slower than expected, and the non-selected tank may overfill unnoticed.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "SDV position indication\nLSHH on all tanks",
+   "recovery": "Level rise check at 3.1",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pa9ampjwtf1",
+     "pifId": "omission",
+     "name": "Barriers to prevent omission",
+     "statement": "The barriers to prevent the check being missed or done at the wrong time are not effective",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "No alarm when more than one tank inlet SDV is open.",
+     "weight": 1
+    },
+    {
+     "id": "ppv3mrbptf1",
+     "pifId": "instruction",
+     "name": "Quality of instruction / information",
+     "statement": "Instructions are unclear, incomplete or out of date",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    },
+    {
+     "id": "pcmjjgpktf1",
+     "pifId": "feedback",
+     "name": "Feedback from the system",
+     "statement": "The system gives no clear feedback that the step was done correctly",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "i4042vv4tf1",
+     "text": "Add a DCS alarm when more than one tank inlet SDV is open to the receipt header",
+     "level": "ENG",
+     "pifIds": [
+      "pa9ampjwtf1"
+     ],
+     "owner": "Instrument / DCS engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "Alarm tested",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "ear0omwwtf1",
+   "nodeId": "nqpdbysftf1",
+   "mode": "COM2",
+   "errorDesc": "Wrong tank or wrong maximum rate is passed to the degassing boot / metering operator",
+   "errorType": "Slip",
+   "consequence": "Receipt above 500 m3/h overloads the VRU (PVRV venting) or starts before line-up is complete (upstream pressure rise).",
+   "consTypes": [
+    "Process safety"
+   ],
+   "controls": "PIT-41xx high alarm\nVRU line PIT-415x",
+   "recovery": "Upstream operator confirms flow on metering skid",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pft46n55tf1",
+     "pifId": "communication",
+     "name": "Communication",
+     "statement": "Communication between the people involved is unreliable",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "Radio/phone between control room and upstream facility; no read-back defined.",
+     "weight": 1
+    },
+    {
+     "id": "pixcf8j0tf1",
+     "pifId": "roles",
+     "name": "Roles and responsibilities",
+     "statement": "It is unclear who performs or confirms the step",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    },
+    {
+     "id": "p4f7e5ygtf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "i2gldwcmtf1",
+     "text": "Standard receipt message with read-back: tank tag, maximum rate, expected duration",
+     "level": "PROC",
+     "pifIds": [
+      "pft46n55tf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Observed at receipt",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "e3a60kystf1",
+   "nodeId": "noxhnb9atf1",
+   "mode": "CH5",
+   "errorDesc": "Level rise is checked too late (or only on one LIT), after a large volume has gone to the wrong place",
+   "errorType": "Lapse",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited. Or crude lost to sewage or another tank.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "LSHH-10x\nBund",
+   "recovery": "Later level readings during 3.2",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pq21zotvtf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    },
+    {
+     "id": "pvq2cw6gtf1",
+     "pifId": "feedback",
+     "name": "Feedback from the system",
+     "statement": "The system gives no clear feedback that the step was done correctly",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "A rise of a few mm on a 34.2 m tank takes time to see; no rate-of-rise display.",
+     "weight": 1
+    },
+    {
+     "id": "pgnghgv3tf1",
+     "pifId": "importance",
+     "name": "Perceived importance of check relative to other tasks",
+     "statement": "The check is seen as less important than other work going on at the same time",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Seen as routine once the SDV shows open; competes with other control room work.",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "i3hhok08tf1",
+     "text": "Display rate of level rise (m3/h) per tank and alarm when the selected tank does not rise within 15 minutes of receipt start",
+     "level": "ENG",
+     "pifIds": [
+      "pvq2cw6gtf1"
+     ],
+     "owner": "Instrument / DCS engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "Alarm tested at SAT",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "i2ut38y0tf1",
+     "text": "Make the 15-minute level-rise check a signed hold point on the receipt checklist",
+     "level": "PROC",
+     "pifIds": [
+      "pgnghgv3tf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Checklist audit",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "eos5lmc2tf1",
+   "nodeId": "n2ok4x42tf1",
+   "mode": "MON1",
+   "errorDesc": "Level and pressure are not monitored for a long period during receipt",
+   "errorType": "Lapse",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "LIA-10x high alarm\nLSHH-10x / LA HH\nBund",
+   "recovery": "Alarm response at 3.3 / 3.4",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pexfr8a4tf1",
+     "pifId": "redundancy",
+     "name": "Perceived redundancy",
+     "statement": "The operator believes another check or system will catch any error",
+     "baseline": 100,
+     "modified": 50,
+     "reason": "LSHH-10x and the LIA high alarm are expected to catch an overfill, so continuous monitoring is relaxed.",
+     "weight": 1
+    },
+    {
+     "id": "pg07esfttf1",
+     "pifId": "fatigue",
+     "name": "Fatigue",
+     "statement": "Fatigue levels are very high",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Receipts run for many hours including night shift.",
+     "weight": 1
+    },
+    {
+     "id": "pimfjs86tf1",
+     "pifId": "workload",
+     "name": "Workload",
+     "statement": "Workload is excessive",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "The CRO also covers export, inter-tank transfer, VRU and hot oil.",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "ibdnwluhtf1",
+     "text": "Provide an independent high-high level trip (LSHH-10x closing SDV-10x-1), assessed for SIL as for the temperature trips (Note 16)",
+     "level": "ENG",
+     "pifIds": [
+      "pexfr8a4tf1"
+     ],
+     "owner": "Process safety engineer",
+     "due": "2027-06-30",
+     "status": "Proposed",
+     "verification": "SIL assessment and proof test record",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "imeiyi19tf1",
+     "text": "Apply fatigue rules for long receipts (break cover for the CRO, hours limits)",
+     "level": "SUP",
+     "pifIds": [
+      "pg07esfttf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2027-01-31",
+     "status": "Proposed",
+     "verification": "Roster review",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "ie040f4gtf1",
+     "text": "Assign a second operator to monitor receipts when other major operations run at the same time",
+     "level": "SUP",
+     "pifIds": [
+      "pimfjs86tf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2027-01-31",
+     "status": "Proposed",
+     "verification": "Roster review",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "edbrovw6tf1",
+   "nodeId": "n2ok4x42tf1",
+   "mode": "MON4",
+   "errorDesc": "CRO watches tank pressure PIT-415x on the VRU line instead of tank PIT-41xx (or the wrong tank)",
+   "errorType": "Slip",
+   "consequence": "High tank pressure missed; PVRVs lift and vent crude vapour.",
+   "consTypes": [
+    "Process safety"
+   ],
+   "controls": "PIT-41xx high alarm\nPVRVs",
+   "recovery": "PVRV lift may be seen or smelt in the field",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pq52a884tf1",
+     "pifId": "similarity",
+     "name": "Similarity and proximity",
+     "statement": "The equipment is similar in function and in close proximity to other equipment",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "PIT-4147/4148/4149 (tank) and PIT-4156/4157/4158 (VRU line) have similar tags and alarm settings.",
+     "weight": 1
+    },
+    {
+     "id": "p5z1d4sztf1",
+     "pifId": "labelling",
+     "name": "Labelling",
+     "statement": "Labelling of the equipment is absent or poor",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    },
+    {
+     "id": "ps4n7ye6tf1",
+     "pifId": "training",
+     "name": "Training and competence",
+     "statement": "The operator does not understand the requirement for the check",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "iqujssoetf1",
+     "text": "Label the PIT faceplates by function (\"TANK VAPOUR\" / \"VRU LINE\") and group each tank's readings together",
+     "level": "HMI",
+     "pifIds": [
+      "pq52a884tf1"
+     ],
+     "owner": "Instrument / DCS engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "Operator review",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "etz7fpjctf1",
+   "nodeId": "nxdhmny6tf1",
+   "mode": "ACT4",
+   "errorDesc": "Response to LSHH / LA HH is too late (alarm flood, alarm assumed spurious)",
+   "errorType": "Mistake",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "LA HH alarm\nBund",
+   "recovery": "None after overflow starts other than bund and emergency response",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pgeyezavtf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 100,
+     "modified": 50,
+     "reason": "From LSHH to overflow there may be only minutes at full receipt rate (not stated on P&ID).",
+     "weight": 1
+    },
+    {
+     "id": "pqrq24lztf1",
+     "pifId": "equipment",
+     "name": "Equipment location / accessibility",
+     "statement": "The equipment is hard to reach, see or operate",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "If the DCS command fails, the local close push-buttons are outside the bund wall (Note 3), some distance from the CRO.",
+     "weight": 1
+    },
+    {
+     "id": "p2ozavk4tf1",
+     "pifId": "omission",
+     "name": "Barriers to prevent omission",
+     "statement": "The barriers to prevent the check being missed or done at the wrong time are not effective",
+     "baseline": 100,
+     "modified": 25,
+     "reason": "LSHH-10x alarms only; no automatic closure of SDV-10x-1 is shown.",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "izs8mgfhtf1",
+     "text": "Provide automatic closure of SDV-10x-1 on LSHH-10x (independent of LIT-10x), SIL assessed",
+     "level": "ENG",
+     "pifIds": [
+      "p2ozavk4tf1"
+     ],
+     "owner": "Process safety engineer",
+     "due": "2027-06-30",
+     "status": "Proposed",
+     "verification": "Proof test record",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "iuer7uettf1",
+     "text": "Calculate and display the response time available between H, HH and overflow at the maximum receipt rate; set alarm points to give at least 20 minutes operator response",
+     "level": "ENG",
+     "pifIds": [
+      "pgeyezavtf1"
+     ],
+     "owner": "Process engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "Alarm set-point calculation approved",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "iwbki9w3tf1",
+     "text": "Rehearse loss-of-DCS response: FO closes SDV-10x-1 at the push-button station outside the bund",
+     "level": "TRN",
+     "pifIds": [
+      "pqrq24lztf1"
+     ],
+     "owner": "Training coordinator",
+     "due": "2027-01-31",
+     "status": "Proposed",
+     "verification": "Drill record",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "euvux1vstf1",
+   "nodeId": "nxdhmny6tf1",
+   "mode": "ACT7",
+   "errorDesc": "CRO closes the SDV of a different tank in the stress of the alarm",
+   "errorType": "Slip",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "LA HH remains active",
+   "recovery": "Level continues to rise; alarm persists",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pp1hcd7atf1",
+     "pifId": "similarity",
+     "name": "Similarity and proximity",
+     "statement": "The equipment is similar in function and in close proximity to other equipment",
+     "baseline": 100,
+     "modified": 50,
+     "reason": "Identical HS faceplates for three tanks.",
+     "weight": 1
+    },
+    {
+     "id": "pkx2nn8ytf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Alarm response under time pressure.",
+     "weight": 1,
+     "noControlReason": "Covered by the automatic LSHH closure and response-time improvements on 3.4 ACT4."
+    },
+    {
+     "id": "pspplz4ltf1",
+     "pifId": "distraction",
+     "name": "Distractions",
+     "statement": "The operator is frequently interrupted during the step",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "iu0djdc3tf1",
+     "text": "Link the LA HH alarm to the correct HS-10x-1 faceplate (one-click from the alarm)",
+     "level": "HMI",
+     "pifIds": [
+      "pp1hcd7atf1"
+     ],
+     "owner": "Instrument / DCS engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "SAT",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "e6y3ovl9tf1",
+   "nodeId": "nermub1xtf1",
+   "mode": "ACT1",
+   "errorDesc": "High level alarm acknowledged but the changeover is not prepared",
+   "errorType": "Lapse",
+   "consequence": "Tank reaches high-high level with no prepared tank to change over to (leads to 3.4).",
+   "consTypes": [
+    "Process safety"
+   ],
+   "controls": "LSHH / LA HH",
+   "recovery": "Response at 3.4",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pcb5xg07tf1",
+     "pifId": "workload",
+     "name": "Workload",
+     "statement": "Workload is excessive",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "High alarms on long receipts are frequent and are acknowledged as routine.",
+     "weight": 1,
+     "noControlReason": "Workload addressed by the second-operator improvement on 3.2."
+    },
+    {
+     "id": "p5iumulutf1",
+     "pifId": "instruction",
+     "name": "Quality of instruction / information",
+     "statement": "Instructions are unclear, incomplete or out of date",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "Action on LIA high is not defined.",
+     "weight": 1
+    },
+    {
+     "id": "pl2jtgk4tf1",
+     "pifId": "fatigue",
+     "name": "Fatigue",
+     "statement": "Fatigue levels are very high",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "ih8r5i1mtf1",
+     "text": "Define the required action on LIA-10x high in the procedure (prepare next tank, inform SS)",
+     "level": "PROC",
+     "pifIds": [
+      "p5iumulutf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Procedure approved",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "ebjzt0xstf1",
+   "nodeId": "nhlc1rljtf1",
+   "mode": "ACT1",
+   "errorDesc": "Receipt continues after a VRU trip or high tank pressure alarm",
+   "errorType": "Mistake",
+   "consequence": "PVRVs lift and vent crude vapour to atmosphere at roof level for the rest of the receipt.",
+   "consTypes": [
+    "Process safety",
+    "Environmental"
+   ],
+   "controls": "PVRVs with flame arresters",
+   "recovery": "Field operator report of PVRV venting",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "plfi2jv4tf1",
+     "pifId": "importance",
+     "name": "Perceived importance of check relative to other tasks",
+     "statement": "The check is seen as less important than other work going on at the same time",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Production pressure to keep receiving from the degassing boot.",
+     "weight": 1
+    },
+    {
+     "id": "pnzg8k9ktf1",
+     "pifId": "instruction",
+     "name": "Quality of instruction / information",
+     "statement": "Instructions are unclear, incomplete or out of date",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "No defined rate reduction on VRU trip.",
+     "weight": 1
+    },
+    {
+     "id": "pi94q5e8tf1",
+     "pifId": "feedback",
+     "name": "Feedback from the system",
+     "statement": "The system gives no clear feedback that the step was done correctly",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "igs1l95itf1",
+     "text": "State in the procedure: on VRU trip, reduce receipt to a defined rate or stop; SS may stop receipt without production approval",
+     "level": "PROC",
+     "pifIds": [
+      "plfi2jv4tf1",
+      "pnzg8k9ktf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Procedure approved",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "eyf0rt5gtf1",
+   "nodeId": "n2ar1bx3tf1",
+   "mode": "CH1",
+   "errorDesc": "Next tank is not checked for ullage and line-up before changeover",
+   "errorType": "Lapse",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "LSHH-10x on the next tank",
+   "recovery": "Level check at 4.4",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pld4xmyetf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Changeover done quickly at high level.",
+     "weight": 1
+    },
+    {
+     "id": "pvz6awpytf1",
+     "pifId": "omission",
+     "name": "Barriers to prevent omission",
+     "statement": "The barriers to prevent the check being missed or done at the wrong time are not effective",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "Preparation steps 1.1-1.5 are not repeated for the next tank.",
+     "weight": 1
+    },
+    {
+     "id": "phus2f68tf1",
+     "pifId": "workload",
+     "name": "Workload",
+     "statement": "Workload is excessive",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "iu9ih62atf1",
+     "text": "Changeover checklist repeats 1.1-1.5 for the next tank, completed before the LIA high alarm",
+     "level": "PROC",
+     "pifIds": [
+      "pld4xmyetf1",
+      "pvz6awpytf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Checklist audit",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "e0sq2375tf1",
+   "nodeId": "nz6sw33utf1",
+   "mode": "ACT7",
+   "errorDesc": "CRO opens the inlet SDV of the wrong tank (the third tank) during changeover",
+   "errorType": "Slip",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "SDV indication\nLSHH",
+   "recovery": "Check at 4.4",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pdyuwwpitf1",
+     "pifId": "similarity",
+     "name": "Similarity and proximity",
+     "statement": "The equipment is similar in function and in close proximity to other equipment",
+     "baseline": 100,
+     "modified": 50,
+     "reason": "Identical faceplates.",
+     "weight": 1
+    },
+    {
+     "id": "pi94767ttf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Done at high level.",
+     "weight": 1
+    },
+    {
+     "id": "pghemthotf1",
+     "pifId": "distraction",
+     "name": "Distractions",
+     "statement": "The operator is frequently interrupted during the step",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "i2lnouqgtf1",
+     "text": "Use the same HS confirm dialogue (tank tag and ullage) proposed at 2.2",
+     "level": "HMI",
+     "pifIds": [
+      "pdyuwwpitf1",
+      "pi94767ttf1"
+     ],
+     "owner": "Instrument / DCS engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "SAT",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "exbwrxfktf1",
+   "nodeId": "n1n6yz6otf1",
+   "mode": "ACT4",
+   "errorDesc": "CRO closes the full tank SDV before the next tank SDV is open",
+   "errorType": "Mistake",
+   "consequence": "Receipt line blocked: pressure rise back to the metering skids / degassing boot, possible relief or upset upstream.",
+   "consTypes": [
+    "Process safety"
+   ],
+   "controls": "Upstream relief\nUpstream operator",
+   "recovery": "Upstream pressure alarm",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pc5127q3tf1",
+     "pifId": "instruction",
+     "name": "Quality of instruction / information",
+     "statement": "Instructions are unclear, incomplete or out of date",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "The open-before-close sequence is not written anywhere.",
+     "weight": 1
+    },
+    {
+     "id": "pntfe8b4tf1",
+     "pifId": "similarity",
+     "name": "Similarity and proximity",
+     "statement": "The equipment is similar in function and in close proximity to other equipment",
+     "baseline": 100,
+     "modified": 50,
+     "reason": "Identical HS faceplates for three tanks.",
+     "weight": 1,
+     "noControlReason": "Addressed by the HS confirm dialogue on 2.2 / 4.2."
+    },
+    {
+     "id": "p56et4wftf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Done at high level under time pressure.",
+     "weight": 1,
+     "noControlReason": "Addressed by changeover preparation at LIA high (3.3, 4.1)."
+    }
+   ],
+   "improvements": [
+    {
+     "id": "i8c5ijlttf1",
+     "text": "DCS permissive: inlet SDV of a tank cannot be closed while it is the only open inlet on a live receipt header",
+     "level": "ENG",
+     "pifIds": [
+      "pc5127q3tf1"
+     ],
+     "owner": "Process / control engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "SAT",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "i9cbjurytf1",
+     "text": "Write the open-before-close sequence into the changeover procedure",
+     "level": "PROC",
+     "pifIds": [
+      "pc5127q3tf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Procedure approved",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "egi2w043tf1",
+   "nodeId": "n1n6yz6otf1",
+   "mode": "ACT7",
+   "errorDesc": "CRO closes the SDV of the new tank instead of the full tank",
+   "errorType": "Slip",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "LSHH on full tank",
+   "recovery": "Check at 4.4",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "pufw7i9rtf1",
+     "pifId": "similarity",
+     "name": "Similarity and proximity",
+     "statement": "The equipment is similar in function and in close proximity to other equipment",
+     "baseline": 100,
+     "modified": 50,
+     "reason": "Identical faceplates.",
+     "weight": 1
+    },
+    {
+     "id": "ppoj1dc0tf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "At high level.",
+     "weight": 1
+    },
+    {
+     "id": "ptethq4mtf1",
+     "pifId": "feedback",
+     "name": "Feedback from the system",
+     "statement": "The system gives no clear feedback that the step was done correctly",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "idhqhed8tf1",
+     "text": "Use the HS confirm dialogue (tank tag, level) proposed at 2.2 for close commands too",
+     "level": "HMI",
+     "pifIds": [
+      "pufw7i9rtf1",
+      "ppoj1dc0tf1"
+     ],
+     "owner": "Instrument / DCS engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "SAT",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "exi3aqmutf1",
+   "nodeId": "nx36gci6tf1",
+   "mode": "CH1",
+   "errorDesc": "Changeover is not confirmed by level trends",
+   "errorType": "Lapse",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "LSHH on full tank",
+   "recovery": "LA HH",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "ppv7g4w4tf1",
+     "pifId": "importance",
+     "name": "Perceived importance of check relative to other tasks",
+     "statement": "The check is seen as less important than other work going on at the same time",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Seen as complete once SDV indications change.",
+     "weight": 1
+    },
+    {
+     "id": "pxdr2k8xtf1",
+     "pifId": "feedback",
+     "name": "Feedback from the system",
+     "statement": "The system gives no clear feedback that the step was done correctly",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "No direct flow indication per tank.",
+     "weight": 1
+    },
+    {
+     "id": "prjr5gi9tf1",
+     "pifId": "time",
+     "name": "Time pressure",
+     "statement": "There is not enough time to complete the step properly",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "ilm3h9axtf1",
+     "text": "Use the rate-of-rise display and no-rise alarm proposed at 3.1 for the changeover check",
+     "level": "ENG",
+     "pifIds": [
+      "ppv7g4w4tf1",
+      "pxdr2k8xtf1"
+     ],
+     "owner": "Instrument / DCS engineer",
+     "due": "2027-03-31",
+     "status": "Proposed",
+     "verification": "SAT",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  },
+  {
+   "id": "ei1nqwkwtf1",
+   "nodeId": "nmndgrs8tf1",
+   "mode": "COM3",
+   "errorDesc": "Incoming CRO is not told the receiving tank, its level or time to high level",
+   "errorType": "Lapse",
+   "consequence": "Tank overfill: crude spills from roof fittings into the bund, large flammable vapour cloud (Buncefield-type), pool fire if ignited.",
+   "consTypes": [
+    "Possible MAH"
+   ],
+   "controls": "LIA high alarm\nLSHH / LA HH",
+   "recovery": "Incoming CRO reviews trends",
+   "credible": true,
+   "notCredibleReason": "",
+   "notes": "",
+   "designReq": "",
+   "verifReq": "",
+   "pifNotes": "Provisional ratings from P&ID review only. Confirm or change with the operating crew at the walk-through.",
+   "pifs": [
+    {
+     "id": "p2fo2426tf1",
+     "pifId": "fatigue",
+     "name": "Fatigue",
+     "statement": "Fatigue levels are very high",
+     "baseline": 75,
+     "modified": 50,
+     "reason": "Handover at end of 12-hour shift.",
+     "weight": 1
+    },
+    {
+     "id": "p3xfqlustf1",
+     "pifId": "communication",
+     "name": "Communication",
+     "statement": "Communication between the people involved is unreliable",
+     "baseline": 75,
+     "modified": 25,
+     "reason": "No structured handover format for an active receipt.",
+     "weight": 1
+    },
+    {
+     "id": "p9rdbo21tf1",
+     "pifId": "roles",
+     "name": "Roles and responsibilities",
+     "statement": "It is unclear who performs or confirms the step",
+     "baseline": 50,
+     "modified": null,
+     "reason": "",
+     "weight": 1
+    }
+   ],
+   "improvements": [
+    {
+     "id": "il9gkjvytf1",
+     "text": "Structured handover sheet for active receipts: tank, level, ullage, time to high, next tank prepared Y/N",
+     "level": "PROC",
+     "pifIds": [
+      "p3xfqlustf1"
+     ],
+     "owner": "Operations superintendent",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Handover audit",
+     "source": "Analyst (P&ID review)"
+    },
+    {
+     "id": "icri0jhgtf1",
+     "text": "Avoid tank changeovers within 1 hour of shift change",
+     "level": "SUP",
+     "pifIds": [
+      "p2fo2426tf1"
+     ],
+     "owner": "Shift supervisors",
+     "due": "2026-12-31",
+     "status": "Proposed",
+     "verification": "Log review",
+     "source": "Analyst (P&ID review)"
+    }
+   ]
+  }
+ ],
+ "competence": {
+  "nv02q4s3tf1": {
+   "criticalDeviation": "Ullage over-estimated (wrong tank, stale or failed transmitter): tank overfilled.",
+   "knowledge": "Explains how ullage is calculated, the maximum safe fill level, and why LIT-10x-1 and LIT-10x-2 must agree.",
+   "skills": "Reads and compares both transmitters on the DCS; calculates time to high level at the planned rate.",
+   "experience": "Supervised receipts into each of T-107, T-108 and T-109.",
+   "refDoc": "P&ID CPSF-PR-PID-1-0001-25-00; tank receipt procedure (to be written)"
+  },
+  "n7ragsxqtf1": {
+   "criticalDeviation": "Filling while inter-tank transfer runs: VRU overloaded, PVRVs vent.",
+   "knowledge": "States Note 10 (VRU sized for 75,000 BOPD / 500 m3/h) and the consequence of exceeding it.",
+   "skills": "Confirms VRU status and transfer pump status on the DCS.",
+   "experience": "Walk-through of the VRU and PVRV arrangement.",
+   "refDoc": "P&ID Note 10"
+  },
+  "na1ufoxhtf1": {
+   "criticalDeviation": "Wrong tank selected for receipt.",
+   "knowledge": "Explains the tank selection and SS sign-off process.",
+   "skills": "Uses read-back of the tank tag.",
+   "experience": "Observed on three receipts.",
+   "refDoc": "Tank receipt checklist (to be written)"
+  },
+  "noxhnb9atf1": {
+   "criticalDeviation": "Level rise not confirmed early: wrong tank or lost crude not detected.",
+   "knowledge": "Explains what level rise to expect for the receipt rate (m3/h divided by 919 m2 tank area).",
+   "skills": "Interprets level trends on both transmitters.",
+   "experience": "Simulated wrong-tank scenario in training.",
+   "refDoc": "Tank receipt procedure step (to be written)"
+  },
+  "n2ok4x42tf1": {
+   "criticalDeviation": "Monitoring lapses during a long receipt.",
+   "knowledge": "Knows the alarm and trip settings (PIT 0.005/0.0025 barg) and that LSHH alarms only.",
+   "skills": "Sets and tracks time-to-high-level.",
+   "experience": "Full receipt including a shift change.",
+   "refDoc": "P&ID alarm/trip table"
+  },
+  "nxdhmny6tf1": {
+   "criticalDeviation": "Late or wrong response to LSHH / LA HH.",
+   "knowledge": "Knows the time from HH to overflow and the local push-button location outside the bund (Note 3).",
+   "skills": "Closes SDV-10x-1 from DCS and directs the FO to the local station.",
+   "experience": "Overfill response drill twice a year.",
+   "refDoc": "Emergency response procedure; P&ID Note 3"
+  },
+  "n1n6yz6otf1": {
+   "criticalDeviation": "Full tank closed before the next is open, or wrong SDV closed.",
+   "knowledge": "Explains the open-before-close rule and the upstream consequence of blocking the receipt line.",
+   "skills": "Performs the changeover sequence with confirmation.",
+   "experience": "Supervised changeovers between each tank pair.",
+   "refDoc": "Changeover procedure (to be written)"
+  },
+  "nx36gci6tf1": {
+   "criticalDeviation": "Changeover not confirmed by level trends.",
+   "knowledge": "Knows the expected level response of both tanks.",
+   "skills": "Uses level trends to confirm.",
+   "experience": "Supervised changeovers.",
+   "refDoc": "Changeover procedure (to be written)"
+  }
+ },
+ "gateNotes": {},
+ "audit": []
+}
