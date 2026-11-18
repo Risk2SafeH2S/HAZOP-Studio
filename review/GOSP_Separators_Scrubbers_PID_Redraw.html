@@ -1,0 +1,1239 @@
+<title>GOSP Separation P&amp;ID</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: drawing-sheet header, full-width scrollable drawing, then reference sections in a readable column */
+:root {
+  --bg:#f3f5f8; --paper:#ffffff; --ink:#14202e; --mute:#5b6b7e; --rule:#d5dce5; --accent:#b86a00;
+  --crude:#1b2b3c; --fg:#c58a00; --ho:#c2410c; --vap:#7c3aed; --vent:#7a8796; --sig:#2563eb; --ia:#0f766e; --dr:#6b4f2a;
+  --chipbg:#eef1f5; --n1:#8b5cf6; --n2:#f2b705; --water:#0284c7; --dsl:#8a5a2b; --gas:#64748b; --hold:#dc2626;
+  --disp:'Rajdhani', 'Arial Narrow', sans-serif; --body:'Inter', system-ui, sans-serif; --mono:'IBM Plex Mono', ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#07101f; --paper:#0e1b2e; --ink:#dfe7f1; --mute:#8a9bb2; --rule:#1d3452; --accent:#f59e0b;
+  --crude:#e2e8f0; --fg:#facc15; --ho:#fb7a3c; --vap:#a78bfa; --vent:#94a3b8; --sig:#60a5fa; --ia:#2dd4bf; --dr:#c8a273; --chipbg:#162236; --n1:#a78bfa; --n2:#fbbf24; --water:#38bdf8; --dsl:#d6a46b; --gas:#94a3b8; --hold:#f87171; color-scheme:dark } }
+:root[data-theme="dark"] {
+  --bg:#07101f; --paper:#0e1b2e; --ink:#dfe7f1; --mute:#8a9bb2; --rule:#1d3452; --accent:#f59e0b;
+  --crude:#e2e8f0; --fg:#facc15; --ho:#fb7a3c; --vap:#a78bfa; --vent:#94a3b8; --sig:#60a5fa; --ia:#2dd4bf; --dr:#c8a273; --chipbg:#162236; --n1:#a78bfa; --n2:#fbbf24; --water:#38bdf8; --dsl:#d6a46b; --gas:#94a3b8; --hold:#f87171; color-scheme:dark }
+body { background:var(--bg); color:var(--ink); font-family:var(--body); font-size:14px; line-height:1.55; }
+.wrap { padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); padding-block:20px 48px; max-width:1500px; margin:0 auto; display:grid; gap:28px; }
+header.sheet { display:grid; grid-template-columns:1fr auto; gap:12px 24px; align-items:end; border-bottom:2px solid var(--ink); padding-bottom:12px; }
+header.sheet h1 { font-family:var(--disp); font-size:clamp(26px,4vw,38px); line-height:1.05; margin:0; letter-spacing:.01em; text-wrap:balance; }
+header.sheet p { margin:4px 0 0; color:var(--mute); max-width:70ch; }
+.tb { display:grid; grid-template-columns:auto auto; gap:2px 14px; font-family:var(--mono); font-size:12px; }
+.tb span:nth-child(odd) { color:var(--mute); text-transform:uppercase; letter-spacing:.06em; font-size:10.5px; padding-top:2px; }
+@media (max-width:720px) { header.sheet { grid-template-columns:1fr; } }
+h2 { font-family:var(--disp); font-size:24px; margin:0 0 10px; letter-spacing:.02em; text-wrap:balance; }
+h3 { font-family:var(--disp); font-size:18px; margin:18px 0 6px; letter-spacing:.02em; }
+section { min-width:0; }
+.lead { max-width:75ch; color:var(--mute); margin:0 0 12px; }
+.toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:8px; }
+.toolbar button { font:600 12px var(--mono); background:var(--paper); color:var(--ink); border:1px solid var(--rule); padding:6px 10px; border-radius:4px; cursor:pointer; }
+.toolbar button[aria-pressed="true"] { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.toolbar button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.toolbar .hint { color:var(--mute); font-size:12px; }
+.canvas { overflow:auto; border:1px solid var(--rule); background:var(--paper); max-height:82vh; border-radius:4px; }
+
+.canvas.fit 
+.legend { display:flex; flex-wrap:wrap; gap:6px 18px; font-size:12px; margin-top:10px; color:var(--mute); }
+.legend span { display:inline-flex; align-items:center; gap:6px; }
+.legend i { display:inline-block; width:28px; height:0; border-top:3px solid; }
+/* svg classes */
+.paper { fill:var(--paper); } .frame { fill:none; stroke:var(--rule); stroke-width:1.5; }
+.tx { fill:var(--ink); font-family:var(--mono); } .mute { fill:var(--mute); font-family:var(--mono); }
+.tk { fill:var(--ink); font-family:var(--disp); } .itx { fill:var(--ink); font-family:var(--mono); font-weight:600; }
+.optx { fill:var(--ink); font-family:var(--mono); }
+polyline { fill:none; stroke-linejoin:round; }
+.halo { stroke:var(--paper); stroke-width:10; }
+.l-crude { stroke:var(--crude); stroke-width:3.2; } .l-fg { stroke:var(--fg); stroke-width:2.4; }
+.l-ho { stroke:var(--ho); stroke-width:2.4; } .l-vap { stroke:var(--vap); stroke-width:2.6; }
+.l-vent { stroke:var(--vent); stroke-width:1.8; } .l-ia { stroke:var(--ia); stroke-width:1.6; }
+.l-dr { stroke:var(--dr); stroke-width:1.8; } .l-inst { stroke:var(--ink); stroke-width:1.1; }
+.sig { fill:none; stroke:var(--sig); stroke-width:1.2; stroke-dasharray:6 4; }
+.ah { stroke:none; } polygon.ah.l-crude { fill:var(--crude); } polygon.ah.l-fg { fill:var(--fg); } polygon.ah.l-ho { fill:var(--ho); }
+polygon.ah.l-vap { fill:var(--vap); } polygon.ah.l-vent { fill:var(--vent); } polygon.ah.l-ia { fill:var(--ia); } polygon.ah.l-dr { fill:var(--dr); }
+.vb { fill:var(--paper); stroke:var(--ink); stroke-width:1.3; } .vb.nc { fill:var(--ink); }
+.dot, .tee { fill:var(--ink); } .stem { stroke:var(--ink); stroke-width:1.3; }
+.ib { fill:var(--paper); stroke:var(--ink); stroke-width:1.2; } .ibl { stroke:var(--ink); stroke-width:1; }
+.tank { fill:var(--paper); stroke:var(--ink); stroke-width:2.6; } .lvl { stroke:var(--crude); stroke-width:1; stroke-dasharray:8 5; }
+.coil { fill:none; stroke:var(--ho); stroke-width:1.5; }
+.pvrv { fill:var(--paper); stroke:var(--vap); stroke-width:1.6; } .pvrvm { fill:none; stroke:var(--vap); stroke-width:1.4; }
+.op { fill:var(--paper); stroke-width:1.6; } .crude-op { stroke:var(--crude); } .fg-op { stroke:var(--fg); } .ho-op { stroke:var(--ho); }
+.vap-op { stroke:var(--vap); } .ia-op { stroke:var(--ia); } .dr-op { stroke:var(--dr); }
+.agug { stroke:var(--mute); stroke-width:1; stroke-dasharray:10 6; }
+g.hot { cursor:help; } g.hot:hover .vb, g.hot:hover .ib, g.hot:hover .op, g.hot:hover .pvrv { stroke:var(--accent); stroke-width:2.2; }
+#tip { position:fixed; z-index:20; max-width:340px; background:var(--ink); color:var(--paper); font:12px/1.45 var(--body); padding:8px 10px; border-radius:4px; pointer-events:none; }
+/* prose & tables */
+.cols { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:18px 28px; }
+.card { background:var(--paper); border:1px solid var(--rule); border-radius:4px; padding:14px 16px; min-width:0; }
+.card h3 { margin-top:0; display:flex; align-items:center; gap:8px; }
+.card h3 i { width:22px; height:0; border-top:3px solid; display:inline-block; }
+.card p, .card ul { margin:6px 0; } .card ul { padding-left:18px; }
+.tw { overflow-x:auto; border:1px solid var(--rule); border-radius:4px; background:var(--paper); }
+table { border-collapse:collapse; width:100%; font-size:12.5px; }
+th, td { text-align:left; padding:6px 10px; border-bottom:1px solid var(--rule); vertical-align:top; }
+th { font-family:var(--disp); font-size:14px; letter-spacing:.04em; text-transform:uppercase; background:var(--chipbg); position:sticky; top:0; }
+table.num td { font-variant-numeric:tabular-nums; }
+tbody tr:last-child td { border-bottom:0; }
+.mono { font-family:var(--mono); font-size:12px; white-space:nowrap; }
+.chip { font:600 11px var(--mono); padding:1px 7px; border-radius:10px; background:var(--chipbg); border-left:3px solid; white-space:nowrap; }
+.chip.fg { border-color:var(--fg); } .chip.vap { border-color:var(--vap); } .chip.vent { border-color:var(--vent); } .chip.ho { border-color:var(--ho); }
+.chip.crude { border-color:var(--crude); } .chip.dr { border-color:var(--dr); } .chip.ia { border-color:var(--ia); }
+ol.notes { margin:0; padding-left:22px; max-width:90ch; } ol.notes li { margin:3px 0; }
+.caveat { border-left:3px solid var(--accent); padding:8px 14px; background:var(--paper); max-width:95ch; }
+.caveat ul { margin:4px 0; padding-left:18px; }
+nav.toc { display:flex; flex-wrap:wrap; gap:6px 14px; font:500 12.5px var(--mono); }
+nav.toc a { color:var(--ink); text-decoration:none; border-bottom:1px solid var(--rule); }
+nav.toc a:hover { border-color:var(--accent); }
+@media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+
+.nd { fill:none; stroke-width:16; stroke-linejoin:round; stroke-linecap:round; opacity:.28; } .nd1 { stroke:var(--n1); } .nd2 { stroke:var(--n2); }
+.nd2box { fill:none; stroke:var(--n2); stroke-width:10; opacity:.28; rx:4; }
+.ndl1 { fill:var(--n1); font-family:var(--disp); } .ndl2 { fill:var(--n2); font-family:var(--disp); }
+.l-water { stroke:var(--water); stroke-width:2.4; } polygon.ah.l-water { fill:var(--water); }
+.l-dsl { stroke:var(--dsl); stroke-width:2.4; stroke-dasharray:10 5; } polygon.ah.l-dsl { fill:var(--dsl); }
+.l-gas { stroke:var(--gas); stroke-width:2; } .water-op { stroke:var(--water); } .dsl-op { stroke:var(--dsl); }
+.l-vent { stroke:var(--vent); stroke-width:2.2; }
+.tp { fill:var(--paper); stroke:var(--hold); stroke-width:1.4; } .tptx { fill:var(--hold); font-family:var(--mono); font-weight:600; }
+.vsl { fill:var(--paper); stroke:var(--ink); stroke-width:2.2; } .eq { fill:var(--paper); stroke:var(--ink); stroke-width:1.8; }
+.eq.hot { stroke:var(--ho); } .pkg { fill:none; stroke:var(--mute); stroke-width:1; stroke-dasharray:8 5; }
+.hold { fill:var(--hold); font-family:var(--mono); }
+.chip.water { border-color:var(--water); } .chip.dsl { border-color:var(--dsl); } .chip.n1 { border-color:var(--n1); } .chip.n2 { border-color:var(--n2); }
+.flow { display:flex; flex-wrap:wrap; gap:6px; align-items:center; font:500 12px var(--mono); margin:6px 0 2px; }
+.flow span { background:var(--chipbg); padding:2px 8px; border-radius:3px; }
+.flow b { color:var(--mute); font-weight:400; }
+
+ul.notes { margin:0; padding-left:20px; max-width:90ch; } ul.notes li { margin:3px 0; }
+
+svg.pid { display:block; max-width:none; height:auto; }
+.canvas.fit svg.pid { width:100% !important; }
+:root { --gas2:#16a34a; --flare:#dc2626; --cond:#0891b2; --air:#64748b; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --gas2:#4ade80; --flare:#f87171; --cond:#22d3ee; --air:#94a3b8; } }
+:root[data-theme="dark"] { --gas2:#4ade80; --flare:#f87171; --cond:#22d3ee; --air:#94a3b8; }
+.l-gas { stroke:var(--gas2); stroke-width:2.6; } polygon.ah.l-gas { fill:var(--gas2); }
+.l-flare { stroke:var(--flare); stroke-width:2; stroke-dasharray:9 4; } polygon.ah.l-flare { fill:var(--flare); }
+.l-cond { stroke:var(--cond); stroke-width:2.2; } polygon.ah.l-cond { fill:var(--cond); }
+.l-air { stroke:var(--air); stroke-width:1.6; stroke-dasharray:3 3; } polygon.ah.l-air { fill:var(--air); }
+.gas-op { stroke:var(--gas2); } .flare-op { stroke:var(--flare); } .cond-op { stroke:var(--cond); }
+.vsl { fill:var(--paper); stroke:var(--ink); stroke-width:2.2; } .eq { fill:var(--paper); stroke:var(--ink); stroke-width:1.8; }
+.newx { fill:none; stroke:var(--flare); stroke-width:1.2; stroke-dasharray:4 3; }
+.chip.gas { border-color:var(--gas2); } .chip.flare { border-color:var(--flare); } .chip.cond { border-color:var(--cond); } .chip.air { border-color:var(--air); }
+.tabs { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+.tabs button { font:600 12.5px var(--mono); background:var(--paper); color:var(--ink); border:1px solid var(--rule); padding:6px 11px; border-radius:4px; cursor:pointer; }
+.tabs button[aria-selected="true"] { background:var(--accent); color:var(--paper); border-color:var(--accent); }
+.tabs button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.dwg-meta { font:12px var(--mono); color:var(--mute); margin:0 0 8px; }
+
+ul.tight { margin:6px 0; padding-left:18px; }
+</style>
+<div class="wrap">
+<header class="sheet">
+  <div>
+    <h1>GOSP Separators, Gas Manifold &amp; Scrubbers — P&amp;ID Redraw</h1>
+    <p>Redrawn from five GOSP as-built P&amp;IDs (sheets 003, 004, 005, 007 and 013). Each drawing shows flow directions, line numbers, valves, instruments and relief settings. The tables below cover equipment, lines and relief, and explain how the system works.</p>
+  </div>
+  <div class="tb">
+    <span>Sheets</span><span>M0002-003/004/005/007 · 00002-013</span>
+    <span>Rev.</span><span>X1 · As built (2018–2024)</span>
+    <span>Company</span><span>Dragon Oil (Turkmenistan) Ltd.</span>
+    <span>Facility</span><span>GOSP / GOSP 2</span>
+    <span>Tags</span><span>Instruments prefixed 24- (Note 2)</span>
+  </div>
+</header>
+<nav class="toc" aria-label="Sections"><a href="#drawing">Drawings</a><a href="#function">How it works</a><a href="#equipment">Equipment</a><a href="#lines">Line list</a><a href="#relief">Relief &amp; trips</a><a href="#instruments">Instruments</a><a href="#compare">005 vs 013</a><a href="#caveats">Reading notes</a></nav>
+
+<section id="drawing">
+  <h2>Redrawn P&amp;IDs</h2>
+  <p class="lead">One tab per sheet. Sheet 013 is the 2018 as-built of the same manifold as sheet 005, so it is compared in a table further down rather than redrawn. Red dashed boxes mark the items clouded as Rev X1 changes. Hover or tap any item for its tag and function.</p>
+  <div class="tabs" role="tablist" aria-label="Sheets"><button type="button" role="tab" id="t-overview" aria-selected="true" aria-controls="p-overview">Overview</button><button type="button" role="tab" id="t-s003" aria-selected="false" aria-controls="p-s003">003 · H-07</button><button type="button" role="tab" id="t-s004" aria-selected="false" aria-controls="p-s004">004 · H-08</button><button type="button" role="tab" id="t-s005" aria-selected="false" aria-controls="p-s005">005 · Manifold</button><button type="button" role="tab" id="t-s007" aria-selected="false" aria-controls="p-s007">007 · Scrubbers</button></div>
+  <div class="toolbar" role="group" aria-label="Zoom"><button type="button" id="z-fit" aria-pressed="false">Fit width</button><button type="button" id="z-100" aria-pressed="true">100%</button><span class="hint">Scroll inside the frame to pan.</span></div>
+  <div role="tabpanel" id="p-overview" aria-labelledby="t-overview" ><p class="dwg-meta">Block flow across all five sheets — Arrows show normal flow direction.</p><div class="canvas"><svg class="pid" viewBox="0 0 1500 560" width="1500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GOSP block flow overview">
+<rect x="0" y="0" width="1500" height="560" class="paper"/><rect x="6" y="6" width="1488" height="548" class="frame"/>
+<g class="hot"><title>Well fluid from Zhdanov-25 (sheet M0002-001)</title>
+<polygon points="20,133.0 160,133.0 170,150 160,167.0 20,167.0" class="op crude-op"/>
+<text x="90.0" y="147.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">FROM ZHDANOV-25</text>
+<text x="90.0" y="160.0" font-size="8.5" text-anchor="middle" class="optx">12&quot; PL-D013</text>
+</g>
+<polyline points="170,150 230,150 230,110 300,110" class="l-crude"/>
+<polyline points="230,150 230,200 300,200" class="l-crude"/>
+<polygon points="292,110 278,105.1 278,114.9" class="ah l-crude"/>
+<polygon points="292,200 278,195.1 278,204.9" class="ah l-crude"/>
+<g class="hot"><title>Horizontal 2-phase separator H-07, 6.4 MPa nominal, 25 m3</title>
+<rect x="300" y="85" width="160" height="50" rx="3" class="eq"/>
+</g>
+<text x="380.0" y="106.0" font-size="11" text-anchor="middle" class="tk" font-weight="700">GOSP-24-H-07</text>
+<text x="380.0" y="120.0" font-size="8" text-anchor="middle" class="mute">2-phase separator · sht 003</text>
+<g class="hot"><title>Horizontal 2-phase separator H-08, 6.4 MPa nominal, 25 m3</title>
+<rect x="300" y="175" width="160" height="50" rx="3" class="eq"/>
+</g>
+<text x="380.0" y="196.0" font-size="11" text-anchor="middle" class="tk" font-weight="700">GOSP-24-H-08</text>
+<text x="380.0" y="210.0" font-size="8" text-anchor="middle" class="mute">2-phase separator · sht 004</text>
+<polyline points="380,135 380,175" class="l-crude"/>
+<text x="388" y="160" font-size="7.5" text-anchor="start" class="mute">12&quot; crossover N3–N3 (021-X)</text>
+<polyline points="460,100 560,100" class="l-gas"/>
+<polyline points="460,190 520,190 520,120 560,120" class="l-gas"/>
+<polygon points="552,100 538,95.1 538,104.9" class="ah l-gas"/>
+<g class="hot"><title>2-phase separator gas outlet manifold</title>
+<rect x="560" y="80" width="170" height="60" rx="3" class="eq"/>
+</g>
+<text x="645.0" y="106.0" font-size="11" text-anchor="middle" class="tk" font-weight="700">OUTLET MANIFOLD</text>
+<text x="645.0" y="120.0" font-size="8" text-anchor="middle" class="mute">sht 005 (013 = 2018 as-built)</text>
+<text x="645.0" y="131.0" font-size="8" text-anchor="middle" class="mute">PSV-224 / 225 @ 14 barg</text>
+<polyline points="730,110 830,110" class="l-gas"/>
+<polygon points="822,110 808,105.1 808,114.9" class="ah l-gas"/>
+<g class="hot"><title>Vertical gas scrubbers V-01 and V-04 (sheet 007)</title>
+<rect x="830" y="70" width="170" height="80" rx="3" class="eq"/>
+</g>
+<text x="915.0" y="106.0" font-size="11" text-anchor="middle" class="tk" font-weight="700">GAS SCRUBBERS</text>
+<text x="915.0" y="120.0" font-size="8" text-anchor="middle" class="mute">GOSP-24-V-01 / V-04</text>
+<text x="915.0" y="131.0" font-size="8" text-anchor="middle" class="mute">PSV-102/-B/-D @ 6.2 barg</text>
+<polyline points="1000,110 1100,110" class="l-gas"/>
+<polygon points="1092,110 1078,105.1 1078,114.9" class="ah l-gas"/>
+<g class="hot"><title>Gas flow meter with bypass BV-227</title>
+<rect x="1100" y="85" width="140" height="50" rx="3" class="eq"/>
+</g>
+<text x="1170.0" y="106.0" font-size="11" text-anchor="middle" class="tk" font-weight="700">GAS METERING</text>
+<text x="1170.0" y="120.0" font-size="8" text-anchor="middle" class="mute">FE-001 · 21-FQIR-001</text>
+<polyline points="1240,110 1270,110 1270,60 1300,60" class="l-gas"/>
+<polygon points="1302,60 1288,55.1 1288,64.9" class="ah l-gas"/>
+<text x="1305" y="63" font-size="9" text-anchor="start" class="tx">→ 20&quot; CARBON PLANT</text>
+<polyline points="1240,110 1270,110 1270,95 1300,95" class="l-gas"/>
+<polygon points="1302,95 1288,90.1 1288,99.9" class="ah l-gas"/>
+<text x="1305" y="98" font-size="9" text-anchor="start" class="tx">→ 6&quot; CHEMICAL PLANT</text>
+<polyline points="1240,110 1270,110 1270,130 1300,130" class="l-gas"/>
+<polygon points="1302,130 1288,125.1 1288,134.9" class="ah l-gas"/>
+<text x="1305" y="133" font-size="9" text-anchor="start" class="tx">→ 4&quot; NGDU</text>
+<polyline points="915,150 915,230 1300,230" class="l-flare"/>
+<polygon points="1297,230 1283,225.1 1283,234.9" class="ah l-flare"/>
+<text x="1305" y="233" font-size="9" text-anchor="start" class="tx">→ 12&quot; EMERGENCY FLARE</text>
+<text x="1000" y="224" font-size="7.5" text-anchor="start" class="mute">PSV discharges · 6&quot; flare line</text>
+<polyline points="645,140 645,175 1300,175" class="l-gas"/>
+<text x="1305" y="178" font-size="9" text-anchor="start" class="tx">→ OLD MANIFOLD (6&quot;)</text>
+<polygon points="1297,175 1283,170.1 1283,179.9" class="ah l-gas"/>
+<polyline points="380,225 380,330 560,330" class="l-crude"/>
+<polygon points="552,330 538,325.1 538,334.9" class="ah l-crude"/>
+<g class="hot"><title>Duplex oil strainers on separator liquid outlets</title>
+<rect x="560" y="300" width="200" height="60" rx="3" class="eq"/>
+</g>
+<text x="660.0" y="326.0" font-size="11" text-anchor="middle" class="tk" font-weight="700">STRAINERS</text>
+<text x="660.0" y="340.0" font-size="8" text-anchor="middle" class="mute">FT-111A/B (H-07) · S-002A/B (H-08)</text>
+<polyline points="760,330 860,330" class="l-crude"/>
+<polygon points="852,330 838,325.1 838,334.9" class="ah l-crude"/>
+<g class="hot"><title>Separator liquids to the multiphase pumps (sheet M0002-002)</title>
+<polygon points="860,313.0 1050,313.0 1060,330 1050,347.0 860,347.0" class="op crude-op"/>
+<text x="955.0" y="327.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">TO MULTIPHASE PUMPS</text>
+<text x="955.0" y="340.0" font-size="8.5" text-anchor="middle" class="optx">8&quot; 017-H60 · 6&quot; 018-H60</text>
+</g>
+<polyline points="645,140 645,250 860,250" class="l-gas"/>
+<text x="700" y="245" font-size="7.5" text-anchor="start" class="mute">3&quot; gas branches 019/020-H60</text>
+<polygon points="852,250 838,245.1 838,254.9" class="ah l-gas"/>
+<polyline points="1000,140 1040,140 1040,450 560,450" class="l-cond"/>
+<polygon points="793,450 807,445.1 807,454.9" class="ah l-cond"/>
+<text x="820" y="443" font-size="8" text-anchor="start" class="tx">4&quot; condensate 031-X</text>
+<g class="hot"><title>Pneumatic (air-driven) condensate pump</title>
+<circle cx="500" cy="450" r="20" class="eq"/><path d="M486,476 L514,476 L508,466 L492,466 Z" class="vb"/><path d="M500,430 L520,430" class="stem"/>
+</g>
+<text x="500" y="492" font-size="9" text-anchor="middle" class="tx" font-weight="700">GOSP-21-P-001</text>
+<text x="500" y="504" font-size="7.5" text-anchor="middle" class="mute">pneumatic pump</text>
+<polyline points="480,450 250,450 250,225" class="l-cond"/>
+<polygon points="250,293 245.1,307 254.9,307" class="ah l-cond"/>
+<text x="258" y="380" font-size="8" text-anchor="start" class="tx">to H-07 N4 / H-08 N4</text>
+<g class="hot"><title>Air receiver supplying the pneumatic pump</title>
+<rect x="380" y="500" width="140" height="45" rx="3" class="eq"/>
+</g>
+<text x="450.0" y="518.5" font-size="11" text-anchor="middle" class="tk" font-weight="700">GOSP-63-V-252</text>
+<text x="450.0" y="532.5" font-size="8" text-anchor="middle" class="mute">air receiver 10 bar</text>
+<polyline points="500,500 500,475" class="l-air"/>
+<text x="530" y="525" font-size="8" text-anchor="start" class="mute">← air compressor XXX (18.5 kW)</text>
+</svg></div></div><div role="tabpanel" id="p-s003" aria-labelledby="t-s003" hidden><p class="dwg-meta">GOSP-PR-PID-01-M0002-003-00 Rev X1 · 04.12.2024 · As built — Horizontal separator H-07, oil strainers FT-111A/B, condensate pump P-001 and air receiver V-252.</p><div class="canvas"><svg class="pid" viewBox="0 0 1600 1000" width="1600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Redrawn sheet 003, separator H-07, condensate pump P-001 and air receiver V-252">
+<rect x="0" y="0" width="1600" height="1000" class="paper"/><rect x="6" y="6" width="1588" height="988" class="frame"/>
+<g class="hot"><title>GOSP-24-H-07 horizontal 2-phase separator. Nominal pressure 6.4 MPa (kgf/m3 on data box), capacity 25 m3, oil/gas service.</title>
+<rect x="430" y="200" width="570" height="130" rx="65.0" ry="65.0" class="vsl"/>
+</g>
+<text x="715.0" y="261.0" font-size="14" text-anchor="middle" class="tk" font-weight="700">GOSP-24-H-07</text>
+<text x="715.0" y="277.0" font-size="8.5" text-anchor="middle" class="mute">Horizontal 2-phase separator</text>
+<text x="715.0" y="289.0" font-size="8.5" text-anchor="middle" class="mute">6.4 MPa nominal · 25 m3 · oil/gas</text>
+<g class="hot"><title>Well fluid from Zhdanov-25</title>
+<polygon points="1390,198.0 1580,198.0 1580,232.0 1390,232.0 1380,215" class="op crude-op"/>
+<text x="1485.0" y="212.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">FROM ZHDANOV-25</text>
+<text x="1485.0" y="225.0" font-size="8.5" text-anchor="middle" class="optx">M0002-001-00</text>
+</g>
+<polyline points="1380,215 1000,215" class="l-crude"/>
+<polygon points="1193,215 1207,210.1 1207,219.9" class="ah l-crude"/>
+<g class="hot"><title>BV-007 12&quot; 600# inlet isolation</title>
+<path d="M1332,209 L1348,221 L1348,209 L1332,221 Z" class="vb"/>
+</g>
+<text x="1340" y="240" font-size="8.5" text-anchor="middle" class="tx">BV-007 12&quot; 600#</text>
+<text x="1150" y="208" font-size="8.5" text-anchor="start" class="tx">12&quot;-PL-D013-007-X</text>
+<g class="hot"><title>16&quot;x12&quot; expander at N2</title>
+<polygon points="1044,208 1056,211 1056,219 1044,222" class="vb"/>
+</g>
+<text x="1005" y="210" font-size="7.5" text-anchor="start" class="mute">N2 16&quot;</text>
+<polyline points="1100,215 1100,190" class="l-inst"/>
+<g class="hot"><title>(016) 1/2&quot; vent/drain on inlet line</title>
+<path d="M1094,172 L1106,188 L1094,188 L1106,172 Z" class="vb"/>
+</g>
+<text x="1108" y="176" font-size="7.5" text-anchor="start" class="mute">(016) 1/2&quot;</text>
+<polyline points="540,200 540,80 1380,80" class="l-gas"/>
+<polygon points="540,133 535.1,147 544.9,147" class="ah l-gas"/>
+<polygon points="907,80 893,75.1 893,84.9" class="ah l-gas"/>
+<g class="hot"><title>Separator gas to outlet manifold (sheet 005)</title>
+<polygon points="1380,63.0 1570,63.0 1580,80 1570,97.0 1380,97.0" class="op gas-op"/>
+<text x="1475.0" y="77.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">TO GAS SCRUBBERS</text>
+<text x="1475.0" y="90.0" font-size="8.5" text-anchor="middle" class="optx">via manifold · M0002-005</text>
+</g>
+<text x="900" y="72" font-size="8.5" text-anchor="middle" class="tx">12&quot;-PR-C013-025-X</text>
+<text x="546" y="195" font-size="7.5" text-anchor="start" class="mute">N1 12&quot;</text>
+<rect x="560" y="95" width="40" height="40" rx="6" class="newx"/>
+<polyline points="580,80 580,110" class="l-inst"/>
+<text x="588" y="110" font-size="7.5" text-anchor="start" class="mute">1/2&quot; vent (new)</text>
+<polyline points="640,200 640,172" class="l-inst"/>
+<g class="hot"><title>PI-188 pressure gauge on N9 (1&quot; valve, new)</title>
+<circle cx="640" cy="158" r="13" class="ib"/>
+<text x="640" y="156" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="640" y="166.0" font-size="7.5" text-anchor="middle" class="itx">188</text>
+</g>
+<polyline points="720,200 720,172" class="l-inst"/>
+<g class="hot"><title>PSHH-222 high-high pressure switch</title>
+<circle cx="720" cy="158" r="13" class="ib"/>
+<text x="720" y="156" font-size="7.5" text-anchor="middle" class="itx">PSHH</text>
+<text x="720" y="166.0" font-size="7.5" text-anchor="middle" class="itx">222</text>
+</g>
+<polyline points="800,200 800,172" class="l-inst"/>
+<g class="hot"><title>PI-003 pressure gauge</title>
+<circle cx="800" cy="158" r="13" class="ib"/>
+<text x="800" y="156" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="800" y="166.0" font-size="7.5" text-anchor="middle" class="itx">003</text>
+</g>
+<polyline points="880,200 880,172" class="l-inst"/>
+<g class="hot"><title>LIT-003 level transmitter with LG-XXX (new, X1 cloud)</title>
+<circle cx="880" cy="158" r="13" class="ib"/>
+<text x="880" y="156" font-size="7.5" text-anchor="middle" class="itx">LIT</text>
+<text x="880" y="166.0" font-size="7.5" text-anchor="middle" class="itx">003</text>
+</g>
+<rect x="860" y="135" width="40" height="48" rx="6" class="newx"/>
+<text x="905" y="150" font-size="7.5" text-anchor="start" class="mute">LG-XXX (new)</text>
+<text x="690" y="196" font-size="7.5" text-anchor="start" class="mute">N8</text>
+<text x="760" y="196" font-size="7.5" text-anchor="start" class="mute">N7</text>
+<text x="940" y="190" font-size="7.5" text-anchor="start" class="mute">MW ×3</text>
+<polyline points="430,235 330,235 330,305 430,305" class="l-inst"/>
+<polyline points="330,225 300,225" class="l-inst"/>
+<g class="hot"><title>LSH-178 high level switch</title>
+<circle cx="285" cy="225" r="13" class="ib"/>
+<text x="285" y="223" font-size="7.5" text-anchor="middle" class="itx">LSH</text>
+<text x="285" y="233.0" font-size="7.5" text-anchor="middle" class="itx">178</text>
+</g>
+<polyline points="330,265 300,265" class="l-inst"/>
+<g class="hot"><title>LIT-001 level transmitter</title>
+<circle cx="285" cy="265" r="13" class="ib"/>
+<text x="285" y="263" font-size="7.5" text-anchor="middle" class="itx">LIT</text>
+<text x="285" y="273.0" font-size="7.5" text-anchor="middle" class="itx">001</text>
+</g>
+<polyline points="330,305 300,305" class="l-inst"/>
+<g class="hot"><title>LSL-180 low level switch</title>
+<circle cx="285" cy="305" r="13" class="ib"/>
+<text x="285" y="303" font-size="7.5" text-anchor="middle" class="itx">LSL</text>
+<text x="285" y="313.0" font-size="7.5" text-anchor="middle" class="itx">180</text>
+</g>
+<g class="hot"><title>LG-173 level gauge</title>
+<circle cx="250" cy="265" r="13" class="ib"/>
+<text x="250" y="263" font-size="7.5" text-anchor="middle" class="itx">LG</text>
+<text x="250" y="273.0" font-size="7.5" text-anchor="middle" class="itx">173</text>
+</g>
+<polyline points="263,265 272,265" class="l-inst"/>
+<text x="410" y="230" font-size="7.5" text-anchor="end" class="mute">N10</text>
+<text x="410" y="300" font-size="7.5" text-anchor="end" class="mute">N11</text>
+<polyline points="1000,300 1180,300 1180,520 1380,520" class="l-crude"/>
+<polygon points="1180,427 1175.1,413 1184.9,413" class="ah l-crude"/>
+<polygon points="1307,520 1293,515.1 1293,524.9" class="ah l-crude"/>
+<g class="hot"><title>14&quot;x12&quot; reducer at N3</title>
+<polygon points="1024,293 1036,296 1036,304 1024,307" class="vb"/>
+</g>
+<g class="hot"><title>21-GV-280 12&quot; 150# on N3 outlet</title>
+<path d="M1082,294 L1098,306 L1098,294 L1082,306 Z" class="vb"/>
+</g>
+<text x="1090" y="322" font-size="8.5" text-anchor="middle" class="tx">21-GV-280 12&quot; 150#</text>
+<text x="1172" y="420" font-size="8.5" text-anchor="middle" class="tx" transform="rotate(-90 1172 420)">12&quot;-PR-B013-021-X</text>
+<g class="hot"><title>21-GV-134 12&quot; 150# on crossover</title>
+<path d="M1174,462 L1186,478 L1174,478 L1186,462 Z" class="vb"/>
+</g>
+<text x="1190" y="470" font-size="7.5" text-anchor="start" class="mute">21-GV-134 12&quot;</text>
+<g class="hot"><title>12&quot; crossover from H-07 N3 to H-08 N3</title>
+<polygon points="1380,503.0 1570,503.0 1580,520 1570,537.0 1380,537.0" class="op crude-op"/>
+<text x="1475.0" y="517.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">TO 2-PHASE SEP. H-08 N3</text>
+<text x="1475.0" y="530.0" font-size="8.5" text-anchor="middle" class="optx">M0002-004 · 21-GV-269</text>
+</g>
+<text x="1005" y="295" font-size="7.5" text-anchor="start" class="mute">N3</text>
+<polyline points="900,560 900,330" class="l-cond"/>
+<polygon points="900,373 895.1,387 904.9,387" class="ah l-cond"/>
+<text x="906" y="345" font-size="7.5" text-anchor="start" class="mute">N4 6&quot;</text>
+<g class="hot"><title>BV-089 6&quot; 300# condensate inlet isolation</title>
+<path d="M894,422 L906,438 L894,438 L906,422 Z" class="vb"/>
+</g>
+<text x="910" y="430" font-size="7.5" text-anchor="start" class="mute">BV-089 6&quot; 300#</text>
+<text x="910" y="465" font-size="7.5" text-anchor="start" class="mute">C013│B013</text>
+<g class="hot"><title>6&quot;x4&quot; reducer</title>
+<polygon points="893,494 907,494 904,506 896,506" class="vb"/>
+</g>
+<text x="892" y="410" font-size="8.5" text-anchor="end" class="tx">6&quot;-PR-C013-029-X</text>
+<polyline points="800,330 800,370" class="l-dr"/>
+<g class="hot"><title>(090) 2&quot; drain valve on N6</title>
+<path d="M794,352 L806,368 L794,368 L806,352 Z" class="vb"/>
+</g>
+<text x="808" y="375" font-size="7.5" text-anchor="start" class="mute">N6 (090) 2&quot;</text>
+<polyline points="520,330 520,400 640,400 640,610" class="l-crude"/>
+<polygon points="520,377 515.1,363 524.9,363" class="ah l-crude"/>
+<g class="hot"><title>14&quot;x8&quot; reducer at N5</title>
+<polygon points="513,344 527,344 524,356 516,356" class="vb"/>
+</g>
+<text x="526" y="345" font-size="7.5" text-anchor="start" class="mute">N5 14&quot;</text>
+<text x="560" y="394" font-size="7.5" text-anchor="start" class="mute">C013│B013</text>
+<text x="560" y="415" font-size="8.5" text-anchor="start" class="tx">8&quot;-PR-B013-022-H60</text>
+<g class="hot"><title>BV-127 8&quot; oil outlet isolation</title>
+<path d="M634,462 L646,478 L634,478 L646,462 Z" class="vb"/>
+</g>
+<text x="650" y="470" font-size="7.5" text-anchor="start" class="mute">BV-127 8&quot;</text>
+<rect x="615" y="505" width="50" height="40" rx="6" class="newx"/>
+<text x="670" y="525" font-size="7.5" text-anchor="start" class="mute">DP 1&quot; (new)</text>
+<polyline points="640,555 680,555" class="l-inst"/>
+<g class="hot"><title>PI-1005 pressure gauge (new, 1/2&quot;)</title>
+<circle cx="695" cy="555" r="12" class="ib"/>
+<text x="695" y="553" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="695" y="563.0" font-size="7.5" text-anchor="middle" class="itx">1005</text>
+</g>
+<g class="hot"><title>H-08 oil outlet cross-tie 8&quot;-PR-B013-022-H</title>
+<polygon points="20,583.0 210,583.0 220,600 210,617.0 20,617.0" class="op crude-op"/>
+<text x="115.0" y="597.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">FROM 2-PHASE SEP. H-08</text>
+<text x="115.0" y="610.0" font-size="8.5" text-anchor="middle" class="optx">M0002-004 · BV-114</text>
+</g>
+<polyline points="220,600 640,600" class="l-crude"/>
+<polygon points="437,600 423,595.1 423,604.9" class="ah l-crude"/>
+<text x="300" y="593" font-size="8.5" text-anchor="start" class="tx">8&quot;-PR-B013-022-H</text>
+<circle cx="640" cy="600" r="3" class="tee"/>
+<polyline points="640,610 640,700" class="l-crude"/>
+<polyline points="640,640 480,640" class="l-crude"/>
+<g class="hot"><title>BV-126 8&quot; 150# strainer inlet</title>
+<path d="M592,634 L608,646 L608,634 L592,646 Z" class="vb"/>
+</g>
+<g class="hot"><title>GOSP-21-FT-111A oil strainer (duplex pair A/B)</title>
+<path d="M528,632 L552,632 L552,650 A12,12 0 0 1 528,650 Z" class="vb"/><line x1="532" y1="638" x2="548" y2="654" class="stem"/>
+</g>
+<text x="540" y="676" font-size="8.5" text-anchor="middle" class="tx" font-weight="600">GOSP-21-FT-111A</text>
+<g class="hot"><title>BV-424 8&quot; 150# strainer outlet</title>
+<path d="M482,634 L498,646 L498,634 L482,646 Z" class="vb"/>
+</g>
+<text x="600" y="630" font-size="7.5" text-anchor="middle" class="mute">BV-126</text>
+<text x="480" y="630" font-size="7.5" text-anchor="middle" class="mute">BV-424</text>
+<polyline points="640,700 480,700" class="l-crude"/>
+<g class="hot"><title>BV-125 8&quot; 150# strainer inlet</title>
+<path d="M592,694 L608,706 L608,694 L592,706 Z" class="vb"/>
+</g>
+<g class="hot"><title>GOSP-21-FT-111B oil strainer (duplex pair A/B)</title>
+<path d="M528,692 L552,692 L552,710 A12,12 0 0 1 528,710 Z" class="vb"/><line x1="532" y1="698" x2="548" y2="714" class="stem"/>
+</g>
+<text x="540" y="736" font-size="8.5" text-anchor="middle" class="tx" font-weight="600">GOSP-21-FT-111B</text>
+<g class="hot"><title>BV-124 8&quot; 150# strainer outlet</title>
+<path d="M482,694 L498,706 L498,694 L482,706 Z" class="vb"/>
+</g>
+<text x="600" y="690" font-size="7.5" text-anchor="middle" class="mute">BV-125</text>
+<text x="480" y="690" font-size="7.5" text-anchor="middle" class="mute">BV-124</text>
+<polyline points="470,640 470,700" class="l-crude"/>
+<polyline points="470,670 330,670 330,820 220,820" class="l-crude"/>
+<polygon points="393,670 407,665.1 407,674.9" class="ah l-crude"/>
+<polygon points="330,767 325.1,753 334.9,753" class="ah l-crude"/>
+<polyline points="410,670 410,645" class="l-inst"/>
+<g class="hot"><title>TI-252 oil temperature</title>
+<circle cx="410" cy="632" r="12" class="ib"/>
+<text x="410" y="630" font-size="7.5" text-anchor="middle" class="itx">TI</text>
+<text x="410" y="640.0" font-size="7.5" text-anchor="middle" class="itx">252</text>
+</g>
+<polyline points="370,670 370,645" class="l-inst"/>
+<g class="hot"><title>PI-1006 pressure gauge</title>
+<circle cx="370" cy="632" r="12" class="ib"/>
+<text x="370" y="630" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="370" y="640.0" font-size="7.5" text-anchor="middle" class="itx">1006</text>
+</g>
+<rect x="345" y="680" width="60" height="50" rx="6" class="newx"/>
+<text x="350" y="742" font-size="7.5" text-anchor="start" class="mute">2&quot; SP / vents (new)</text>
+<g class="hot"><title>21-GV-201 8&quot; 150# outlet to multiphase pumps</title>
+<path d="M324,772 L336,788 L324,788 L336,772 Z" class="vb"/>
+</g>
+<text x="338" y="780" font-size="7.5" text-anchor="start" class="mute">21-GV-201 8&quot;</text>
+<g class="hot"><title>Oil to multiphase pumps 8&quot;-PR-B013-017-H60</title>
+<polygon points="30,803.0 220,803.0 220,837.0 30,837.0 20,820" class="op crude-op"/>
+<text x="125.0" y="817.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">TO MULTIPHASE PUMPS</text>
+<text x="125.0" y="830.0" font-size="8.5" text-anchor="middle" class="optx">M0002-002</text>
+</g>
+<text x="230" y="813" font-size="8.5" text-anchor="start" class="tx">8&quot;-PR-B013-017-H60</text>
+<g class="hot"><title>Scrubber condensate 4&quot;-PR-B013-031-X (underground then above ground)</title>
+<polygon points="20,883.0 210,883.0 220,900 210,917.0 20,917.0" class="op cond-op"/>
+<text x="115.0" y="897.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">FROM GAS SCRUBBERS</text>
+<text x="115.0" y="910.0" font-size="8.5" text-anchor="middle" class="optx">M0002-007</text>
+</g>
+<polyline points="220,900 760,900 760,760 1000,760" class="l-cond"/>
+<polygon points="507,900 493,895.1 493,904.9" class="ah l-cond"/>
+<polygon points="760,813 755.1,827 764.9,827" class="ah l-cond"/>
+<text x="300" y="893" font-size="8.5" text-anchor="start" class="tx">4&quot;-PR-B013-031-X</text>
+<polyline points="790,760 790,735" class="l-inst"/>
+<g class="hot"><title>21-PI-215 pump suction pressure</title>
+<circle cx="790" cy="722" r="12" class="ib"/>
+<text x="790" y="720" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="790" y="730.0" font-size="7.5" text-anchor="middle" class="itx">215</text>
+</g>
+<polyline points="830,760 830,850 880,850" class="l-cond"/>
+<g class="hot"><title>21-GV-147 4&quot; 150# P-001 suction isolation</title>
+<path d="M824,792 L836,808 L824,808 L836,792 Z" class="vb"/>
+</g>
+<text x="838" y="800" font-size="7.5" text-anchor="start" class="mute">21-GV-147</text>
+<g class="hot"><title>21-GV-145 4&quot; 150#</title>
+<path d="M852,844 L868,856 L868,844 L852,856 Z" class="vb"/>
+</g>
+<g class="hot"><title>GOSP-21-P-001 pneumatic operated pump: max 7.0 bar, 19-378 L/min, -29 to 82 degC</title>
+<circle cx="920" cy="850" r="20" class="eq"/><path d="M906,876 L934,876 L928,866 L912,866 Z" class="vb"/><path d="M920,830 L940,830" class="stem"/>
+</g>
+<text x="920" y="892" font-size="9" text-anchor="middle" class="tx" font-weight="700">GOSP-21-P-001</text>
+<text x="920" y="904" font-size="7.5" text-anchor="middle" class="mute">pneumatic, max 7 bar</text>
+<text x="920" y="915" font-size="7.5" text-anchor="middle" class="mute">19–378 L/min</text>
+<polyline points="940,830 940,815 1000,815 1060,815 1060,760" class="l-cond"/>
+<g class="hot"><title>21-GV-144 4&quot; 150# P-001 discharge</title>
+<path d="M992,809 L1008,821 L1008,809 L992,821 Z" class="vb"/>
+</g>
+<g class="hot"><title>GV-142 4&quot; 150#</title>
+<path d="M1054,782 L1066,798 L1054,798 L1066,782 Z" class="vb"/>
+</g>
+<g class="hot"><title>21-GV-148 4&quot; 150# pump bypass (flow by scrubber pressure)</title>
+<path d="M932,754 L948,766 L948,754 L932,766 Z" class="vb"/>
+</g>
+<text x="940" y="750" font-size="7.5" text-anchor="middle" class="mute">21-GV-148 bypass</text>
+<polyline points="1000,760 1120,760 1120,560 900,560" class="l-cond"/>
+<polygon points="1120,643 1115.1,657 1124.9,657" class="ah l-cond"/>
+<g class="hot"><title>21-FSV-141 3&quot; 150# check valve on condensate to separators</title>
+<path d="M1112,700 L1128,700 L1120,684 Z" class="vb"/>
+</g>
+<text x="1130" y="698" font-size="7.5" text-anchor="start" class="mute">21-FSV-141 3&quot; (check)</text>
+<polyline points="1120,620 1150,620" class="l-inst"/>
+<g class="hot"><title>21-PI-209 pressure on condensate return</title>
+<circle cx="1165" cy="620" r="12" class="ib"/>
+<text x="1165" y="618" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="1165" y="628.0" font-size="7.5" text-anchor="middle" class="itx">209</text>
+</g>
+<polyline points="1120,560 1350,560" class="l-cond"/>
+<polygon points="1267,560 1253,555.1 1253,564.9" class="ah l-cond"/>
+<circle cx="1120" cy="560" r="3" class="tee"/>
+<g class="hot"><title>Condensate to H-08 N4 4&quot;-PR-B013-031-X</title>
+<polygon points="1380,583.0 1570,583.0 1580,600 1570,617.0 1380,617.0" class="op cond-op"/>
+<text x="1475.0" y="597.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">CONDENSATE TO H-08 N4</text>
+<text x="1475.0" y="610.0" font-size="8.5" text-anchor="middle" class="optx">M0002-004</text>
+</g>
+<polyline points="1350,560 1350,600 1380,600" class="l-cond"/>
+<text x="1150" y="553" font-size="8.5" text-anchor="start" class="tx">4&quot;-PR-B013-031-X</text>
+<g class="hot"><title>GOSP-63-V-252 air receiver, nominal 10 bar, air</title>
+<rect x="1420" y="700" width="60" height="180" rx="30.0" ry="30.0" class="vsl"/>
+</g>
+<text x="1450.0" y="790.0" font-size="12" text-anchor="middle" class="tk" font-weight="700">V-252</text>
+<text x="1450.0" y="803.0" font-size="7.5" text-anchor="middle" class="mute">AIR RECEIVER</text>
+<text x="1450.0" y="814.0" font-size="7.5" text-anchor="middle" class="mute">10 bar</text>
+<polyline points="1420,730 1300,730 1300,880 960,880 960,876" class="l-air"/>
+<polygon points="1333,730 1347,725.1 1347,734.9" class="ah l-air"/>
+<g class="hot"><title>(234) 1&quot; air outlet to P-001</title>
+<path d="M1352,724 L1368,736 L1368,724 L1352,736 Z" class="vb"/>
+</g>
+<text x="1306" y="760" font-size="7.5" text-anchor="start" class="mute">FLEXIBLE │ SS</text>
+<text x="1305" y="870" font-size="7.5" text-anchor="start" class="mute">air drive to P-001</text>
+<g class="hot"><title>Air compressor model 15-12398: 10 atm, 2740 L/min, 18.5 kW, 79x69x120 cm, 361 kg</title>
+<rect x="1180" y="930" width="150" height="50" rx="3" class="eq"/>
+</g>
+<text x="1255.0" y="951.0" font-size="11" text-anchor="middle" class="tk" font-weight="700">AIR COMPRESSOR XXX</text>
+<text x="1255.0" y="965.0" font-size="8" text-anchor="middle" class="mute">10 atm · 2740 L/min · 18.5 kW</text>
+<polyline points="1330,955 1400,955 1400,850 1420,850" class="l-air"/>
+<polygon points="1400,893 1395.1,907 1404.9,907" class="ah l-air"/>
+<text x="1392" y="930" font-size="7.5" text-anchor="end" class="tx">1&quot;-PR-B013-063-X</text>
+<polyline points="1450,880 1450,930 1520,930" class="l-air"/>
+<g class="hot"><title>(233) 1/2&quot; receiver drain</title>
+<path d="M1492,924 L1508,936 L1508,924 L1492,936 Z" class="vb"/>
+</g>
+<text x="1458" y="915" font-size="7.5" text-anchor="start" class="mute">N3 1/2&quot; drain</text>
+<text x="1488" y="735" font-size="7.5" text-anchor="start" class="mute">N1</text>
+<text x="1488" y="855" font-size="7.5" text-anchor="start" class="mute">N2</text>
+</svg></div></div><div role="tabpanel" id="p-s004" aria-labelledby="t-s004" hidden><p class="dwg-meta">GOSP-PR-PID-01-M0002-004-00 Rev X1 · 31.12.2023 · As built — Horizontal separator H-08 and oil strainers S-002A/B.</p><div class="canvas"><svg class="pid" viewBox="0 0 1600 820" width="1600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Redrawn sheet 004, separator H-08">
+<rect x="0" y="0" width="1600" height="820" class="paper"/><rect x="6" y="6" width="1588" height="808" class="frame"/>
+<g class="hot"><title>GOSP-24-H-08 horizontal 2-phase separator, 6.4 MPa nominal, 25 m3, oil/gas</title>
+<rect x="430" y="180" width="570" height="130" rx="65.0" ry="65.0" class="vsl"/>
+</g>
+<text x="715.0" y="241.0" font-size="14" text-anchor="middle" class="tk" font-weight="700">GOSP-24-H-08</text>
+<text x="715.0" y="257.0" font-size="8.5" text-anchor="middle" class="mute">Horizontal 2-phase separator</text>
+<text x="715.0" y="269.0" font-size="8.5" text-anchor="middle" class="mute">6.4 MPa nominal · 25 m3 · oil/gas</text>
+<g class="hot"><title>Well fluid from Zhdanov-25</title>
+<polygon points="1390,178.0 1580,178.0 1580,212.0 1390,212.0 1380,195" class="op crude-op"/>
+<text x="1485.0" y="192.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">FROM ZHDANOV-25</text>
+<text x="1485.0" y="205.0" font-size="8.5" text-anchor="middle" class="optx">M0002-001-00</text>
+</g>
+<polyline points="1380,195 1000,195" class="l-crude"/>
+<polygon points="1193,195 1207,190.1 1207,199.9" class="ah l-crude"/>
+<g class="hot"><title>BV-008 12&quot; 600# inlet isolation</title>
+<path d="M1332,189 L1348,201 L1348,189 L1332,201 Z" class="vb"/>
+</g>
+<text x="1340" y="220" font-size="8.5" text-anchor="middle" class="tx">BV-008 12&quot; 600#</text>
+<text x="1150" y="188" font-size="8.5" text-anchor="start" class="tx">12&quot;-PL-D013-006-X</text>
+<g class="hot"><title>16&quot;x12&quot; at N2</title>
+<polygon points="1044,188 1056,191 1056,199 1044,202" class="vb"/>
+</g>
+<text x="1005" y="190" font-size="7.5" text-anchor="start" class="mute">N2 16&quot;</text>
+<polyline points="1100,195 1100,170" class="l-inst"/>
+<g class="hot"><title>(017) 1/2&quot; vent/drain</title>
+<path d="M1094,152 L1106,168 L1094,168 L1106,152 Z" class="vb"/>
+</g>
+<text x="1108" y="156" font-size="7.5" text-anchor="start" class="mute">(017) 1/2&quot;</text>
+<g class="hot"><title>12&quot;-PR-B013-021-X crossover from H-07 N3</title>
+<polygon points="1390,263.0 1580,263.0 1580,297.0 1390,297.0 1380,280" class="op crude-op"/>
+<text x="1485.0" y="277.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">FROM 2-PHASE SEP. H-07 N3</text>
+<text x="1485.0" y="290.0" font-size="8.5" text-anchor="middle" class="optx">M0002-003</text>
+</g>
+<polyline points="1380,280 1000,280" class="l-crude"/>
+<polygon points="1193,280 1207,275.1 1207,284.9" class="ah l-crude"/>
+<g class="hot"><title>21-GV-269 12&quot; 150# crossover isolation at H-08 N3</title>
+<path d="M1082,274 L1098,286 L1098,274 L1082,286 Z" class="vb"/>
+</g>
+<text x="1090" y="302" font-size="8.5" text-anchor="middle" class="tx">21-GV-269 12&quot; 150#</text>
+<g class="hot"><title>14&quot;x12&quot;</title>
+<polygon points="1024,273 1036,276 1036,284 1024,287" class="vb"/>
+</g>
+<text x="1150" y="273" font-size="8.5" text-anchor="start" class="tx">12&quot;-PR-B013-021-X</text>
+<text x="1005" y="276" font-size="7.5" text-anchor="start" class="mute">N3</text>
+<polyline points="540,180 540,70 240,70" class="l-gas"/>
+<polygon points="540,113 535.1,127 544.9,127" class="ah l-gas"/>
+<polygon points="393,70 407,65.1 407,74.9" class="ah l-gas"/>
+<g class="hot"><title>H-08 gas to outlet manifold 12&quot;-PR-C013-026-X</title>
+<polygon points="30,53.0 240,53.0 240,87.0 30,87.0 20,70" class="op gas-op"/>
+<text x="135.0" y="67.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">TO GAS SCRUBBERS</text>
+<text x="135.0" y="80.0" font-size="8.5" text-anchor="middle" class="optx">via manifold · M0002-005</text>
+</g>
+<text x="400" y="62" font-size="8.5" text-anchor="middle" class="tx">12&quot;-PR-C013-026-X</text>
+<rect x="450" y="50" width="40" height="40" rx="6" class="newx"/>
+<text x="470" y="100" font-size="7.5" text-anchor="middle" class="mute">1/2&quot; (new)</text>
+<text x="546" y="176" font-size="7.5" text-anchor="start" class="mute">N1 12&quot;</text>
+<polyline points="620,180 620,152" class="l-inst"/>
+<g class="hot"><title>LIT-004 level transmitter</title>
+<circle cx="620" cy="138" r="13" class="ib"/>
+<text x="620" y="136" font-size="7.5" text-anchor="middle" class="itx">LIT</text>
+<text x="620" y="146.0" font-size="7.5" text-anchor="middle" class="itx">004</text>
+</g>
+<polyline points="700,180 700,152" class="l-inst"/>
+<g class="hot"><title>PSHH-223 high-high pressure switch</title>
+<circle cx="700" cy="138" r="13" class="ib"/>
+<text x="700" y="136" font-size="7.5" text-anchor="middle" class="itx">PSHH</text>
+<text x="700" y="146.0" font-size="7.5" text-anchor="middle" class="itx">223</text>
+</g>
+<polyline points="790,180 790,152" class="l-inst"/>
+<g class="hot"><title>PSL-001 low pressure switch</title>
+<circle cx="790" cy="138" r="13" class="ib"/>
+<text x="790" y="136" font-size="7.5" text-anchor="middle" class="itx">PSL</text>
+<text x="790" y="146.0" font-size="7.5" text-anchor="middle" class="itx">001</text>
+</g>
+<polyline points="860,180 860,152" class="l-inst"/>
+<g class="hot"><title>LSH-119 high level switch</title>
+<circle cx="860" cy="138" r="13" class="ib"/>
+<text x="860" y="136" font-size="7.5" text-anchor="middle" class="itx">LSH</text>
+<text x="860" y="146.0" font-size="7.5" text-anchor="middle" class="itx">119</text>
+</g>
+<polyline points="930,180 930,152" class="l-inst"/>
+<g class="hot"><title>LSL-181 low level switch</title>
+<circle cx="930" cy="138" r="13" class="ib"/>
+<text x="930" y="136" font-size="7.5" text-anchor="middle" class="itx">LSL</text>
+<text x="930" y="146.0" font-size="7.5" text-anchor="middle" class="itx">181</text>
+</g>
+<rect x="590" y="320" width="170" height="46" rx="6" class="newx"/>
+<g class="hot"><title>LG-XXX level gauge (new, X1)</title>
+<circle cx="610" cy="343" r="12" class="ib"/>
+<text x="610" y="341" font-size="7.5" text-anchor="middle" class="itx">LG</text>
+<text x="610" y="351.0" font-size="7.5" text-anchor="middle" class="itx">XXX</text>
+</g>
+<g class="hot"><title>PSH-XXX high pressure switch (new, X1)</title>
+<circle cx="660" cy="343" r="12" class="ib"/>
+<text x="660" y="341" font-size="7.5" text-anchor="middle" class="itx">PSH</text>
+<text x="660" y="351.0" font-size="7.5" text-anchor="middle" class="itx">XXX</text>
+</g>
+<g class="hot"><title>PSL-XXX low pressure switch (new, X1)</title>
+<circle cx="710" cy="343" r="12" class="ib"/>
+<text x="710" y="341" font-size="7.5" text-anchor="middle" class="itx">PSL</text>
+<text x="710" y="351.0" font-size="7.5" text-anchor="middle" class="itx">XXX</text>
+</g>
+<text x="760" y="360" font-size="7.5" text-anchor="start" class="mute">new (X1)</text>
+<g class="hot"><title>LG-175 level gauge on N15/N16 (tag also used on the bridle)</title>
+<circle cx="990" cy="140" r="12" class="ib"/>
+<text x="990" y="138" font-size="7.5" text-anchor="middle" class="itx">LG</text>
+<text x="990" y="148.0" font-size="7.5" text-anchor="middle" class="itx">175</text>
+</g>
+<polyline points="430,215 330,215 330,285 430,285" class="l-inst"/>
+<polyline points="330,205 300,205" class="l-inst"/>
+<g class="hot"><title>PSL-007 low pressure switch</title>
+<circle cx="285" cy="205" r="13" class="ib"/>
+<text x="285" y="203" font-size="7.5" text-anchor="middle" class="itx">PSL</text>
+<text x="285" y="213.0" font-size="7.5" text-anchor="middle" class="itx">007</text>
+</g>
+<polyline points="330,250 300,250" class="l-inst"/>
+<g class="hot"><title>LIT-XXX level transmitter (new, X1)</title>
+<circle cx="285" cy="250" r="13" class="ib"/>
+<text x="285" y="248" font-size="7.5" text-anchor="middle" class="itx">LIT</text>
+<text x="285" y="258.0" font-size="7.5" text-anchor="middle" class="itx">XXX</text>
+</g>
+<polyline points="330,295 300,295" class="l-inst"/>
+<g class="hot"><title>LIT-002 level transmitter</title>
+<circle cx="285" cy="295" r="13" class="ib"/>
+<text x="285" y="293" font-size="7.5" text-anchor="middle" class="itx">LIT</text>
+<text x="285" y="303.0" font-size="7.5" text-anchor="middle" class="itx">002</text>
+</g>
+<rect x="262" y="228" width="46" height="46" rx="6" class="newx"/>
+<g class="hot"><title>LG-175 level gauge on bridle</title>
+<circle cx="250" cy="250" r="13" class="ib"/>
+<text x="250" y="248" font-size="7.5" text-anchor="middle" class="itx">LG</text>
+<text x="250" y="258.0" font-size="7.5" text-anchor="middle" class="itx">175</text>
+</g>
+<text x="410" y="210" font-size="7.5" text-anchor="end" class="mute">N9</text>
+<text x="410" y="280" font-size="7.5" text-anchor="end" class="mute">N10</text>
+<g class="hot"><title>4&quot;-PR-B013-031-X condensate from scrubbers via P-001 / bypass</title>
+<polygon points="1390,453.0 1580,453.0 1580,487.0 1390,487.0 1380,470" class="op cond-op"/>
+<text x="1485.0" y="467.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">CONDENSATE FROM P-001</text>
+<text x="1485.0" y="480.0" font-size="8.5" text-anchor="middle" class="optx">M0002-003</text>
+</g>
+<polyline points="1380,470 900,470 900,310" class="l-cond"/>
+<polygon points="1093,470 1107,465.1 1107,474.9" class="ah l-cond"/>
+<polygon points="900,353 895.1,367 904.9,367" class="ah l-cond"/>
+<text x="1150" y="463" font-size="8.5" text-anchor="start" class="tx">4&quot;-PR-B013-031-X</text>
+<g class="hot"><title>21-BV-155 6&quot; 300# condensate inlet isolation</title>
+<path d="M894,382 L906,398 L894,398 L906,382 Z" class="vb"/>
+</g>
+<text x="910" y="390" font-size="7.5" text-anchor="start" class="mute">21-BV-155 6&quot; 300#</text>
+<g class="hot"><title>6&quot;x4&quot;</title>
+<polygon points="893,424 907,424 904,436 896,436" class="vb"/>
+</g>
+<text x="910" y="445" font-size="7.5" text-anchor="start" class="mute">C013│B013</text>
+<text x="892" y="360" font-size="8" text-anchor="end" class="tx">6&quot;-PR-C013-030-X</text>
+<text x="906" y="325" font-size="7.5" text-anchor="start" class="mute">N4 6&quot;</text>
+<polyline points="800,310 800,345" class="l-dr"/>
+<g class="hot"><title>(092) 2&quot; 150# drain on N6</title>
+<path d="M794,330 L806,346 L794,346 L806,330 Z" class="vb"/>
+</g>
+<text x="808" y="352" font-size="7.5" text-anchor="start" class="mute">N6 (092) 2&quot;</text>
+<polyline points="520,310 520,380 560,380 560,520" class="l-crude"/>
+<g class="hot"><title>14&quot;x8&quot; at N5</title>
+<polygon points="513,324 527,324 524,336 516,336" class="vb"/>
+</g>
+<text x="470" y="378" font-size="7.5" text-anchor="start" class="mute">C013│B013</text>
+<text x="526" y="325" font-size="7.5" text-anchor="start" class="mute">N5 14&quot;</text>
+<g class="hot"><title>BV-212 8&quot; 150# oil outlet isolation</title>
+<path d="M554,412 L566,428 L554,428 L566,412 Z" class="vb"/>
+</g>
+<text x="570" y="420" font-size="7.5" text-anchor="start" class="mute">BV-212 8&quot;</text>
+<polyline points="560,450 600,450" class="l-inst"/>
+<g class="hot"><title>PI-226 pressure gauge</title>
+<circle cx="615" cy="450" r="12" class="ib"/>
+<text x="615" y="448" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="615" y="458.0" font-size="7.5" text-anchor="middle" class="itx">226</text>
+</g>
+<text x="568" y="490" font-size="8.5" text-anchor="start" class="tx">8&quot;-PR-B013-024-H</text>
+<circle cx="560" cy="520" r="3" class="tee"/>
+<polyline points="560,520 560,640" class="l-crude"/>
+<polyline points="560,520 700,520 700,640 1380,640" class="l-crude"/>
+<polygon points="1007,640 993,635.1 993,644.9" class="ah l-crude"/>
+<g class="hot"><title>BV-114 8&quot; 150# cross-tie to H-07 strainers</title>
+<path d="M1092,634 L1108,646 L1108,634 L1092,646 Z" class="vb"/>
+</g>
+<text x="1100" y="662" font-size="8.5" text-anchor="middle" class="tx">BV-114 8&quot; 150#</text>
+<text x="1150" y="633" font-size="8.5" text-anchor="start" class="tx">8&quot;-PR-B013-022-H</text>
+<g class="hot"><title>Cross-tie to H-07 oil outlet / strainers FT-111A/B</title>
+<polygon points="1380,623.0 1570,623.0 1580,640 1570,657.0 1380,657.0" class="op crude-op"/>
+<text x="1475.0" y="637.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">TO 2-PHASE SEP. H-07 OIL</text>
+<text x="1475.0" y="650.0" font-size="8.5" text-anchor="middle" class="optx">M0002-003</text>
+</g>
+<polyline points="560,560 400,560" class="l-crude"/>
+<g class="hot"><title>BV-213 8&quot; 150# strainer inlet</title>
+<path d="M512,554 L528,566 L528,554 L512,566 Z" class="vb"/>
+</g>
+<g class="hot"><title>GOSP-21-S-002A oil strainer</title>
+<path d="M448,552 L472,552 L472,570 A12,12 0 0 1 448,570 Z" class="vb"/><line x1="452" y1="558" x2="468" y2="574" class="stem"/>
+</g>
+<text x="460" y="596" font-size="8.5" text-anchor="middle" class="tx" font-weight="600">GOSP-21-S-002A</text>
+<g class="hot"><title>BV-214 8&quot; 150# strainer outlet</title>
+<path d="M402,554 L418,566 L418,554 L402,566 Z" class="vb"/>
+</g>
+<text x="520" y="550" font-size="7.5" text-anchor="middle" class="mute">BV-213</text>
+<text x="410" y="550" font-size="7.5" text-anchor="middle" class="mute">BV-214</text>
+<polyline points="560,620 400,620" class="l-crude"/>
+<g class="hot"><title>BV-215 8&quot; 150# strainer inlet</title>
+<path d="M512,614 L528,626 L528,614 L512,626 Z" class="vb"/>
+</g>
+<g class="hot"><title>GOSP-21-S-002B oil strainer</title>
+<path d="M448,612 L472,612 L472,630 A12,12 0 0 1 448,630 Z" class="vb"/><line x1="452" y1="618" x2="468" y2="634" class="stem"/>
+</g>
+<text x="460" y="656" font-size="8.5" text-anchor="middle" class="tx" font-weight="600">GOSP-21-S-002B</text>
+<g class="hot"><title>BV-216 8&quot; 150# strainer outlet</title>
+<path d="M402,614 L418,626 L418,614 L402,626 Z" class="vb"/>
+</g>
+<text x="520" y="610" font-size="7.5" text-anchor="middle" class="mute">BV-215</text>
+<text x="410" y="610" font-size="7.5" text-anchor="middle" class="mute">BV-216</text>
+<polyline points="390,560 390,620" class="l-crude"/>
+<polyline points="390,590 250,590 250,760 220,760" class="l-crude"/>
+<polygon points="313,590 327,585.1 327,594.9" class="ah l-crude"/>
+<polygon points="250,707 245.1,693 254.9,693" class="ah l-crude"/>
+<polyline points="330,590 330,565" class="l-inst"/>
+<g class="hot"><title>TI-253 oil temperature</title>
+<circle cx="330" cy="552" r="12" class="ib"/>
+<text x="330" y="550" font-size="7.5" text-anchor="middle" class="itx">TI</text>
+<text x="330" y="560.0" font-size="7.5" text-anchor="middle" class="itx">253</text>
+</g>
+<polyline points="290,590 290,565" class="l-inst"/>
+<g class="hot"><title>PI-1007 pressure gauge</title>
+<circle cx="290" cy="552" r="12" class="ib"/>
+<text x="290" y="550" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="290" y="560.0" font-size="7.5" text-anchor="middle" class="itx">1007</text>
+</g>
+<rect x="150" y="600" width="90" height="60" rx="6" class="newx"/>
+<text x="150" y="675" font-size="7.5" text-anchor="start" class="mute">1&quot; DP · 2&quot; SP (new)</text>
+<g class="hot"><title>21-GV-202 8&quot; 150# outlet to multiphase pumps</title>
+<path d="M244,712 L256,728 L244,728 L256,712 Z" class="vb"/>
+</g>
+<text x="258" y="720" font-size="7.5" text-anchor="start" class="mute">21-GV-202 8&quot;</text>
+<g class="hot"><title>Oil to multiphase pumps 6&quot;-PR-B013-018-H60</title>
+<polygon points="30,743.0 220,743.0 220,777.0 30,777.0 20,760" class="op crude-op"/>
+<text x="125.0" y="757.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">TO MULTIPHASE PUMPS</text>
+<text x="125.0" y="770.0" font-size="8.5" text-anchor="middle" class="optx">M0002-002</text>
+</g>
+<text x="300" y="775" font-size="8.5" text-anchor="start" class="tx">6&quot;-PR-B013-018-H60</text>
+</svg></div></div><div role="tabpanel" id="p-s005" aria-labelledby="t-s005" hidden><p class="dwg-meta">GOSP-PR-PID-01-M0002-005-00 Rev X1 · 05.12.2024 · As built (013 is the 2018 version) — 2-phase separator gas outlet manifold.</p><div class="canvas"><svg class="pid" viewBox="0 0 1500 880" width="1500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Redrawn sheet 005, 2-phase separator outlet manifold">
+<rect x="0" y="0" width="1500" height="880" class="paper"/><rect x="6" y="6" width="1488" height="868" class="frame"/>
+<g class="hot"><title>12&quot;-PR-C013-025-X gas from H-07 N1</title>
+<polygon points="20,163.0 220,163.0 230,180 220,197.0 20,197.0" class="op gas-op"/>
+<text x="120.0" y="177.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">FROM 2-PHASE SEP. H-07</text>
+<text x="120.0" y="190.0" font-size="8.5" text-anchor="middle" class="optx">M0002-003</text>
+</g>
+<g class="hot"><title>12&quot;-PR-C013-026-X gas from H-08 N1</title>
+<polygon points="20,743.0 220,743.0 230,760 220,777.0 20,777.0" class="op gas-op"/>
+<text x="120.0" y="757.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">FROM 2-PHASE SEP. H-08</text>
+<text x="120.0" y="770.0" font-size="8.5" text-anchor="middle" class="optx">M0002-004</text>
+</g>
+<polyline points="230,180 1000,180" class="l-gas"/>
+<polyline points="230,760 1000,760" class="l-gas"/>
+<polygon points="357,180 343,175.1 343,184.9" class="ah l-gas"/>
+<polygon points="357,760 343,755.1 343,764.9" class="ah l-gas"/>
+<text x="260" y="172" font-size="8.5" text-anchor="start" class="tx">12&quot;-PR-C013-025-X</text>
+<text x="260" y="752" font-size="8.5" text-anchor="start" class="tx">12&quot;-PR-C013-026-X</text>
+<rect x="580" y="155" width="70" height="50" rx="6" class="newx"/>
+<g class="hot"><title>21-GV-216 14&quot; 150# H-07 gas to scrubber header (X1)</title>
+<path d="M607,174 L623,186 L623,174 L607,186 Z" class="vb"/>
+</g>
+<text x="615" y="215" font-size="8.5" text-anchor="middle" class="tx">21-GV-216 14&quot;</text>
+<rect x="580" y="735" width="70" height="50" rx="6" class="newx"/>
+<g class="hot"><title>21-GV-120 14&quot; 150# H-08 gas to scrubber header (X1)</title>
+<path d="M607,754 L623,766 L623,754 L607,766 Z" class="vb"/>
+</g>
+<text x="615" y="795" font-size="8.5" text-anchor="middle" class="tx">21-GV-120 14&quot;</text>
+<g class="hot"><title>12&quot;x14&quot;</title>
+<polygon points="974,173 986,176 986,184 974,187" class="vb"/>
+</g>
+<g class="hot"><title>14&quot;x12&quot;</title>
+<polygon points="993,734 1007,734 1004,746 996,746" class="vb"/>
+</g>
+<polyline points="1000,760 1000,60 1200,60" class="l-gas"/>
+<polygon points="1000,443 995.1,457 1004.9,457" class="ah l-gas"/>
+<polygon points="1107,60 1093,55.1 1093,64.9" class="ah l-gas"/>
+<circle cx="1000" cy="180" r="3" class="tee"/>
+<text x="992" y="400" font-size="8.5" text-anchor="end" class="tx">14&quot;-PR-B013-034-X</text>
+<g class="hot"><title>Combined separator gas 14&quot;-PR-B013-034-X to gas scrubbers V-01/V-04</title>
+<polygon points="1200,43.0 1420,43.0 1430,60 1420,77.0 1200,77.0" class="op gas-op"/>
+<text x="1310.0" y="57.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">TO GAS SCRUBBERS</text>
+<text x="1310.0" y="70.0" font-size="8.5" text-anchor="middle" class="optx">M0002-007 · A/G</text>
+</g>
+<polyline points="1000,560 980,560" class="l-inst"/>
+<rect x="940" y="540" width="50" height="40" rx="6" class="newx"/>
+<text x="935" y="585" font-size="7.5" text-anchor="end" class="mute">1/2&quot; (new)</text>
+<polyline points="470,180 470,110 1200,110" class="l-gas"/>
+<g class="hot"><title>12&quot;x10&quot; / 10&quot;x8&quot;</title>
+<polygon points="463,159 477,159 474,171 466,171" class="vb"/>
+</g>
+<g class="hot"><title>21-BV-215 8&quot; 150# branch to old manifold (X1)</title>
+<path d="M464,132 L476,148 L464,148 L476,132 Z" class="vb"/>
+</g>
+<rect x="445" y="120" width="50" height="50" rx="6" class="newx"/>
+<text x="500" y="140" font-size="7.5" text-anchor="start" class="mute">21-BV-215 8&quot;</text>
+<polyline points="470,110 470,90 1200,90" class="l-gas"/>
+<polygon points="1107,90 1093,85.1 1093,94.9" class="ah l-gas"/>
+<polygon points="1107,110 1093,105.1 1093,114.9" class="ah l-gas"/>
+<text x="1205" y="93" font-size="8.5" text-anchor="start" class="tx">→ OLD MANIFOLD (M0002-006) · 6&quot;-PR-B013-XXX-X ×2</text>
+<text x="560" y="85" font-size="7.5" text-anchor="start" class="mute">8&quot;x6&quot;</text>
+<polyline points="420,180 420,450 1200,450" class="l-gas"/>
+<polygon points="1107,450 1093,445.1 1093,454.9" class="ah l-gas"/>
+<circle cx="420" cy="180" r="3" class="tee"/>
+<g class="hot"><title>4&quot;x3&quot;</title>
+<polygon points="413,224 427,224 424,236 416,236" class="vb"/>
+</g>
+<g class="hot"><title>21-BV-205 3&quot; 150# gas branch to multiphase pumps</title>
+<path d="M414,262 L426,278 L414,278 L426,262 Z" class="vb"/>
+</g>
+<text x="428" y="270" font-size="7.5" text-anchor="start" class="mute">21-BV-205 3&quot;</text>
+<text x="1205" y="453" font-size="8.5" text-anchor="start" class="tx">→ MULTIPHASE PUMPS (M0002-002) · 3&quot;-PR-B013-020-H60</text>
+<polyline points="420,330 560,330" class="l-gas"/>
+<g class="hot"><title>PSV-224 set at 14 barg, 4&quot; 150#, protects H-07 gas line / manifold; discharges to the 6&quot; flare line</title>
+<path d="M553,328 L567,328 L560,316 Z M560,316 L560,306" class="vb"/><path d="M560,320 L572,314 L572,326 Z" class="vb"/>
+</g>
+<text x="550" y="302" font-size="8" text-anchor="end" class="tx" font-weight="600">PSV-224</text>
+<text x="550" y="312" font-size="7.5" text-anchor="end" class="mute">SET 14 barg</text>
+<rect x="500" y="280" width="80" height="60" rx="6" class="newx"/>
+<polyline points="572,314 620,314 620,370 760,370" class="l-flare"/>
+<g class="hot"><title>GV-242 4&quot; 150# PSV outlet isolation</title>
+<path d="M672,364 L688,376 L688,364 L672,376 Z" class="vb"/>
+</g>
+<text x="680" y="360" font-size="7.5" text-anchor="middle" class="mute">GV-242 4&quot;</text>
+<g class="hot"><title>6&quot;x4&quot;</title>
+<polygon points="734,363 746,366 746,374 734,377" class="vb"/>
+</g>
+<polyline points="760,370 760,300 1200,300" class="l-flare"/>
+<polygon points="1107,300 1093,295.1 1093,304.9" class="ah l-flare"/>
+<text x="780" y="293" font-size="8.5" text-anchor="start" class="tx">6&quot;-PR-B013-028-X</text>
+<text x="1205" y="303" font-size="8.5" text-anchor="start" class="tx">→ GAS SCRUBBER AREA FLARE LINE (M0002-007)</text>
+<polyline points="420,760 420,560 1200,560" class="l-gas"/>
+<circle cx="420" cy="760" r="3" class="tee"/>
+<polygon points="1107,560 1093,555.1 1093,564.9" class="ah l-gas"/>
+<g class="hot"><title>4&quot;x3&quot;</title>
+<polygon points="413,614 427,614 424,626 416,626" class="vb"/>
+</g>
+<g class="hot"><title>21-BV-206 3&quot; 150# gas branch to multiphase pumps</title>
+<path d="M414,592 L426,608 L414,608 L426,592 Z" class="vb"/>
+</g>
+<text x="428" y="600" font-size="7.5" text-anchor="start" class="mute">21-BV-206 3&quot;</text>
+<text x="1205" y="563" font-size="8.5" text-anchor="start" class="tx">→ MULTIPHASE PUMPS (M0002-002) · 3&quot;-PR-B013-019-H60</text>
+<text x="412" y="700" font-size="8" text-anchor="end" class="tx">4&quot;-PR-B013-027-X</text>
+<polyline points="420,680 560,680" class="l-gas"/>
+<g class="hot"><title>PSV-255 set 14 barg (tagged PSV-225 on the 2018 as-built sheet 013) protects H-08 gas line</title>
+<path d="M553,678 L567,678 L560,666 Z M560,666 L560,656" class="vb"/><path d="M560,670 L572,664 L572,676 Z" class="vb"/>
+</g>
+<text x="550" y="652" font-size="8" text-anchor="end" class="tx" font-weight="600">PSV-255 (225)</text>
+<text x="550" y="662" font-size="7.5" text-anchor="end" class="mute">SET 14 barg</text>
+<rect x="500" y="630" width="80" height="60" rx="6" class="newx"/>
+<polyline points="572,664 620,664 620,640 760,640 760,370" class="l-flare"/>
+<g class="hot"><title>GV-243 4&quot; 150# PSV outlet isolation</title>
+<path d="M672,634 L688,646 L688,634 L672,646 Z" class="vb"/>
+</g>
+<text x="680" y="630" font-size="7.5" text-anchor="middle" class="mute">GV-243 4&quot;</text>
+<polygon points="760,493 755.1,507 764.9,507" class="ah l-flare"/>
+<text x="768" y="520" font-size="8" text-anchor="start" class="tx">6&quot;-PR-B013-028-X</text>
+</svg></div></div><div role="tabpanel" id="p-s007" aria-labelledby="t-s007" hidden><p class="dwg-meta">GOSP-PR-PID-01-M0002-007-00 Rev X1 · 05.12.2024 · As built — Gas scrubbers V-01 / V-04, gas metering and export.</p><div class="canvas"><svg class="pid" viewBox="0 0 1600 960" width="1600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Redrawn sheet 007, gas scrubbers V-01 and V-04 and gas metering">
+<rect x="0" y="0" width="1600" height="960" class="paper"/><rect x="6" y="6" width="1588" height="948" class="frame"/>
+<g class="hot"><title>Combined separator gas 14&quot;-PR-B013-034-X</title>
+<polygon points="20,183.0 230,183.0 240,200 230,217.0 20,217.0" class="op gas-op"/>
+<text x="125.0" y="197.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">FROM OUTLET MANIFOLD</text>
+<text x="125.0" y="210.0" font-size="8.5" text-anchor="middle" class="optx">14&quot; 034-X · M0002-005</text>
+</g>
+<polyline points="240,200 330,200 330,820" class="l-gas"/>
+<polygon points="330,507 325.1,493 334.9,493" class="ah l-gas"/>
+<g class="hot"><title>PSV-102 set 6.2 barg on scrubber inlet header (4&quot;x6&quot; 150#), inlet BV-237 4&quot;, outlet GV-244 6&quot;</title>
+<path d="M363,158 L377,158 L370,146 Z M370,146 L370,136" class="vb"/><path d="M370,150 L382,144 L382,156 Z" class="vb"/>
+</g>
+<text x="360" y="132" font-size="8" text-anchor="end" class="tx" font-weight="600">PSV-102</text>
+<text x="360" y="142" font-size="7.5" text-anchor="end" class="mute">SET 6.2 barg</text>
+<polyline points="330,230 370,230 370,158" class="l-gas"/>
+<g class="hot"><title>BV-237 4&quot; 150# PSV-102 inlet isolation (X1)</title>
+<path d="M364,192 L376,208 L364,208 L376,192 Z" class="vb"/>
+</g>
+<polyline points="382,144 470,144 470,100 1500,100" class="l-flare"/>
+<g class="hot"><title>GV-244 6&quot; 150#</title>
+<path d="M412,138 L428,150 L428,138 L412,150 Z" class="vb"/>
+</g>
+<text x="1000" y="93" font-size="8.5" text-anchor="middle" class="tx">6&quot; FLARE LINE</text>
+<g class="hot"><title>6&quot;-PR-B013-028-X from PSV-224/255 on the outlet manifold</title>
+<polygon points="20,43.0 230,43.0 240,60 230,77.0 20,77.0" class="op flare-op"/>
+<text x="125.0" y="57.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">PSV DISCHARGES FROM MANIFOLD</text>
+<text x="125.0" y="70.0" font-size="8.5" text-anchor="middle" class="optx">6&quot; 028-X · M0002-005</text>
+</g>
+<polyline points="240,60 1500,60 1500,100" class="l-flare"/>
+<polygon points="807,60 793,55.1 793,64.9" class="ah l-flare"/>
+<polyline points="1500,100 1500,640 1300,640" class="l-flare"/>
+<polygon points="1500,407 1495.1,393 1504.9,393" class="ah l-flare"/>
+<polygon points="1373,640 1387,635.1 1387,644.9" class="ah l-flare"/>
+<g class="hot"><title>BV-234 6&quot; 150# flare line to emergency flare header</title>
+<path d="M1432,634 L1448,646 L1448,634 L1432,646 Z" class="vb"/>
+</g>
+<text x="1440" y="630" font-size="7.5" text-anchor="middle" class="mute">BV-234 6&quot;</text>
+<g class="hot"><title>GOSP-24-V-01 vertical gas scrubber. V-01 design pressure 1.6 MPa (V-04 data blank on drawing)</title>
+<rect x="520" y="240" width="90" height="200" rx="45.0" ry="45.0" class="vsl"/>
+</g>
+<text x="565.0" y="340.0" font-size="12" text-anchor="middle" class="tk" font-weight="700">01</text>
+<text x="565.0" y="353.0" font-size="7.5" text-anchor="middle" class="mute">VERTICAL GAS</text>
+<text x="565.0" y="364.0" font-size="7.5" text-anchor="middle" class="mute">SCRUBBER</text>
+<polyline points="330,360 520,360" class="l-gas"/>
+<g class="hot"><title>BV-218 14&quot; 150# scrubber inlet</title>
+<path d="M412,354 L428,366 L428,354 L412,366 Z" class="vb"/>
+</g>
+<text x="420" y="350" font-size="7.5" text-anchor="middle" class="mute">BV-218</text>
+<polyline points="565,240 565,210 900,210" class="l-gas"/>
+<g class="hot"><title>BV-221 14&quot; 150# scrubber gas outlet</title>
+<path d="M752,204 L768,216 L768,204 L752,216 Z" class="vb"/>
+</g>
+<text x="760" y="200" font-size="7.5" text-anchor="middle" class="mute">BV-221</text>
+<polyline points="680,210 680,180" class="l-gas"/>
+<g class="hot"><title>BV-220 4&quot; 150# PSV inlet isolation (X1)</title>
+<path d="M674,182 L686,198 L674,198 L686,182 Z" class="vb"/>
+</g>
+<g class="hot"><title>PSV-102-B set 6.2 barg protecting GOSP-24-V-01</title>
+<path d="M673,176 L687,176 L680,164 Z M680,164 L680,154" class="vb"/><path d="M680,168 L692,162 L692,174 Z" class="vb"/>
+</g>
+<text x="670" y="150" font-size="8" text-anchor="end" class="tx" font-weight="600">PSV-102-B</text>
+<text x="670" y="160" font-size="7.5" text-anchor="end" class="mute">SET 6.2 barg</text>
+<polyline points="692,162 850,162" class="l-flare"/>
+<g class="hot"><title>GV-245 6&quot; 150# PSV outlet</title>
+<path d="M792,156 L808,168 L808,156 L792,168 Z" class="vb"/>
+</g>
+<text x="800" y="152" font-size="7.5" text-anchor="middle" class="mute">GV-245</text>
+<polygon points="852,162 838,157.1 838,166.9" class="ah l-flare"/>
+<polyline points="610,410 660,410 660,480" class="l-cond"/>
+<g class="hot"><title>BV-247 4&quot; 150# condensate outlet</title>
+<path d="M654,437 L666,453 L654,453 L666,437 Z" class="vb"/>
+</g>
+<text x="668" y="445" font-size="7.5" text-anchor="start" class="mute">BV-247</text>
+<g class="hot"><title>LG-001 level gauge on GOSP-24-V-01 (new connections X1)</title>
+<rect x="620" y="280" width="34" height="110" rx="4" class="newx"/>
+</g>
+<g class="hot"><title>LG-001 level gauge</title>
+<circle cx="637" cy="335" r="12" class="ib"/>
+<text x="637" y="333" font-size="7.5" text-anchor="middle" class="itx">LG</text>
+<text x="637" y="343.0" font-size="7.5" text-anchor="middle" class="itx">001</text>
+</g>
+<polyline points="520,290 490,290" class="l-inst"/>
+<g class="hot"><title>PI-239 pressure gauge</title>
+<circle cx="476" cy="290" r="12" class="ib"/>
+<text x="476" y="288" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="476" y="298.0" font-size="7.5" text-anchor="middle" class="itx">239</text>
+</g>
+<polyline points="565,440 565,460" class="l-dr"/>
+<text x="572" y="465" font-size="7.5" text-anchor="start" class="mute">2&quot; drain</text>
+<g class="hot"><title>GOSP-24-V-04 vertical gas scrubber. V-01 design pressure 1.6 MPa (V-04 data blank on drawing)</title>
+<rect x="520" y="520" width="90" height="200" rx="45.0" ry="45.0" class="vsl"/>
+</g>
+<text x="565.0" y="620.0" font-size="12" text-anchor="middle" class="tk" font-weight="700">04</text>
+<text x="565.0" y="633.0" font-size="7.5" text-anchor="middle" class="mute">VERTICAL GAS</text>
+<text x="565.0" y="644.0" font-size="7.5" text-anchor="middle" class="mute">SCRUBBER</text>
+<polyline points="330,640 520,640" class="l-gas"/>
+<g class="hot"><title>BV-219 14&quot; 150# scrubber inlet</title>
+<path d="M412,634 L428,646 L428,634 L412,646 Z" class="vb"/>
+</g>
+<text x="420" y="630" font-size="7.5" text-anchor="middle" class="mute">BV-219</text>
+<polyline points="565,520 565,490 900,490" class="l-gas"/>
+<g class="hot"><title>BV-223 14&quot; 150# scrubber gas outlet</title>
+<path d="M752,484 L768,496 L768,484 L752,496 Z" class="vb"/>
+</g>
+<text x="760" y="480" font-size="7.5" text-anchor="middle" class="mute">BV-223</text>
+<polyline points="680,490 680,460" class="l-gas"/>
+<g class="hot"><title>BV-222 4&quot; 150# PSV inlet isolation (X1)</title>
+<path d="M674,462 L686,478 L674,478 L686,462 Z" class="vb"/>
+</g>
+<g class="hot"><title>PSV-102-D set 6.2 barg protecting GOSP-24-V-04</title>
+<path d="M673,456 L687,456 L680,444 Z M680,444 L680,434" class="vb"/><path d="M680,448 L692,442 L692,454 Z" class="vb"/>
+</g>
+<text x="670" y="430" font-size="8" text-anchor="end" class="tx" font-weight="600">PSV-102-D</text>
+<text x="670" y="440" font-size="7.5" text-anchor="end" class="mute">SET 6.2 barg</text>
+<polyline points="692,442 850,442" class="l-flare"/>
+<g class="hot"><title>GV-246 6&quot; 150# PSV outlet</title>
+<path d="M792,436 L808,448 L808,436 L792,448 Z" class="vb"/>
+</g>
+<text x="800" y="432" font-size="7.5" text-anchor="middle" class="mute">GV-246</text>
+<polygon points="852,442 838,437.1 838,446.9" class="ah l-flare"/>
+<polyline points="610,690 660,690 660,760" class="l-cond"/>
+<g class="hot"><title>BV-224 4&quot; 150# condensate outlet</title>
+<path d="M654,717 L666,733 L654,733 L666,717 Z" class="vb"/>
+</g>
+<text x="668" y="725" font-size="7.5" text-anchor="start" class="mute">BV-224</text>
+<g class="hot"><title>LG-002 level gauge on GOSP-24-V-04 (new connections X1)</title>
+<rect x="620" y="560" width="34" height="110" rx="4" class="newx"/>
+</g>
+<g class="hot"><title>LG-002 level gauge</title>
+<circle cx="637" cy="615" r="12" class="ib"/>
+<text x="637" y="613" font-size="7.5" text-anchor="middle" class="itx">LG</text>
+<text x="637" y="623.0" font-size="7.5" text-anchor="middle" class="itx">002</text>
+</g>
+<polyline points="520,570 490,570" class="l-inst"/>
+<g class="hot"><title>PI-240 pressure gauge</title>
+<circle cx="476" cy="570" r="12" class="ib"/>
+<text x="476" y="568" font-size="7.5" text-anchor="middle" class="itx">PI</text>
+<text x="476" y="578.0" font-size="7.5" text-anchor="middle" class="itx">240</text>
+</g>
+<polyline points="565,720 565,740" class="l-dr"/>
+<text x="572" y="745" font-size="7.5" text-anchor="start" class="mute">2&quot; drain</text>
+<polyline points="850,162 850,100" class="l-flare"/>
+<polyline points="850,442 850,100" class="l-flare"/>
+<polyline points="660,480 270,480 270,900 230,900" class="l-cond"/>
+<polyline points="660,760 270,760" class="l-cond"/>
+<polygon points="270,857 265.1,843 274.9,843" class="ah l-cond"/>
+<polygon points="393,480 407,475.1 407,484.9" class="ah l-cond"/>
+<polygon points="393,760 407,755.1 407,764.9" class="ah l-cond"/>
+<text x="262" y="620" font-size="8" text-anchor="end" class="tx">4&quot; condensate outlet</text>
+<g class="hot"><title>Scrubber condensate 4&quot;-PR-B013-031-X to P-001 / separators</title>
+<polygon points="30,883.0 230,883.0 230,917.0 30,917.0 20,900" class="op cond-op"/>
+<text x="130.0" y="897.0" font-size="8.5" text-anchor="middle" class="optx" font-weight="600">TO RECIRCULATION PUMP</text>
+<text x="130.0" y="910.0" font-size="8.5" text-anchor="middle" class="optx">4&quot; 031-X · M0002-003</text>
+</g>
+<polyline points="330,820 940,820" class="l-gas"/>
+<g class="hot"><title>BV-217 14&quot; 150# scrubber bypass valve</title>
+<path d="M324,782 L336,798 L324,798 L336,782 Z" class="vb"/>
+</g>
+<text x="338" y="790" font-size="7.5" text-anchor="start" class="mute">BV-217 14&quot;</text>
+<text x="600" y="813" font-size="8.5" text-anchor="middle" class="tx">14&quot;-PR-B013-034-X BYPASS LINE</text>
+<polygon points="507,820 493,815.1 493,824.9" class="ah l-gas"/>
+<polyline points="900,210 900,820" class="l-gas"/>
+<polyline points="900,490 900,490" class="l-gas"/>
+<polygon points="900,607 895.1,593 904.9,593" class="ah l-gas"/>
+<circle cx="900" cy="820" r="3" class="tee"/>
+<text x="908" y="400" font-size="8" text-anchor="start" class="tx">14&quot; gas</text>
+<polyline points="940,820 1300,820" class="l-gas"/>
+<g class="hot"><title>BV-225 14&quot; 150# meter inlet</title>
+<path d="M982,814 L998,826 L998,814 L982,826 Z" class="vb"/>
+</g>
+<text x="990" y="840" font-size="7.5" text-anchor="middle" class="mute">BV-225</text>
+<polyline points="960,820 960,795" class="l-inst"/>
+<g class="hot"><title>PI-243 (new)</title>
+<circle cx="960" cy="782" r="11" class="ib"/>
+<text x="960" y="780" font-size="6.5" text-anchor="middle" class="itx">PI</text>
+<text x="960" y="789.0" font-size="6.5" text-anchor="middle" class="itx">243</text>
+</g>
+<g class="hot"><title>Gas flow meter FE-001 with flow totaliser 21-FQIR-001 and restriction orifice RO-001</title>
+<rect x="1050" y="760" width="90" height="50" rx="3" class="eq"/>
+</g>
+<text x="1095.0" y="781.0" font-size="11" text-anchor="middle" class="tk" font-weight="700">FE-001</text>
+<text x="1095.0" y="795.0" font-size="8" text-anchor="middle" class="mute">21-FQIR-001</text>
+<polyline points="1095,810 1095,820" class="l-inst"/>
+<g class="hot"><title>BV-226 14&quot; 150# meter outlet</title>
+<path d="M1182,814 L1198,826 L1198,814 L1182,826 Z" class="vb"/>
+</g>
+<text x="1190" y="840" font-size="7.5" text-anchor="middle" class="mute">BV-226</text>
+<polyline points="970,820 970,870 1230,870 1230,820" class="l-gas"/>
+<g class="hot"><title>BV-227 14&quot; 150# meter bypass</title>
+<path d="M1092,864 L1108,876 L1108,864 L1092,876 Z" class="vb"/>
+</g>
+<text x="1100" y="890" font-size="7.5" text-anchor="middle" class="mute">BV-227 bypass</text>
+<polyline points="1250,820 1250,795" class="l-inst"/>
+<g class="hot"><title>PI-229</title>
+<circle cx="1250" cy="782" r="11" class="ib"/>
+<text x="1250" y="780" font-size="6.5" text-anchor="middle" class="itx">PI</text>
+<text x="1250" y="789.0" font-size="6.5" text-anchor="middle" class="itx">229</text>
+</g>
+<circle cx="1300" cy="820" r="3" class="tee"/>
+<polyline points="1300,820 1300,620" class="l-flare"/>
+<polyline points="1300,700 1300,700" class="l-flare"/>
+<g class="hot"><title>BV-238 12&quot; 150# (X1) to emergency flare</title>
+<path d="M1294,772 L1306,788 L1294,788 L1306,772 Z" class="vb"/>
+</g>
+<g class="hot"><title>BV-233 12&quot; 150# to emergency flare</title>
+<path d="M1294,732 L1306,748 L1294,748 L1306,732 Z" class="vb"/>
+</g>
+<text x="1308" y="760" font-size="7.5" text-anchor="start" class="mute">BV-238 / BV-233 12&quot;</text>
+<polyline points="1300,790 1270,790 1270,730 1300,730" class="l-flare"/>
+<g class="hot"><title>GV-249 12&quot; 150# bypass</title>
+<path d="M1264,752 L1276,768 L1264,768 L1276,752 Z" class="vb"/>
+</g>
+<polygon points="1300,643 1295.1,657 1304.9,657" class="ah l-flare"/>
+<text x="1306" y="620" font-size="8.5" text-anchor="start" class="tx" font-weight="600">12&quot; → EMERGENCY FLARE</text>
+<polyline points="1300,820 1580,820" class="l-gas"/>
+<g class="hot"><title>BV-229 14&quot; 150# (X1)</title>
+<path d="M1332,814 L1348,826 L1348,814 L1332,826 Z" class="vb"/>
+</g>
+<polyline points="1360,820 1360,795" class="l-inst"/>
+<g class="hot"><title>PI-244 (new)</title>
+<circle cx="1360" cy="782" r="11" class="ib"/>
+<text x="1360" y="780" font-size="6.5" text-anchor="middle" class="itx">PI</text>
+<text x="1360" y="789.0" font-size="6.5" text-anchor="middle" class="itx">244</text>
+</g>
+<circle cx="1400" cy="820" r="3" class="tee"/>
+<polyline points="1400,820 1400,690" class="l-gas"/>
+<g class="hot"><title>BV-230 8&quot; 150# branch to chemical plant / NGDU</title>
+<path d="M1394,772 L1406,788 L1394,788 L1406,772 Z" class="vb"/>
+</g>
+<text x="1408" y="795" font-size="7.5" text-anchor="start" class="mute">BV-230 8&quot;</text>
+<polyline points="1400,755 1370,755" class="l-inst"/>
+<g class="hot"><title>PI-197; SP-250 sample point and 1&quot; drain below</title>
+<circle cx="1356" cy="742" r="11" class="ib"/>
+<text x="1356" y="740" font-size="6.5" text-anchor="middle" class="itx">PI</text>
+<text x="1356" y="749.0" font-size="6.5" text-anchor="middle" class="itx">197</text>
+</g>
+<polyline points="1400,690 1580,690" class="l-gas"/>
+<polyline points="1400,730 1580,730" class="l-gas"/>
+<polygon points="1577,690 1563,685.1 1563,694.9" class="ah l-gas"/>
+<polygon points="1577,730 1563,725.1 1563,734.9" class="ah l-gas"/>
+<text x="1575" y="684" font-size="7.5" text-anchor="end" class="tx">6&quot; CHEMICAL PLANT · 056-X · BV-239</text>
+<text x="1575" y="724" font-size="7.5" text-anchor="end" class="tx">4&quot; NGDU · 055-X · BV-447</text>
+<g class="hot"><title>BV-228 14&quot; 150# (X1)</title>
+<path d="M1452,814 L1468,826 L1468,814 L1452,826 Z" class="vb"/>
+</g>
+<g class="hot"><title>GLV-001 14&quot; 150# globe valve on export line</title>
+<circle cx="1510" cy="820" r="4" class="dot"/>
+</g>
+<g class="hot"><title>GLV-001 14&quot; 150# globe valve on export line</title>
+<path d="M1502,814 L1518,826 L1518,814 L1502,826 Z" class="vb"/>
+<circle cx="1510" cy="820" r="3" class="dot"/>
+</g>
+<text x="1460" y="840" font-size="7.5" text-anchor="middle" class="mute">BV-228</text>
+<text x="1510" y="840" font-size="7.5" text-anchor="middle" class="mute">GLV-001</text>
+<polyline points="1580,820 1580,930 240,930" class="l-gas"/>
+<polygon points="893,930 907,925.1 907,934.9" class="ah l-gas"/>
+<text x="900" y="923" font-size="8.5" text-anchor="middle" class="tx">20&quot;-PR-B013-054-X → CARBON PLANT (+ 20&quot; from old manifold M0002-014 via GV-286)</text>
+</svg></div></div>
+  <div class="legend">
+    <span><i style="border-color:var(--crude)"></i>Well fluid / oil</span>
+    <span><i style="border-color:var(--gas2)"></i>Gas</span>
+    <span><i style="border-color:var(--flare);border-top-style:dashed"></i>Relief / flare</span>
+    <span><i style="border-color:var(--cond)"></i>Condensate</span>
+    <span><i style="border-color:var(--air);border-top-style:dotted"></i>Instrument / drive air</span>
+    <span><i style="border-color:var(--dr)"></i>Drain</span>
+    <span><i style="border-color:var(--flare);border-top-width:1px;border-top-style:dashed"></i>Rev X1 change (clouded)</span>
+  </div>
+</section>
+
+<section id="function">
+  <h2>How it works</h2>
+  <div class="cols">
+    <div class="card"><h3><i style="border-color:var(--crude)"></i>Separation</h3><p>Well fluid from Zhdanov-25 enters each horizontal 2-phase separator through a 12" 600# isolation valve (BV-007 on H-07, BV-008 on H-08) at nozzle N2. Gas leaves from N1 on top. Oil leaves from N5 at the bottom, where the piping class drops from C013 to B013 (Class 150). A 12" crossover (021-X, valves 21-GV-280, 21-GV-134 and 21-GV-269) joins H-07 N3 to H-08 N3.</p></div>
+    <div class="card"><h3><i style="border-color:var(--crude)"></i>Oil to multiphase pumps</h3><p>Each separator's oil passes through a duplex strainer: FT-111A/B for H-07 and S-002A/B for H-08. It then goes to the multiphase pumps on 8"-017-H60 and 6"-018-H60. BV-114 cross-ties the H-08 oil line into the H-07 strainer header, so either strainer set can serve either separator.</p></div>
+    <div class="card"><h3><i style="border-color:var(--gas2)"></i>Gas manifold and scrubbing</h3><p>Gas from both separators joins the 14" header (034-X) at the outlet manifold, through 21-GV-216 and 21-GV-120. From the header it goes to scrubber V-01 (BV-218) and/or V-04 (BV-219), or around both on the bypass (BV-217). Branches off the separator gas lines feed the old manifold (21-BV-215) and the multiphase pumps (21-BV-205 / 206, 3").</p></div>
+    <div class="card"><h3><i style="border-color:var(--gas2)"></i>Metering and export</h3><p>Scrubbed gas passes meter FE-001 / 21-FQIR-001, which has bypass BV-227. It then splits to:</p><ul class="tight"><li>the emergency flare, 12" via BV-238 / BV-233</li><li>the chemical plant, 6" via BV-230 / BV-239</li><li>the NGDU, 4" via BV-447</li><li>the carbon plant, 20"-054-X via GLV-001, together with the 20" line from the old manifold</li></ul></div>
+    <div class="card"><h3><i style="border-color:var(--cond)"></i>Condensate return</h3><p>Liquid knocked out in V-01 and V-04 drains on 4"-031-X (BV-247, BV-224). It goes either through air-driven pump P-001 or straight through bypass 21-GV-148 when scrubber pressure is enough. It then passes check valve 21-FSV-141 back to N4 of both separators (BV-089 on H-07, 21-BV-155 on H-08). P-001 runs on air from receiver V-252, which is charged by the 18.5 kW compressor.</p></div>
+    <div class="card"><h3><i style="border-color:var(--flare)"></i>Overpressure protection</h3><p>PSV-224 and PSV-255 (14 barg) protect the Class 150 outlet manifold. PSV-102, PSV-102-B and PSV-102-D (6.2 barg) protect the scrubber section. All five discharge into one 6" flare line that runs to the emergency flare through BV-234. The separators themselves show only PSHH-222 / 223 and level switches on these sheets. No PSV or shutdown valve is drawn for them.</p></div>
+  </div>
+</section>
+
+<section id="equipment"><h2>Equipment</h2><div class="tw"><table class=""><thead><tr><th>Tag</th><th>Description</th><th>Sheet</th><th>Data on drawing</th></tr></thead><tbody><tr><td><span class="mono">GOSP-24-H-07</span></td><td>Horizontal 2-phase separator</td><td>003</td><td>Nominal pressure 6.4 MPa (data box unit printed as "kgf/m3") · capacity 25 m³ · oil/gas · inlet N2 16", gas N1 12", oil N5 14", N3 12" crossover, N4 6" condensate inlet</td></tr><tr><td><span class="mono">GOSP-24-H-08</span></td><td>Horizontal 2-phase separator</td><td>004</td><td>Same data as H-07</td></tr><tr><td><span class="mono">GOSP-21-FT-111A/B</span></td><td>Oil strainers (duplex) on H-07 outlet</td><td>003</td><td>8" 150#, BV-126/424 (A), BV-125/124 (B)</td></tr><tr><td><span class="mono">GOSP-21-S-002A/B</span></td><td>Oil strainers (duplex) on H-08 outlet</td><td>004</td><td>8" 150#, BV-213/214 (A), BV-215/216 (B)</td></tr><tr><td><span class="mono">GOSP-21-P-001</span></td><td>Pneumatic (air-operated) condensate pump</td><td>003</td><td>Max pressure 7.0 bar · 19–378 L/min · −29 to 82 °C</td></tr><tr><td><span class="mono">GOSP-63-V-252</span></td><td>Air receiver</td><td>003</td><td>Nominal 10.0 bar · air</td></tr><tr><td><span class="mono">AIR COMPRESSOR XXX</span></td><td>Air compressor for V-252</td><td>003</td><td>Model 15-12398 · 10 atm · 2740 L/min · 18.5 kW · 79×69×120 cm · 361 kg</td></tr><tr><td><span class="mono">GOSP-24-V-01</span></td><td>Vertical gas scrubber</td><td>007</td><td>Design pressure 1.6 MPa · capacity and operating pressure blank</td></tr><tr><td><span class="mono">GOSP-24-V-04</span></td><td>Vertical gas scrubber</td><td>007</td><td>All data blank on drawing</td></tr><tr><td><span class="mono">FE-001 / 21-FQIR-001</span></td><td>Gas flow meter and totaliser</td><td>007</td><td>14" run, 16"×14" reducers, bypass BV-227, RO-001</td></tr></tbody></table></div></section>
+<section id="lines"><h2>Line list</h2><p class="lead">C013 / D013 upstream classes; B013 is the Class 150 class downstream of the spec breaks. H60 / H / X are the insulation codes as printed.</p><div class="tw"><table class=""><thead><tr><th>Line</th><th>Service</th><th>From → To</th><th>Sheet</th></tr></thead><tbody><tr><td><span class="mono">12&quot;-PL-D013-007-X</span></td><td><span class="chip crude">Well fluid</span></td><td>Zhdanov-25 (BV-007 12" 600#) → H-07 N2</td><td>003</td></tr><tr><td><span class="mono">12&quot;-PL-D013-006-X</span></td><td><span class="chip crude">Well fluid</span></td><td>Zhdanov-25 (BV-008 12" 600#) → H-08 N2</td><td>004</td></tr><tr><td><span class="mono">12&quot;-PR-C013-025-X</span></td><td><span class="chip gas">Gas</span></td><td>H-07 N1 → manifold → 21-GV-216 → 14" header</td><td>003 / 005</td></tr><tr><td><span class="mono">12&quot;-PR-C013-026-X</span></td><td><span class="chip gas">Gas</span></td><td>H-08 N1 → manifold → 21-GV-120 → 14" header</td><td>004 / 005</td></tr><tr><td><span class="mono">12&quot;-PR-B013-021-X</span></td><td><span class="chip crude">Liquid</span></td><td>H-07 N3 (21-GV-280, 21-GV-134) → H-08 N3 (21-GV-269) crossover</td><td>003 / 004</td></tr><tr><td><span class="mono">8&quot;-PR-B013-022-H60</span></td><td><span class="chip crude">Oil</span></td><td>H-07 N5 (14"×8", BV-127) → strainers FT-111A/B</td><td>003</td></tr><tr><td><span class="mono">8&quot;-PR-B013-024-H</span></td><td><span class="chip crude">Oil</span></td><td>H-08 N5 (BV-212) → strainers S-002A/B; branch via BV-114</td><td>004</td></tr><tr><td><span class="mono">8&quot;-PR-B013-022-H</span></td><td><span class="chip crude">Oil</span></td><td>H-08 oil cross-tie (BV-114) → H-07 strainer header</td><td>004 / 003</td></tr><tr><td><span class="mono">8&quot;-PR-B013-017-H60</span></td><td><span class="chip crude">Oil</span></td><td>FT-111A/B (21-GV-201) → multiphase pumps</td><td>003</td></tr><tr><td><span class="mono">6&quot;-PR-B013-018-H60</span></td><td><span class="chip crude">Oil</span></td><td>S-002A/B (21-GV-202) → multiphase pumps</td><td>004</td></tr><tr><td><span class="mono">14&quot;-PR-B013-034-X</span></td><td><span class="chip gas">Gas</span></td><td>Manifold header → scrubbers V-01/V-04 (BV-218/219) or bypass (BV-217) → metering</td><td>005 / 007</td></tr><tr><td><span class="mono">6&quot;-PR-B013-XXX-X (×2)</span></td><td><span class="chip gas">Gas</span></td><td>H-07 gas line (21-BV-215 8") → old manifold (M0002-006); one with CS/CO-FLEX</td><td>005</td></tr><tr><td><span class="mono">3&quot;-PR-B013-020-H60</span></td><td><span class="chip gas">Gas</span></td><td>H-07 gas line (21-BV-205 3") → multiphase pumps</td><td>005</td></tr><tr><td><span class="mono">3&quot;-PR-B013-019-H60</span></td><td><span class="chip gas">Gas</span></td><td>H-08 gas line (21-BV-206 3") → multiphase pumps</td><td>005</td></tr><tr><td><span class="mono">4&quot;-PR-B013-027-X</span></td><td><span class="chip gas">Gas</span></td><td>H-08 gas line → PSV-255 and 3" branch</td><td>005</td></tr><tr><td><span class="mono">4&quot;/6&quot;-PR-B013-028-X</span></td><td><span class="chip flare">Relief</span></td><td>PSV-224 / PSV-255 outlets (GV-242/243) → 6" flare line at scrubbers</td><td>005 / 007</td></tr><tr><td><span class="mono">4&quot;-PR-B013-031-X</span></td><td><span class="chip cond">Condensate</span></td><td>Scrubbers (BV-247, BV-224) → P-001 or bypass 21-GV-148 → FSV-141 → H-07 N4 and H-08 N4</td><td>007 / 003 / 004</td></tr><tr><td><span class="mono">6&quot;-PR-C013-029-X</span></td><td><span class="chip cond">Condensate</span></td><td>Condensate header (BV-089 6" 300#) → H-07 N4</td><td>003</td></tr><tr><td><span class="mono">6&quot;-PR-C013-030-X</span></td><td><span class="chip cond">Condensate</span></td><td>Condensate header (21-BV-155 6" 300#) → H-08 N4</td><td>004</td></tr><tr><td><span class="mono">1&quot;-PR-B013-063-X</span></td><td><span class="chip air">Air</span></td><td>Air compressor → V-252 N2</td><td>003</td></tr><tr><td><span class="mono">1/2&quot;-PR-B013-063-X</span></td><td><span class="chip air">Air</span></td><td>V-252 N3 drain (233)</td><td>003</td></tr><tr><td><span class="mono">12&quot; (no number)</span></td><td><span class="chip gas">Gas</span></td><td>Metering header (BV-238/233, GV-249 bypass) + 6" flare line (BV-234) → emergency flare</td><td>007</td></tr><tr><td><span class="mono">6&quot;-PR-B013-056-X</span></td><td><span class="chip gas">Gas</span></td><td>BV-230 / BV-239 → chemical plant</td><td>007</td></tr><tr><td><span class="mono">4&quot;-PR-B013-055-X</span></td><td><span class="chip gas">Gas</span></td><td>BV-230 / BV-447 → NGDU</td><td>007</td></tr><tr><td><span class="mono">20&quot;-PR-B013-054-X</span></td><td><span class="chip gas">Gas</span></td><td>Metering (BV-229, BV-228, GLV-001) + 20" from old manifold (GV-286) → carbon plant</td><td>007</td></tr></tbody></table></div></section>
+<section id="relief"><h2>Relief devices and trips</h2><div class="tw"><table class=""><thead><tr><th>Device</th><th>Set</th><th>Protects</th><th>Discharge</th><th>Sheet</th></tr></thead><tbody><tr><td><span class="mono">PSV-224</span></td><td>14 barg</td><td>H-07 gas line / outlet manifold (B013 Class 150)</td><td>GV-242 → 4"/6"-PR-B013-028-X → 6" flare line → BV-234 → emergency flare</td><td>005</td></tr><tr><td><span class="mono">PSV-255 (PSV-225 on 013)</span></td><td>14 barg</td><td>H-08 gas line / outlet manifold</td><td>GV-243 → 6"-PR-B013-028-X → as above</td><td>005</td></tr><tr><td><span class="mono">PSV-102</span></td><td>6.2 barg</td><td>Scrubber inlet header 14"-034-X (BV-237 inlet)</td><td>GV-244 → 6" flare line</td><td>007</td></tr><tr><td><span class="mono">PSV-102-B</span></td><td>6.2 barg</td><td>Scrubber V-01 (BV-220 inlet)</td><td>GV-245 → 6" flare line</td><td>007</td></tr><tr><td><span class="mono">PSV-102-D</span></td><td>6.2 barg</td><td>Scrubber V-04 (BV-222 inlet)</td><td>GV-246 → 6" flare line</td><td>007</td></tr><tr><td><span class="mono">PSHH-222 / PSHH-223</span></td><td>—</td><td>H-07 / H-08 high-high pressure (switches; final element not shown)</td><td>—</td><td>003 / 004</td></tr></tbody></table></div></section>
+<section id="instruments"><h2>Instruments</h2><div class="tw"><table class=""><thead><tr><th>Tag</th><th>Function</th><th>Location</th></tr></thead><tbody><tr><td><span class="mono">LG-173, LIT-001, LSH-178, LSL-180</span></td><td>Level bridle on H-07 (N9–N11)</td><td>003</td></tr><tr><td><span class="mono">PSHH-222, PI-003, PI-188</span></td><td>H-07 pressure</td><td>003</td></tr><tr><td><span class="mono">LIT-003, LG-XXX</span></td><td>Second H-07 level (new, X1)</td><td>003</td></tr><tr><td><span class="mono">TI-252, PI-1006, PI-1005, DP</span></td><td>H-07 oil outlet / strainers</td><td>003</td></tr><tr><td><span class="mono">21-PI-215, 21-PI-209</span></td><td>P-001 suction / condensate return</td><td>003</td></tr><tr><td><span class="mono">LG-175, LIT-002, PSL-007, LIT-XXX</span></td><td>Level bridle on H-08 (N9–N10); LIT-XXX new</td><td>004</td></tr><tr><td><span class="mono">LIT-004, LG-XXX, PSH-XXX, PSL-XXX</span></td><td>H-08 level and pressure (PSH/PSL/LG new, X1)</td><td>004</td></tr><tr><td><span class="mono">PSHH-223, PSL-001, LSH-119, LSL-181, LG-175</span></td><td>H-08 pressure and level switches</td><td>004</td></tr><tr><td><span class="mono">PI-226, PI-1007, TI-253</span></td><td>H-08 oil outlet / strainers</td><td>004</td></tr><tr><td><span class="mono">PI-239, LG-001</span></td><td>Scrubber V-01</td><td>007</td></tr><tr><td><span class="mono">PI-240, LG-002</span></td><td>Scrubber V-04</td><td>007</td></tr><tr><td><span class="mono">PI-243, PI-229, PI-244, PI-245, PI-246, PI-197, SP-250</span></td><td>Metering and export header</td><td>007</td></tr></tbody></table></div></section>
+<section id="compare"><h2>Sheet 005 vs sheet 013</h2><p class="lead">Both sheets show the same manifold. Sheet 013 is the 2018 as-built; sheet 005 is the 2024 as-built with clouded X1 changes.</p><div class="tw"><table class=""><thead><tr><th>Item</th><th>Sheet 005 (Rev X1, 05.12.2024)</th><th>Sheet 013 (Rev X1, 30.01.2018)</th></tr></thead><tbody><tr><td>Drawing number</td><td><span class="mono">GOSP-PR-PID-01-M0002-005-00</span></td><td><span class="mono">GOSP-PR-PID-01-00002-013-00</span></td></tr><tr><td>H-07 gas valve to header</td><td><span class="mono">21-GV-216 14&quot; 150#</span></td><td><span class="mono">(116) 12&quot;</span></td></tr><tr><td>H-08 gas valve to header</td><td><span class="mono">21-GV-120 14&quot; 150#</span></td><td><span class="mono">(120) 12&quot;</span></td></tr><tr><td>PSV on H-08 gas line</td><td><span class="mono">PSV-255, set 14 barg</span></td><td><span class="mono">PSV-225, no set pressure shown</span></td></tr><tr><td>PSV on H-07 gas line</td><td><span class="mono">PSV-224, set 14 barg</span></td><td><span class="mono">PSV-224, no set pressure shown</span></td></tr><tr><td>PSV outlet valves</td><td><span class="mono">GV-242 / GV-243 4&quot; 150#</span></td><td><span class="mono">(GV-242) / (GV-243) 4&quot;</span></td></tr><tr><td>Branch valves</td><td><span class="mono">21-BV-215 8&quot;, 21-BV-205 3&quot;, 21-BV-206 3&quot;</span></td><td><span class="mono">(BV-215) 8&quot;, (205) 3&quot;, (206) 3&quot;</span></td></tr><tr><td>Old-manifold lines</td><td><span class="mono">6&quot;-PR-B013-XXX-X (number clouded)</span></td><td>Unnumbered</td></tr><tr><td>Connector references</td><td><span class="mono">M0002-003/004/002/006/007</span></td><td><span class="mono">00002-011/012/010/014/015</span></td></tr><tr><td>Instrument tag prefix</td><td>Note 2: prefix 24-</td><td>Note 2: prefix 24-</td></tr></tbody></table></div></section>
+<section id="caveats"><h2>Reading notes</h2><div class="caveat"><ul>
+ <li>This is a schematic redraw for review and HAZOP use, not a controlled drawing. Small vents, drains and sample points are summarised, not all drawn.</li>
+ <li><b>Relief mismatch to check:</b> the scrubbers' relief valves are set at 6.2 barg, but the manifold PSVs that feed the same header are set at 14 barg. In normal operation the header is open straight to the scrubbers, so the 6.2 barg valves (PSV-102 on the inlet header, PSV-102-B and PSV-102-D on the vessels) protect them. If the scrubbers can be isolated while the manifold stays live, confirm that the 14 barg setting doesn't leave the scrubber inlet piping exposed above 6.2 barg.</li>
+ <li><b>Separator protection not shown:</b> H-07 and H-08 (6.4 MPa) have no PSV, ESDV or SDV on these sheets. PSHH-222 / 223, LSH and LSL are shown, but nothing shows what they act on. Their relief may be on another sheet. Confirm it.</li>
+ <li><b>Tag issues:</b>
+  <ul class="tight">
+   <li>LG-175 appears twice on H-08.</li>
+   <li>PSV-255 on sheet 005 is PSV-225 on sheet 013.</li>
+   <li>Several tags are still placeholders: LIT-XXX, LG-XXX, PSH-XXX, PSL-XXX, 6"-PR-B013-XXX-X, and air compressor "XXX".</li>
+   <li>V-04 and the V-01 capacity / operating pressure fields are blank.</li>
+  </ul></li>
+ <li><b>Data box units:</b> the separator nominal pressure is printed "6.4 MPa (kgf/m3)", and the compressor dimension unit is "sm". Both are transcribed as printed.</li>
+ <li><b>Interpretations:</b> the direction of the H-07 to H-08 N3 crossover is taken from the arrows on sheet 003. The P-001 air connection and exhaust are simplified.</li>
+</ul></div></section>
+</div>
+<div id="tip" hidden></div>
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('[role=tab]'));
+  function show(id){ tabs.forEach(function(t){ var on=t.id==='t-'+id; t.setAttribute('aria-selected',on?'true':'false'); document.getElementById('p-'+t.id.slice(2)).hidden=!on; }); }
+  tabs.forEach(function(t){ t.addEventListener('click',function(){ show(t.id.slice(2)); }); });
+  var fit=document.getElementById('z-fit'), one=document.getElementById('z-100');
+  function setFit(f){ document.querySelectorAll('.canvas').forEach(function(c){ c.classList.toggle('fit',f); }); fit.setAttribute('aria-pressed',f?'true':'false'); one.setAttribute('aria-pressed',f?'false':'true'); }
+  fit.addEventListener('click',function(){ setFit(true); }); one.addEventListener('click',function(){ setFit(false); });
+  setFit(window.innerWidth<900);
+  var tip=document.getElementById('tip');
+  function hov(e){ var g=e.target.closest&&e.target.closest('g.hot'); if(!g){tip.hidden=true;return;} var tt=g.querySelector('title'); if(!tt) return;
+    tip.textContent=tt.textContent; tip.hidden=false; var x=(e.clientX||0)+14,y=(e.clientY||0)+14,w=tip.offsetWidth,h=tip.offsetHeight;
+    if(x+w>window.innerWidth-8) x=Math.max(8,window.innerWidth-w-8); if(y+h>window.innerHeight-8) y=Math.max(8,(e.clientY||0)-h-10);
+    tip.style.left=x+'px'; tip.style.top=y+'px'; }
+  document.querySelectorAll('svg.pid').forEach(function(s){ s.addEventListener('mousemove',hov); s.addEventListener('click',hov); s.addEventListener('mouseleave',function(){tip.hidden=true;}); });
+  document.querySelectorAll('.canvas').forEach(function(c){ c.addEventListener('scroll',function(){tip.hidden=true;}); });
+})();
+</script>
